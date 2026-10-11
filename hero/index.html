@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='14' y='5' width='4' height='16' fill='%23ff8800'/%3E%3Ccircle cx='16' cy='24' r='4' fill='%23ff00aa'/%3E%3C/svg%3E"><title>NEON HERO — Mini Arcade</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%2305070d'/%3E%3Cpath d='M11 2v8.5a2.5 2.5 0 1 1-1.5-2.29V3.5L7 4.3v6.2a2.5 2.5 0 1 1-1.5-2.29V2.8L11 2z' fill='%23ff8800'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -16,10 +17,11 @@
   #topbar span { color:#ffe600; }
   #wrap { position:relative; }
   canvas { display:block; background:#05070d; border:2px solid rgba(255,136,0,0.55); box-shadow:0 0 18px rgba(255,136,0,0.22); touch-action:none; }
-  .overlay { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(3,5,10,0.88); text-align:center; padding:18px; gap:12px; z-index:5; }
+  .overlay { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(3,5,10,0.88); text-align:center; padding:18px; gap:12px; z-index:5; animation:popIn 0.28s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes popIn { from { transform:scale(0.86); opacity:0; } to { transform:scale(1); opacity:1; } }
   .overlay h2 { font-size:14px; color:#ff8800; text-shadow:0 0 10px rgba(255,136,0,0.8); }
   .overlay p { font-size:8px; color:#94a3b8; line-height:2.1; }
-  .overlay .big { font-size:12px; color:#ffe600; }
+  .overlay .big { font-size:20px; color:#ffe600; text-shadow:0 0 16px rgba(255,230,0,0.9); }
   button.ctl { font-family:'Press Start 2P',monospace; font-size:9px; padding:12px 18px; background:rgba(15,23,42,0.9); border:2px solid #ff8800; color:#ff8800; cursor:pointer; border-radius:4px; }
   button.ctl:active { background:#ff8800; color:#000; }
   .hidden { display:none !important; }
@@ -71,7 +73,7 @@
 
   let ac = null, songStart = 0, schedTimer = null, schedStep = 0, noiseBuf = null;
   let notes = [], score, combo, maxCombo, perfect, good, miss, totalNotes, alive, running = false, raf = null;
-  let laneFlash = [0, 0, 0, 0], hitFx = [], endMs = 0;
+  let laneFlash = [0, 0, 0, 0], laneRings = [], hitFx = [], endMs = 0;
   const scoreEl = document.getElementById('score'), comboEl = document.getElementById('combo'), accEl = document.getElementById('acc'), bestEl = document.getElementById('best');
 
   function loadBest() { const v = parseInt(localStorage.getItem(HS_KEY) || '0', 10); return isNaN(v) ? 0 : v; }
@@ -185,6 +187,7 @@
     if (bestNote && bestDt <= 0.095) {
       bestNote.hit = true;
       const isPerfect = bestDt <= 0.045;
+      laneRings.push({ lane, life: 1, color: isPerfect ? '#ffe600' : LANE_COLORS[lane] }); // expanding shockwave ring
       combo++;
       maxCombo = Math.max(maxCombo, combo);
       score += (isPerfect ? 100 : 50) * Math.min(combo, 20) / 10;
@@ -218,6 +221,13 @@
     const now = songTime();
     ctx.fillStyle = '#05070d';
     ctx.fillRect(0, 0, W, H);
+    // lane tint (very subtle, alpha 0.03 per accent color for lane readability)
+    for (let l = 0; l < LANES; l++) {
+      ctx.fillStyle = LANE_COLORS[l];
+      ctx.globalAlpha = 0.03;
+      ctx.fillRect(l * LW, 0, LW, H);
+      ctx.globalAlpha = 1;
+    }
     // lane separators
     ctx.strokeStyle = 'rgba(255,255,255,0.07)';
     for (let l = 1; l < LANES; l++) { ctx.beginPath(); ctx.moveTo(l * LW, 0); ctx.lineTo(l * LW, H); ctx.stroke(); }
@@ -251,12 +261,35 @@
       ctx.fillText(LANE_KEYS[l], l * LW + LW / 2, HIT_Y + 38);
       laneFlash[l] = Math.max(0, laneFlash[l] - 0.12);
     }
+    // shockwave rings on receptor hit (visual only)
+    for (let i = laneRings.length - 1; i >= 0; i--) {
+      const ring = laneRings[i];
+      ring.life -= 0.07;
+      if (ring.life <= 0) { laneRings.splice(i, 1); continue; }
+      const cx = ring.lane * LW + LW / 2;
+      const rad = 14 + (1 - ring.life) * 34;
+      ctx.save();
+      ctx.globalAlpha = ring.life * 0.8;
+      ctx.strokeStyle = ring.color; ctx.lineWidth = 2 + ring.life * 2;
+      ctx.shadowColor = ring.color; ctx.shadowBlur = 12;
+      ctx.beginPath(); ctx.arc(cx, HIT_Y, rad, 0, Math.PI * 2); ctx.stroke();
+      ctx.restore();
+    }
     // notes
     for (const n of notes) {
       if (n.hit || n.missed) continue;
       const y = HIT_Y - (n.t - now) * SPEED;
       if (y < -30 || y > H + 30) continue;
       ctx.save();
+      // glow trail: short vertical gradient above the falling note
+      const trailH = 34;
+      const grad = ctx.createLinearGradient(0, y - trailH, 0, y);
+      grad.addColorStop(0, 'rgba(0,0,0,0)');
+      grad.addColorStop(1, LANE_COLORS[n.lane]);
+      ctx.globalAlpha = 0.35;
+      ctx.fillStyle = grad;
+      ctx.fillRect(n.lane * LW + 12, y - trailH, LW - 24, trailH);
+      ctx.globalAlpha = 1;
       ctx.shadowColor = LANE_COLORS[n.lane]; ctx.shadowBlur = 12;
       ctx.fillStyle = LANE_COLORS[n.lane];
       ctx.fillRect(n.lane * LW + 12, y - 9, LW - 24, 18);
@@ -275,6 +308,22 @@
       ctx.fillStyle = f.color;
       ctx.fillText(f.txt, f.x, f.y);
       ctx.globalAlpha = 1;
+    }
+    // big combo counter (pulse when combo >= 10)
+    if (combo >= 10) {
+      const pulse = 1 + Math.sin(now * 8) * 0.06;
+      ctx.save();
+      ctx.translate(W / 2, 64);
+      ctx.scale(pulse, pulse);
+      ctx.font = '24px "Press Start 2P", monospace';
+      ctx.textAlign = 'center';
+      ctx.shadowColor = '#ff00aa'; ctx.shadowBlur = 16;
+      ctx.fillStyle = '#ff00aa';
+      ctx.fillText(String(combo), 0, 0);
+      ctx.font = '8px "Press Start 2P", monospace';
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.fillText('COMBO', 0, 14);
+      ctx.restore();
     }
     // lead-in countdown
     if (running && now < 0) {
@@ -310,7 +359,7 @@
       const d = noiseBuf.getChannelData(0);
       for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
     }
-    notes = []; hitFx = [];
+    notes = []; hitFx = []; laneRings = [];
     score = 0; combo = 0; maxCombo = 0; perfect = 0; good = 0; miss = 0; totalNotes = 0;
     schedStep = 0; endMs = 0; alive = true;
     scoreEl.textContent = '0'; comboEl.textContent = '0'; accEl.textContent = '100%';
