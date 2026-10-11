@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MINI ARCADE — Neon Collection</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #050508;
+    color: #e2e8f0;
+    font-family: 'Press Start 2P', monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 16px;
+    overflow-x: hidden;
+  }
+  /* starfield backdrop */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 12% 22%, rgba(0,240,255,0.7), transparent),
+      radial-gradient(1px 1px at 45% 8%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(2px 2px at 78% 30%, rgba(255,0,85,0.5), transparent),
+      radial-gradient(1px 1px at 25% 65%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1.5px 1.5px at 88% 72%, rgba(0,240,255,0.5), transparent),
+      radial-gradient(1px 1px at 60% 85%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1.5px 1.5px at 8% 88%, rgba(255,0,170,0.45), transparent);
+    pointer-events: none;
+  }
+  .logo {
+    font-size: clamp(1.4rem, 5vw, 2.2rem);
+    text-align: center;
+    color: #00f0ff;
+    text-shadow: 0 0 14px rgba(0,240,255,0.8), 4px 4px 0 #000;
+    letter-spacing: 2px;
+    z-index: 1;
+  }
+  .logo span { color: #ff00aa; text-shadow: 0 0 14px rgba(255,0,170,0.8), 4px 4px 0 #000; }
+  .tagline {
+    font-size: 8px;
+    color: #94a3b8;
+    margin: 14px 0 28px;
+    text-align: center;
+    line-height: 1.8;
+    z-index: 1;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+    width: 100%;
+    max-width: 860px;
+    z-index: 1;
+  }
+  a.card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: rgba(10, 14, 24, 0.85);
+    border: 2px solid #1e293b;
+    border-radius: 10px;
+    padding: 20px 18px;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  a.card:hover { transform: translateY(-4px); }
+  .card .icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+  .card h2 { font-size: 12px; margin-bottom: 10px; letter-spacing: 1px; }
+  .card p { font-size: 7px; line-height: 1.9; color: #94a3b8; font-family: monospace; }
+  .card .hs { font-size: 7px; margin-top: 12px; color: #ffe600; }
+  .card.cyan:hover { border-color: #00f0ff; box-shadow: 0 0 22px rgba(0,240,255,0.35); }
+  .card.cyan h2 { color: #00f0ff; }
+  .card.pink:hover { border-color: #ff00aa; box-shadow: 0 0 22px rgba(255,0,170,0.35); }
+  .card.pink h2 { color: #ff00aa; }
+  .card.yellow:hover { border-color: #ffe600; box-shadow: 0 0 22px rgba(255,230,0,0.35); }
+  .card.yellow h2 { color: #ffe600; }
+  .card.green:hover { border-color: #00ff88; box-shadow: 0 0 22px rgba(0,255,136,0.35); }
+  .card.green h2 { color: #00ff88; }
+  .soon {
+    opacity: 0.45;
+    border-style: dashed;
+  }
+  .soon h2 { color: #64748b !important; }
+  .footer {
+    margin-top: 30px;
+    font-size: 7px;
+    color: #475569;
+    text-align: center;
+    line-height: 2;
+    z-index: 1;
+  }
+  .crt {
+    position: fixed; inset: 0; pointer-events: none; z-index: 5;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.14) 0 2px, transparent 2px 4px);
+  }
+  .vignette {
+    position: fixed; inset: 0; pointer-events: none; z-index: 4;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.5) 100%);
+  }
+</style>
+</head>
+<body>
+  <div class="logo">MINI<span> ARCADE</span></div>
+  <div class="tagline">NEON COLLECTION · SINGLE-FILE GAMES · ZERO DEPENDENCY<br>PILIH GAME ▼</div>
+
+  <div class="grid">
+    <a class="card cyan" href="snake/index.html">
+      <span class="icon">🐍</span>
+      <h2>NEON SNAKE</h2>
+      <p>Klasik snake di grid neon. Makin gemuk makin ngebut. Jangan gigit ekor sendiri.</p>
+      <div class="hs" id="hsSnake">★ BEST: 0</div>
+    </a>
+    <a class="card pink" href="breakout/index.html">
+      <span class="icon">🧱</span>
+      <h2>NEON BREAKOUT</h2>
+      <p>Pantulin bola, hancurkan baris brick. Combo multiplier buat pantul beruntun.</p>
+      <div class="hs" id="hsBreakout">★ BEST: 0</div>
+    </a>
+    <a class="card yellow" href="flappy/index.html">
+      <span class="icon">🚀</span>
+      <h2>FLAPPY CYBER</h2>
+      <p>Kapal thruster kecil vs data pylons. Satu sentuh = satu ledakan. Berapa jauh kamu lolos?</p>
+      <div class="hs" id="hsFlappy">★ BEST: 0</div>
+    </a>
+    <a class="card green soon" href="#" onclick="return false;">
+      <span class="icon">👾</span>
+      <h2>??? SLOT 4</h2>
+      <p>Coming soon — bilang aja mau game apa berikutnya.</p>
+      <div class="hs">★ LOCKED</div>
+    </a>
+  </div>
+
+  <div class="footer">BUILT WITH VANILLA JS · NO ENGINE · NO ASSETS<br>Part of the lwn2210 arcade universe</div>
+  <div class="crt"></div>
+  <div class="vignette"></div>
+
+  <script>
+    // High score badges pulled from each game's localStorage (same-origin)
+    function fmt(id, key) {
+      try {
+        const v = parseInt(localStorage.getItem(key) || '0', 10);
+        document.getElementById(id).textContent = '★ BEST: ' + (isNaN(v) ? 0 : v);
+      } catch (e) { /* storage unavailable */ }
+    }
+    fmt('hsSnake', 'neonsnake_hs');
+    fmt('hsBreakout', 'neonbreakout_hs');
+    fmt('hsFlappy', 'flappycyber_hs');
+  </script>
+</body>
+</html>
