@@ -78,19 +78,50 @@
     97% { opacity: 0.8; }
   }
 
+  .back {
+    width: min(600px, calc(100vw - 32px));
+    align-self: flex-start;
+    margin-bottom: 8px;
+    font-size: 8px;
+    font-family: monospace;
+    letter-spacing: 2px;
+    color: #00fff7;
+    text-decoration: none;
+    text-shadow: 0 0 6px rgba(0, 255, 247, 0.5);
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+  }
+
+  .back:hover { color: #ff2bd6; text-shadow: 0 0 10px rgba(255, 43, 214, 0.7); }
+
   .hud {
     width: min(600px, calc(100vw - 32px));
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    margin-bottom: 10px;
+    gap: 12px;
+    margin-bottom: 12px;
     font-size: clamp(8px, 2vw, 12px);
   }
 
   .hud .label { color: #ff2bd6; text-shadow: 0 0 8px #ff2bd6; margin-right: 8px; }
-  .hud .value { color: #00fff7; text-shadow: 0 0 8px #00fff7; }
-  #scoreValue { transition: transform 0.1s; }
-  #scoreValue.pop { transform: scale(1.4); }
+  .hud .value {
+    color: #00fff7;
+    display: inline-block;
+    padding: 1px 6px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-shadow: 0 0 8px #00fff7;
+    transition: transform 0.12s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  #scoreValue.pop {
+    transform: scale(1.4);
+    border-color: rgba(0, 255, 247, 0.6);
+    box-shadow: 0 0 12px rgba(0, 255, 247, 0.5), inset 0 0 6px rgba(0, 255, 247, 0.2);
+  }
+  #highValue.pop {
+    border-color: rgba(255, 43, 214, 0.6);
+    box-shadow: 0 0 12px rgba(255, 43, 214, 0.5), inset 0 0 6px rgba(255, 43, 214, 0.2);
+  }
 
   .stage {
     position: relative;
@@ -172,6 +203,7 @@
 </style>
 </head>
 <body>
+  <a class="back" href="../">&larr; BACK TO HUB</a>
   <h1>NEON SNAKE</h1>
   <div class="hud">
     <div><span class="label">SCORE</span><span class="value" id="scoreValue">0</span></div>
