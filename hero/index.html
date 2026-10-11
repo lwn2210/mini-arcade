@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>NEON HERO — Mini Arcade</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; }
+  body { background:#050508; color:#e2e8f0; font-family:'Press Start 2P',monospace; display:flex; flex-direction:column; align-items:center; touch-action:manipulation; overflow:hidden; }
+  a.back { position:fixed; top:10px; left:10px; font-size:8px; color:#475569; text-decoration:none; z-index:20; }
+  a.back:hover { color:#ff8800; }
+  h1 { font-size:clamp(11px,3.5vw,16px); color:#ff8800; text-shadow:0 0 12px rgba(255,136,0,0.8); margin:26px 0 4px; text-align:center; }
+  #topbar { display:flex; gap:16px; font-size:8px; margin:6px 0; flex-wrap:wrap; justify-content:center; }
+  #topbar span { color:#ffe600; }
+  #wrap { position:relative; }
+  canvas { display:block; background:#05070d; border:2px solid rgba(255,136,0,0.55); box-shadow:0 0 18px rgba(255,136,0,0.22); touch-action:none; }
+  .overlay { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(3,5,10,0.88); text-align:center; padding:18px; gap:12px; z-index:5; }
+  .overlay h2 { font-size:14px; color:#ff8800; text-shadow:0 0 10px rgba(255,136,0,0.8); }
+  .overlay p { font-size:8px; color:#94a3b8; line-height:2.1; }
+  .overlay .big { font-size:12px; color:#ffe600; }
+  button.ctl { font-family:'Press Start 2P',monospace; font-size:9px; padding:12px 18px; background:rgba(15,23,42,0.9); border:2px solid #ff8800; color:#ff8800; cursor:pointer; border-radius:4px; }
+  button.ctl:active { background:#ff8800; color:#000; }
+  .hidden { display:none !important; }
+  .crt { position:fixed; inset:0; pointer-events:none; z-index:9; background:repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0 2px, transparent 2px 4px); }
+</style>
+</head>
+<body>
+<a class="back" href="../index.html">← ARCADE</a>
+<h1>NEON HERO</h1>
+<div id="topbar">SCORE: <span id="score">0</span> &nbsp; COMBO: <span id="combo">0</span> &nbsp; ACC: <span id="acc">100%</span> &nbsp; BEST: <span id="best">0</span></div>
+<div id="wrap">
+  <canvas id="cv" width="480" height="640"></canvas>
+  <div class="overlay" id="readyOv">
+    <h2>NEON HERO</h2>
+    <p>TEPATKAN NOTE SAAT SAMPAI GARIS<br>KEYBOARD: D · F · J · K<br>MOBILE: TAP KOLOM LANSUNG<br>PERFECT ±45ms · GOOD ±95ms</p>
+    <button class="ctl" id="startBtn">START TRACK</button>
+  </div>
+  <div class="overlay hidden" id="overOv">
+    <h2 id="overTitle">TRACK CLEAR!</h2>
+    <p class="big">SCORE: <span id="finalScore">0</span></p>
+    <p>ACCURACY: <span id="finalAcc">0%</span><br>MAX COMBO: <span id="finalCombo">0</span></p>
+    <p id="newBestMsg" class="hidden" style="color:#00ff88;">★ NEW BEST! ★</p>
+    <button class="ctl" id="retryBtn">PLAY AGAIN</button>
+  </div>
+</div>
+<div class="crt"></div>
+<script>
+(function () {
+  'use strict';
+  const W = 480, H = 640;
+  const LANES = 4, LW = W / LANES;
+  const HIT_Y = 540, SPEED = 360; // px per second fall
+  const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+  const HS_KEY = '***';
+  const LANE_COLORS = ['#00f0ff', '#ff00aa', '#ffe600', '#00ff88'];
+  const LANE_KEYS = ['D', 'F', 'J', 'K'];
+  const KEYMAP = { d: 0, f: 1, j: 2, k: 3 };
+  const PENTA = [261.6, 293.7, 329.6, 392.0]; // C D E G per lane
+
+  // chart: eighth-note step patterns per bar (1 = note)
+  const PATTERNS = [
+    [1,0,1,0,1,0,1,0],
+    [1,0,0,1,1,0,1,0],
+    [1,1,0,1,0,1,1,0],
+    [1,0,1,1,0,1,0,1],
+    [1,1,0,0,1,0,1,1]
+  ];
+  const BPM = 112, BEAT = 60 / BPM, STEP = BEAT / 2, LEAD_BEATS = 4, BARS = 30;
+
+  let ac = null, songStart = 0, schedTimer = null, schedStep = 0, noiseBuf = null;
+  let notes = [], score, combo, maxCombo, perfect, good, miss, totalNotes, alive, running = false, raf = null;
+  let laneFlash = [0, 0, 0, 0], hitFx = [], endMs = 0;
+  const scoreEl = document.getElementById('score'), comboEl = document.getElementById('combo'), accEl = document.getElementById('acc'), bestEl = document.getElementById('best');
+
+  function loadBest() { const v = parseInt(localStorage.getItem(HS_KEY) || '0', 10); return isNaN(v) ? 0 : v; }
+  bestEl.textContent = loadBest();
+
+  function songTime() { return ac ? ac.currentTime - songStart : 0; }
+
+  // ---- synth voices ----
+  function kick(t) {
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(150, t);
+    o.frequency.exponentialRampToValueAtTime(42, t + 0.14);
+    g.gain.setValueAtTime(0.5, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+    o.connect(g).connect(ac.destination);
+    o.start(t); o.stop(t + 0.24);
+  }
+  function hat(t, strong) {
+    const s = ac.createBufferSource(), g = ac.createGain(), f = ac.createBiquadFilter();
+    s.buffer = noiseBuf;
+    f.type = 'highpass'; f.frequency.value = 7000;
+    g.gain.setValueAtTime(strong ? 0.09 : 0.045, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + (strong ? 0.09 : 0.045));
+    s.connect(f).connect(g).connect(ac.destination);
+    s.start(t); s.stop(t + 0.1);
+  }
+  function bass(t, lane, dur) {
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'square';
+    const bar = Math.floor((t - songStart) / (8 * STEP));
+    o.frequency.value = PENTA[lane] * (bar % 2 === 1 ? 1.5 : 1) * 0.5;
+    g.gain.setValueAtTime(0.16, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    o.connect(g).connect(ac.destination);
+    o.start(t); o.stop(t + dur + 0.02);
+  }
+  function blip(t, lane, mult) {
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'triangle';
+    o.frequency.value = PENTA[lane] * (mult === 'perfect' ? 4 : 3);
+    g.gain.setValueAtTime(0.12, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+    o.connect(g).connect(ac.destination);
+    o.start(t); o.stop(t + 0.14);
+  }
+  function thud(t) {
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'sawtooth';
+    o.frequency.value = 82;
+    g.gain.setValueAtTime(0.07, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+    o.connect(g).connect(ac.destination);
+    o.start(t); o.stop(t + 0.14);
+  }
+
+  // deterministic lane pick so chart feels composed, not random mush
+  function laneFor(bar, step) {
+    const seq = [0, 2, 1, 3, 0, 3, 1, 2];
+    const jump = (bar * 3 + Math.floor(step / 2)) % 2 === 0;
+    let l = seq[(step + bar * 5) % 4];
+    if (jump && step % 2 === 1) l = (l + 2) % 4;
+    return l;
+  }
+
+  // ---- lookahead scheduler ----
+  function schedule() {
+    if (!running) return;
+    const horizon = ac.currentTime + 0.14;
+    while (songStart + LEAD_BEATS * BEAT + schedStep * STEP < horizon && schedStep < BARS * 8) {
+      const t = songStart + LEAD_BEATS * BEAT + schedStep * STEP;
+      const stepInBar = schedStep % 8, bar = Math.floor(schedStep / 8);
+      if (stepInBar === 0 || stepInBar === 4) kick(t);
+      hat(t, stepInBar % 4 === 2);
+      const pat = PATTERNS[bar % PATTERNS.length];
+      if (pat[stepInBar]) {
+        const lane = laneFor(bar, stepInBar);
+        bass(t, lane, STEP * 0.9);
+        notes.push({ t: t - songStart, lane, hit: false, missed: false });
+        totalNotes++;
+      }
+      schedStep++;
+    }
+    if (schedStep >= BARS * 8 && !endMs) endMs = (songStart + LEAD_BEATS * BEAT + BARS * 8 * STEP - songStart) + 1.2;
+  }
+
+  function finishTrack() {
+    running = false;
+    if (schedTimer) { clearInterval(schedTimer); schedTimer = null; }
+    const acc = totalNotes ? Math.round(((perfect + good * 0.6) / totalNotes) * 100) : 100;
+    document.getElementById('finalAcc').textContent = acc + '%';
+    document.getElementById('finalCombo').textContent = maxCombo;
+    document.getElementById('overTitle').textContent = miss === 0 ? 'FULL COMBO CLEAR!' : 'TRACK CLEAR!';
+    const best = loadBest();
+    if (score > best) { localStorage.setItem(HS_KEY, String(score)); bestEl.textContent = score; document.getElementById('newBestMsg').classList.remove('hidden'); }
+    else document.getElementById('newBestMsg').classList.add('hidden');
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('overOv').classList.remove('hidden');
+  }
+
+  function judge(lane) {
+    if (!running || !alive) return;
+    laneFlash[lane] = 1;
+    const now = songTime();
+    let bestNote = null, bestDt = Infinity;
+    for (const n of notes) {
+      if (n.lane !== lane || n.hit || n.missed) continue;
+      const dt = Math.abs(now - n.t);
+      if (dt < bestDt) { bestDt = dt; bestNote = n; }
+    }
+    if (bestNote && bestDt <= 0.095) {
+      bestNote.hit = true;
+      const isPerfect = bestDt <= 0.045;
+      combo++;
+      maxCombo = Math.max(maxCombo, combo);
+      score += (isPerfect ? 100 : 50) * Math.min(combo, 20) / 10;
+      if (isPerfect) perfect++; else good++;
+      blip(ac.currentTime, lane, isPerfect ? 'perfect' : 'good');
+      hitFx.push({ x: lane * LW + LW / 2, y: HIT_Y, life: 1, txt: isPerfect ? 'PERFECT' : 'GOOD', color: isPerfect ? '#ffe600' : '#00f0ff' });
+      scoreEl.textContent = Math.round(score);
+      comboEl.textContent = combo;
+      accEl.textContent = Math.round(((perfect + good * 0.6) / totalNotes) * 100) + '%';
+    }
+  }
+
+  function updateMisses() {
+    const now = songTime();
+    for (const n of notes) {
+      if (!n.hit && !n.missed && now > n.t + 0.12) {
+        n.missed = true;
+        miss++;
+        combo = 0;
+        comboEl.textContent = '0';
+        thud(ac.currentTime);
+        hitFx.push({ x: n.lane * LW + LW / 2, y: HIT_Y, life: 1, txt: 'MISS', color: '#ff0055' });
+        accEl.textContent = Math.round(((perfect + good * 0.6) / totalNotes) * 100) + '%';
+      }
+    }
+    if (notes.length > 220) notes = notes.filter(n => n.t > now - 2);
+    if (endMs && now > endMs) finishTrack();
+  }
+
+  function draw() {
+    const now = songTime();
+    ctx.fillStyle = '#05070d';
+    ctx.fillRect(0, 0, W, H);
+    // lane separators
+    ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+    for (let l = 1; l < LANES; l++) { ctx.beginPath(); ctx.moveTo(l * LW, 0); ctx.lineTo(l * LW, H); ctx.stroke(); }
+    // beat lines scrolling (tempo feel)
+    const firstBeat = Math.ceil((now - LEAD_BEATS) / BEAT) * BEAT + LEAD_BEATS - LEAD_BEATS;
+    for (let b = -2; b < BARS * 4 + 8; b++) {
+      const bt = b * BEAT;
+      const y = HIT_Y - (bt - now) * SPEED;
+      if (y < -10 || y > H + 10) continue;
+      ctx.strokeStyle = b % 4 === 0 ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.05)';
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+    // hit line
+    ctx.save();
+    ctx.shadowColor = '#ff8800'; ctx.shadowBlur = 14;
+    ctx.strokeStyle = '#ff8800';
+    ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(0, HIT_Y); ctx.lineTo(W, HIT_Y); ctx.stroke();
+    ctx.restore();
+    // receptors
+    for (let l = 0; l < LANES; l++) {
+      ctx.save();
+      ctx.globalAlpha = 0.55 + laneFlash[l] * 0.45;
+      ctx.shadowColor = LANE_COLORS[l]; ctx.shadowBlur = 12 + laneFlash[l] * 18;
+      ctx.fillStyle = laneFlash[l] > 0 ? LANE_COLORS[l] : 'rgba(255,255,255,0.08)';
+      ctx.fillRect(l * LW + 8, HIT_Y - 14, LW - 16, 28);
+      ctx.restore();
+      ctx.font = '9px "Press Start 2P", monospace';
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.textAlign = 'center';
+      ctx.fillText(LANE_KEYS[l], l * LW + LW / 2, HIT_Y + 38);
+      laneFlash[l] = Math.max(0, laneFlash[l] - 0.12);
+    }
+    // notes
+    for (const n of notes) {
+      if (n.hit || n.missed) continue;
+      const y = HIT_Y - (n.t - now) * SPEED;
+      if (y < -30 || y > H + 30) continue;
+      ctx.save();
+      ctx.shadowColor = LANE_COLORS[n.lane]; ctx.shadowBlur = 12;
+      ctx.fillStyle = LANE_COLORS[n.lane];
+      ctx.fillRect(n.lane * LW + 12, y - 9, LW - 24, 18);
+      ctx.fillStyle = 'rgba(255,255,255,0.75)';
+      ctx.fillRect(n.lane * LW + 16, y - 5, LW - 32, 4);
+      ctx.restore();
+    }
+    // judgement fx
+    ctx.font = '10px "Press Start 2P", monospace';
+    ctx.textAlign = 'center';
+    for (let i = hitFx.length - 1; i >= 0; i--) {
+      const f = hitFx[i];
+      f.life -= 0.05; f.y -= 0.8;
+      if (f.life <= 0) { hitFx.splice(i, 1); continue; }
+      ctx.globalAlpha = Math.max(0, f.life);
+      ctx.fillStyle = f.color;
+      ctx.fillText(f.txt, f.x, f.y);
+      ctx.globalAlpha = 1;
+    }
+    // lead-in countdown
+    if (running && now < 0) {
+      ctx.font = '26px "Press Start 2P", monospace';
+      ctx.fillStyle = '#ff8800';
+      ctx.textAlign = 'center';
+      ctx.fillText(String(Math.ceil(-now / BEAT)), W / 2, H / 2);
+    }
+  }
+
+  function loop() {
+    raf = requestAnimationFrame(loop);
+    if (running) updateMisses();
+    draw();
+  }
+
+  document.addEventListener('keydown', e => {
+    const k = e.key.toLowerCase();
+    if (k in KEYMAP) { e.preventDefault(); judge(KEYMAP[k]); }
+  });
+  cv.addEventListener('pointerdown', e => {
+    e.preventDefault();
+    const rect = cv.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width * W;
+    judge(Math.min(LANES - 1, Math.max(0, Math.floor(x / LW))));
+  });
+
+  function start() {
+    if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)();
+    if (ac.state === 'suspended') ac.resume();
+    if (!noiseBuf) {
+      noiseBuf = ac.createBuffer(1, ac.sampleRate * 0.1, ac.sampleRate);
+      const d = noiseBuf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    }
+    notes = []; hitFx = [];
+    score = 0; combo = 0; maxCombo = 0; perfect = 0; good = 0; miss = 0; totalNotes = 0;
+    schedStep = 0; endMs = 0; alive = true;
+    scoreEl.textContent = '0'; comboEl.textContent = '0'; accEl.textContent = '100%';
+    document.getElementById('readyOv').classList.add('hidden');
+    document.getElementById('overOv').classList.add('hidden');
+    songStart = ac.currentTime + 0.3;
+    running = true;
+    if (schedTimer) clearInterval(schedTimer);
+    schedTimer = setInterval(schedule, 25);
+    if (!raf) raf = requestAnimationFrame(loop);
+  }
+  document.getElementById('startBtn').addEventListener('click', start);
+  document.getElementById('retryBtn').addEventListener('click', start);
+
+  raf = requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
