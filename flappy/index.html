@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>FLAPPY CYBER — Mini Arcade</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#050508; color:#e2e8f0; font-family:'Press Start 2P',monospace; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; touch-action:none; overflow:hidden; }
+  h1 { font-size:clamp(12px,3vw,18px); color:#ffe600; text-shadow:0 0 12px rgba(255,230,0,0.8); margin-bottom:12px; text-align:center; }
+  #hud { margin:10px 0; font-size:9px; }
+  #hud span { color:#00f0ff; }
+  #wrap { position:relative; }
+  canvas { display:block; border:2px solid rgba(255,230,0,0.5); box-shadow:0 0 20px rgba(255,230,0,0.2); background:#05070d; touch-action:none; }
+  .overlay { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(3,5,10,0.85); text-align:center; padding:24px; gap:14px; }
+  .overlay h2 { font-size:14px; color:#ffe600; text-shadow:0 0 10px rgba(255,230,0,0.8); }
+  .overlay p { font-size:8px; color:#94a3b8; line-height:2; }
+  .overlay .big { font-size:13px; color:#00f0ff; }
+  button { font-family:'Press Start 2P',monospace; font-size:9px; padding:10px 16px; background:rgba(15,23,42,0.9); border:2px solid #ffe600; color:#ffe600; cursor:pointer; border-radius:4px; }
+  button:active { background:#ffe600; color:#000; }
+  .hidden { display:none !important; }
+  .back { position:fixed; top:12px; left:12px; font-size:8px; color:#475569; text-decoration:none; }
+  .back:hover { color:#ffe600; }
+  .crt { position:fixed; inset:0; pointer-events:none; z-index:9; background:repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0 2px, transparent 2px 4px); }
+</style>
+</head>
+<body>
+<a class="back" href="../index.html">← ARCADE</a>
+<h1>FLAPPY CYBER</h1>
+<div id="hud">SCORE: <span id="score">0</span> &nbsp; BEST: <span id="best">0</span></div>
+<div id="wrap">
+  <canvas id="cv" width="480" height="700"></canvas>
+  <div class="overlay" id="readyOv">
+    <h2>FLAPPY CYBER</h2>
+    <p>TAP / SPASI = THRUSTER<br>LOLOS PYLON = +1<br>SENTUH APA PUN = LEDAKAN</p>
+    <button id="startBtn">START</button>
+  </div>
+  <div class="overlay hidden" id="overOv">
+    <h2>WRECKED</h2>
+    <p class="big">SCORE: <span id="finalScore">0</span></p>
+    <p id="newBestMsg" class="hidden" style="color:#00ff88;">★ NEW BEST! ★</p>
+    <button id="retryBtn">RETRY</button>
+  </div>
+</div>
+<div class="crt"></div>
+<script>
+(function () {
+  'use strict';
+  const W = 480, H = 700;
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const HS_KEY = 'flappycyber_hs';
+  const PW = 70;        // pylon width
+  const GAP0 = 190;     // starting gap
+  const SPAWN_X = 110;  // horizontal distance between pylons
+
+  let ship, pylons, score, alive, running = false, particles = [], stars = [], spawnAcc = 0, shake = 0, raf = null;
+  const scoreEl = document.getElementById('score'), bestEl = document.getElementById('best');
+
+  function loadBest() { const v = parseInt(localStorage.getItem(HS_KEY) || '0', 10); return isNaN(v) ? 0 : v; }
+  bestEl.textContent = loadBest();
+
+  // parallax star layers
+  for (let i = 0; i < 60; i++) {
+    stars.push({ x: Math.random() * W, y: Math.random() * H, s: Math.random() > 0.7 ? 2 : 1, sp: 0.3 + Math.random() * 1.2 });
+  }
+
+  function reset() {
+    ship = { x: 120, y: H / 2, vy: 0, thrust: 0 };
+    pylons = [];
+    score = 0; alive = true; particles = []; shake = 0; spawnAcc = SPAWN_X; // first pylon soon
+    scoreEl.textContent = '0';
+  }
+
+  function spawnPylon() {
+    const speed = 2.4 + Math.min(score * 0.04, 1.8);
+    const gap = Math.max(130, GAP0 - score * 2);
+    const gy = 90 + Math.random() * (H - 180 - gap);
+    pylons.push({ x: W + PW, top: gy, gap, scored: false, speed });
+  }
+
+  function burst(x, y, color, n) {
+    for (let i = 0; i < (n || 16); i++) {
+      const a = Math.random() * Math.PI * 2;
+      particles.push({ x, y, vx: Math.cos(a)*(1+Math.random()*3), vy: Math.sin(a)*(1+Math.random()*3), life: 1, color });
+    }
+  }
+
+  function die() {
+    alive = false;
+    shake = 14;
+    burst(ship.x, ship.y, '#ffe600', 26);
+    burst(ship.x, ship.y, '#ff0055', 16);
+    const best = loadBest();
+    if (score > best) { localStorage.setItem(HS_KEY, String(score)); bestEl.textContent = score; document.getElementById('newBestMsg').classList.remove('hidden'); }
+    else document.getElementById('newBestMsg').classList.add('hidden');
+    document.getElementById('finalScore').textContent = score;
+    setTimeout(() => document.getElementById('overOv').classList.remove('hidden'), 500);
+  }
+
+  function flap() {
+    if (!alive) return;
+    ship.vy = -5.6;
+    ship.thrust = 8;
+    burst(ship.x - 14, ship.y + 8, '#00f0ff', 4);
+  }
+
+  function update() {
+    if (!alive) { shake = Math.max(0, shake - 0.5); return; }
+    // physics
+    ship.vy += 0.32;
+    ship.y += ship.vy;
+    if (ship.thrust > 0) ship.thrust--;
+    shake = Math.max(0, shake - 0.8);
+    // ceiling / floor
+    if (ship.y < 14) { ship.y = 14; ship.vy = 0; }
+    if (ship.y > H - 16) { die(); return; }
+    // spawn pylons by distance
+    spawnAcc += pylons.length ? pylons[pylons.length-1].speed : 2.4;
+    if (spawnAcc >= SPAWN_X) { spawnAcc = 0; spawnPylon(); }
+    // move pylons
+    for (let i = pylons.length - 1; i >= 0; i--) {
+      const p = pylons[i];
+      p.x -= p.speed;
+      if (p.x + PW < -10) { pylons.splice(i, 1); continue; }
+      // scoring
+      if (!p.scored && p.x + PW < ship.x - 12) {
+        p.scored = true;
+        score++;
+        scoreEl.textContent = score;
+      }
+      // collision (circle vs rects)
+      const inX = ship.x + 12 > p.x && ship.x - 12 < p.x + PW;
+      const hitTop = ship.y - 10 < p.top;
+      const hitBot = ship.y + 10 > p.top + p.gap;
+      if (inX && (hitTop || hitBot)) { die(); return; }
+    }
+  }
+
+  function draw(ts) {
+    ctx.save();
+    if (shake > 0) ctx.translate((Math.random() - 0.5) * shake, (Math.random() - 0.5) * shake);
+    ctx.fillStyle = '#05070d';
+    ctx.fillRect(-10, -10, W + 20, H + 20);
+    // stars
+    stars.forEach(s => {
+      s.y += s.sp;
+      if (s.y > H) { s.y = 0; s.x = Math.random() * W; }
+      ctx.fillStyle = s.s === 2 ? 'rgba(0,240,255,0.55)' : 'rgba(255,255,255,0.3)';
+      ctx.fillRect(s.x, s.y, s.s, s.s);
+    });
+    // pylons — data pylons with glowing caps
+    pylons.forEach(p => {
+      ctx.save();
+      ctx.shadowColor = '#00f0ff'; ctx.shadowBlur = 10;
+      ctx.fillStyle = 'rgba(0,240,255,0.18)';
+      ctx.fillRect(p.x, 0, PW, p.top);
+      ctx.fillRect(p.x, p.top + p.gap, PW, H - p.top - p.gap);
+      ctx.strokeStyle = '#00f0ff';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(p.x, 0, PW, p.top);
+      ctx.strokeRect(p.x, p.top + p.gap, PW, H - p.top - p.gap);
+      // caps
+      ctx.fillStyle = '#ff00aa';
+      ctx.shadowColor = '#ff00aa';
+      ctx.fillRect(p.x - 3, p.top - 8, PW + 6, 8);
+      ctx.fillRect(p.x - 3, p.top + p.gap, PW + 6, 8);
+      ctx.restore();
+    });
+    // ship — pixel wedge with thruster glow
+    ctx.save();
+    ctx.translate(ship.x, ship.y);
+    ctx.rotate(Math.max(-0.5, Math.min(0.9, ship.vy * 0.06)));
+    ctx.shadowColor = '#ff8800'; ctx.shadowBlur = 10;
+    ctx.fillStyle = 'rgba(255,136,0,' + (0.5 + Math.random() * 0.4) + ')';
+    ctx.beginPath();
+    ctx.moveTo(-14, -3); ctx.lineTo(-22 - Math.random() * 6, 0); ctx.lineTo(-14, 3);
+    ctx.closePath(); ctx.fill();
+    ctx.shadowColor = '#ffe600'; ctx.shadowBlur = 12;
+    ctx.fillStyle = '#ffe600';
+    ctx.beginPath();
+    ctx.moveTo(14, 0); ctx.lineTo(-10, -9); ctx.lineTo(-6, 0); ctx.lineTo(-10, 9);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#05070d';
+    ctx.fillRect(2, -3, 5, 5);
+    ctx.restore();
+    // particles
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx; p.y += p.vy; p.life -= 0.04;
+      if (p.life <= 0) { particles.splice(i, 1); continue; }
+      ctx.globalAlpha = Math.max(0, p.life);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+      ctx.globalAlpha = 1;
+    }
+    // score watermark
+    ctx.font = '22px "Press Start 2P", monospace';
+    ctx.fillStyle = 'rgba(255,255,255,0.12)';
+    ctx.textAlign = 'center';
+    ctx.fillText(String(score), W / 2, 90);
+    ctx.restore();
+  }
+
+  function loop(ts) {
+    raf = requestAnimationFrame(loop);
+    if (running) update();
+    draw(ts);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); if (running) flap(); }
+  });
+  cv.addEventListener('pointerdown', e => { e.preventDefault(); if (running) flap(); });
+
+  function start() {
+    reset();
+    document.getElementById('readyOv').classList.add('hidden');
+    document.getElementById('overOv').classList.add('hidden');
+    running = true;
+    if (!raf) raf = requestAnimationFrame(loop);
+  }
+  document.getElementById('startBtn').addEventListener('click', start);
+  document.getElementById('retryBtn').addEventListener('click', start);
+
+  reset();
+  raf = requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
