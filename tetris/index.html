@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>NEON TETRIS — Mini Arcade</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height: 100%; }
+  body {
+    background:#050508; color:#e2e8f0; font-family:'Press Start 2P',monospace;
+    display:flex; flex-direction:column; align-items:center;
+    touch-action:manipulation; overflow:hidden; padding:8px;
+  }
+  a.back { position:fixed; top:10px; left:10px; font-size:8px; color:#475569; text-decoration:none; z-index:20; }
+  a.back:hover { color:#00f0ff; }
+  h1 { font-size:clamp(11px,3.5vw,16px); color:#00ff88; text-shadow:0 0 12px rgba(0,255,136,0.8); margin:26px 0 8px; text-align:center; }
+  #topbar { display:flex; gap:14px; font-size:8px; margin-bottom:6px; flex-wrap:wrap; justify-content:center; }
+  #topbar span { color:#ffe600; }
+  #main { display:flex; gap:10px; align-items:flex-start; }
+  #wrap { position:relative; }
+  canvas { display:block; background:#05070d; border:2px solid rgba(0,255,136,0.5); box-shadow:0 0 16px rgba(0,255,136,0.2); touch-action:none; }
+  #side { display:flex; flex-direction:column; gap:8px; font-size:7px; color:#94a3b8; min-width:64px; }
+  #side .box { border:1px solid #1e293b; border-radius:6px; padding:6px; background:rgba(10,14,24,0.8); }
+  #side .box b { display:block; color:#00f0ff; font-size:6px; margin-bottom:4px; }
+  #nextCv { display:block; margin:0 auto; }
+  /* Big touch controls — mobile first */
+  #touchpad { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; width:100%; max-width:420px; margin-top:10px; padding:0 6px; }
+  .tbtn {
+    font-family:'Press Start 2P',monospace; font-size:14px; color:#e2e8f0;
+    background:rgba(15,23,42,0.95); border:2px solid #334155; border-radius:10px;
+    padding:14px 0; text-align:center; user-select:none; -webkit-user-select:none;
+    touch-action:manipulation;
+  }
+  .tbtn:active, .tbtn.pressed { background:#00ff88; color:#000; border-color:#00ff88; box-shadow:0 0 14px rgba(0,255,136,0.5); }
+  #btnDrop { grid-column: span 2; font-size:10px; }
+  .overlay { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(3,5,10,0.88); text-align:center; padding:18px; gap:12px; z-index:5; }
+  .overlay h2 { font-size:14px; color:#00ff88; text-shadow:0 0 10px rgba(0,255,136,0.8); }
+  .overlay p { font-size:8px; color:#94a3b8; line-height:2; }
+  .overlay .big { font-size:12px; color:#ffe600; }
+  button.ctl { font-family:'Press Start 2P',monospace; font-size:9px; padding:10px 16px; background:rgba(15,23,42,0.9); border:2px solid #00ff88; color:#00ff88; cursor:pointer; border-radius:4px; }
+  button.ctl:active { background:#00ff88; color:#000; }
+  .hidden { display:none !important; }
+  .crt { position:fixed; inset:0; pointer-events:none; z-index:9; background:repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0 2px, transparent 2px 4px); }
+  @media (max-width: 480px) {
+    #side { display:none; }
+    h1 { margin-top:22px; }
+  }
+</style>
+</head>
+<body>
+<a class="back" href="../index.html">← ARCADE</a>
+<h1>NEON TETRIS</h1>
+<div id="topbar">SCORE: <span id="score">0</span> &nbsp; LINES: <span id="lines">0</span> &nbsp; LV: <span id="level">1</span> &nbsp; BEST: <span id="best">0</span></div>
+<div id="main">
+  <div id="wrap">
+    <canvas id="cv" width="300" height="600"></canvas>
+    <div class="overlay" id="readyOv">
+      <h2>NEON TETRIS</h2>
+      <p>⬅ ➡ GERAK · ⟳ PUTAR<br>⬇ TURUN · ⤓ DROP LANGSUNG<br>SWIPE JUGA BISA DI PAPAN</p>
+      <button class="ctl" id="startBtn">START</button>
+    </div>
+    <div class="overlay hidden" id="overOv">
+      <h2>TOP OUT</h2>
+      <p class="big">SCORE: <span id="finalScore">0</span></p>
+      <p id="newBestMsg" class="hidden" style="color:#00ff88;">★ NEW BEST! ★</p>
+      <button class="ctl" id="retryBtn">RETRY</button>
+    </div>
+  </div>
+  <div id="side">
+    <div class="box"><b>NEXT</b><canvas id="nextCv" width="72" height="72"></canvas></div>
+    <div class="box"><b>COMBO</b><span id="combo">0</span></div>
+  </div>
+</div>
+<div id="touchpad">
+  <div class="tbtn" id="btnLeft">⬅</div>
+  <div class="tbtn" id="btnRot">⟳</div>
+  <div class="tbtn" id="btnRight">➡</div>
+  <div class="tbtn" id="btnDown">⬇</div>
+  <div class="tbtn" id="btnDrop" style="grid-column: span 4;">⤓ HARD DROP</div>
+</div>
+<div class="crt"></div>
+<script>
+(function () {
+  'use strict';
+  const COLS = 10, ROWS = 20;
+  const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+  const nextCv = document.getElementById('nextCv'), nctx = nextCv.getContext('2d');
+  const HS_KEY = '***';
+
+  // responsive canvas: fit to available width, keep 1:2 ratio
+  function fitCanvas() {
+    const avail = Math.min(window.innerWidth - 16, 320);
+    const cell = Math.floor(avail / COLS);
+    const w = cell * COLS, h = cell * ROWS;
+    cv.style.width = w + 'px';
+    cv.style.height = h + 'px';
+    cv.width = w; cv.height = h;
+  }
+  fitCanvas();
+  window.addEventListener('resize', fitCanvas);
+
+  const SHAPES = {
+    I: [[1,1,1,1]],
+    O: [[1,1],[1,1]],
+    T: [[1,1,1],[0,1,0]],
+    S: [[0,1,1],[1,1,0]],
+    Z: [[1,1,0],[0,1,1]],
+    J: [[1,0,0],[1,1,1]],
+    L: [[0,0,1],[1,1,1]]
+  };
+  const COLORS = { I:'#00f0ff', O:'#ffe600', T:'#ff00aa', S:'#00ff88', Z:'#ff0055', J:'#4477ff', L:'#ff8800' };
+  const KEYS = Object.keys(SHAPES);
+
+  let grid, cur, nextPiece, score, lines, level, combo, alive, running = false, dropMs, lastDrop = 0, raf = null, particles = [];
+
+  function loadBest() { const v = parseInt(localStorage.getItem(HS_KEY) || '0', 10); return isNaN(v) ? 0 : v; }
+  document.getElementById('best').textContent = loadBest();
+
+  function randPiece() {
+    const k = KEYS[Math.floor(Math.random() * KEYS.length)];
+    return { k, m: SHAPES[k].map(r => r.slice()), x: 3, y: 0 };
+  }
+
+  function rotate(m) {
+    const R = m.length, C = m[0].length;
+    const out = [];
+    for (let c = 0; c < C; c++) {
+      const row = [];
+      for (let r = R - 1; r >= 0; r--) row.push(m[r][c]);
+      out.push(row);
+    }
+    return out;
+  }
+
+  function fits(m, px, py) {
+    for (let r = 0; r < m.length; r++) {
+      for (let c = 0; c < m[r].length; c++) {
+        if (!m[r][c]) continue;
+        const x = px + c, y = py + r;
+        if (x < 0 || x >= COLS || y >= ROWS) return false;
+        if (y >= 0 && grid[y][x]) return false;
+      }
+    }
+    return true;
+  }
+
+  function burst(cx, cy, color) {
+    for (let i = 0; i < 8; i++) {
+      const a = Math.random() * Math.PI * 2;
+      particles.push({ x: cx, y: cy, vx: Math.cos(a)*2.2, vy: Math.sin(a)*2.2, life: 1, color });
+    }
+  }
+
+  function clearLines() {
+    let cleared = 0;
+    for (let r = ROWS - 1; r >= 0; r--) {
+      if (grid[r].every(v => v)) {
+        grid.splice(r, 1);
+        grid.unshift(Array(COLS).fill(0));
+        cleared++;
+        r++; // recheck same row index
+      }
+    }
+    if (cleared) {
+      combo++;
+      lines += cleared;
+      const pts = [0, 100, 300, 500, 800][cleared] * level + (combo > 1 ? combo * 50 : 0);
+      score += pts;
+      const cy = (ROWS - cleared) * cellSize();
+      burst(cv.width / 2, cy, '#ffe600', 20);
+      level = Math.floor(lines / 10) + 1;
+      dropMs = Math.max(90, 620 - (level - 1) * 55);
+      document.getElementById('combo').textContent = combo;
+    } else {
+      combo = 0;
+      document.getElementById('combo').textContent = '0';
+    }
+    document.getElementById('score').textContent = score;
+    document.getElementById('lines').textContent = lines;
+    document.getElementById('level').textContent = level;
+  }
+
+  function cellSize() { return cv.width / COLS; }
+
+  function lockPiece() {
+    cur.m.forEach((row, r) => row.forEach((v, c) => {
+      if (v && cur.y + r >= 0) grid[cur.y + r][cur.x + c] = COLORS[cur.k];
+    }));
+    // top out check: any block locked in negative-y zone overflow
+    clearLines();
+    spawn();
+  }
+
+  function spawn() {
+    cur = nextPiece || randPiece();
+    nextPiece = randPiece();
+    drawNext();
+    if (!fits(cur.m, cur.x, cur.y)) {
+      alive = false;
+      running = false;
+      const best = loadBest();
+      if (score > best) { localStorage.setItem(HS_KEY, String(score)); document.getElementById('best').textContent = score; document.getElementById('newBestMsg').classList.remove('hidden'); }
+      else document.getElementById('newBestMsg').classList.add('hidden');
+      document.getElementById('finalScore').textContent = score;
+      setTimeout(() => document.getElementById('overOv').classList.remove('hidden'), 350);
+    }
+  }
+
+  function drawNext() {
+    nctx.clearRect(0, 0, 72, 72);
+    const m = nextPiece.m, s = 14;
+    const off = (72 - m[0].length * s) / 2;
+    m.forEach((row, r) => row.forEach((v, c) => {
+      if (v) {
+        nctx.fillStyle = COLORS[nextPiece.k];
+        nctx.fillRect(off + c * s, 10 + r * s, s - 2, s - 2);
+      }
+    }));
+  }
+
+  function update() {
+    if (fits(cur.m, cur.x, cur.y + 1)) cur.y++;
+    else lockPiece();
+  }
+
+  function hardDrop() {
+    while (fits(cur.m, cur.x, cur.y + 1)) { cur.y++; score += 2; }
+    document.getElementById('score').textContent = score;
+    lockPiece();
+  }
+
+  function draw(ts) {
+    const cs = cellSize();
+    ctx.fillStyle = '#05070d';
+    ctx.fillRect(0, 0, cv.width, cv.height);
+    // grid lines
+    ctx.strokeStyle = 'rgba(0,255,136,0.05)';
+    for (let c = 1; c < COLS; c++) { ctx.beginPath(); ctx.moveTo(c*cs, 0); ctx.lineTo(c*cs, cv.height); ctx.stroke(); }
+    for (let r = 1; r < ROWS; r++) { ctx.beginPath(); ctx.moveTo(0, r*cs); ctx.lineTo(cv.width, r*cs); ctx.stroke(); }
+    // locked blocks
+    grid.forEach((row, r) => row.forEach((v, c) => {
+      if (v) {
+        ctx.save();
+        ctx.shadowColor = v; ctx.shadowBlur = 6;
+        ctx.fillStyle = v;
+        ctx.fillRect(c*cs + 1, r*cs + 1, cs - 2, cs - 2);
+        ctx.restore();
+      }
+    }));
+    // current piece
+    if (alive) {
+      cur.m.forEach((row, r) => row.forEach((v, c) => {
+        if (v && cur.y + r >= 0) {
+          ctx.save();
+          ctx.shadowColor = COLORS[cur.k]; ctx.shadowBlur = 10;
+          ctx.fillStyle = COLORS[cur.k];
+          ctx.fillRect((cur.x + c)*cs + 1, (cur.y + r)*cs + 1, cs - 2, cs - 2);
+          ctx.restore();
+        }
+      }));
+    }
+    // particles
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx; p.y += p.vy; p.life -= 0.05;
+      if (p.life <= 0) { particles.splice(i, 1); continue; }
+      ctx.globalAlpha = Math.max(0, p.life);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  function loop(ts) {
+    raf = requestAnimationFrame(loop);
+    if (running && ts - lastDrop >= dropMs) { lastDrop = ts; if (alive) update(); }
+    draw(ts);
+  }
+
+  // ---- controls ----
+  function act(name) {
+    if (!running || !alive) return;
+    if (name === 'left' && fits(cur.m, cur.x - 1, cur.y)) cur.x--;
+    else if (name === 'right' && fits(cur.m, cur.x + 1, cur.y)) cur.x++;
+    else if (name === 'rot') {
+      const m = rotate(cur.m);
+      // wall-kick attempts
+      for (const dx of [0, -1, 1, -2, 2]) {
+        if (fits(m, cur.x + dx, cur.y)) { cur.m = m; cur.x += dx; break; }
+      }
+    }
+    else if (name === 'down') { if (fits(cur.m, cur.x, cur.y + 1)) { cur.y++; score += 1; document.getElementById('score').textContent = score; } }
+    else if (name === 'drop') hardDrop();
+  }
+
+  document.addEventListener('keydown', e => {
+    const k = e.key.toLowerCase();
+    if (['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k)) e.preventDefault();
+    if (k === 'arrowleft' || k === 'a') act('left');
+    else if (k === 'arrowright' || k === 'd') act('right');
+    else if (k === 'arrowup' || k === 'w') act('rot');
+    else if (k === 'arrowdown' || k === 's') act('down');
+    else if (k === ' ') act('drop');
+  });
+
+  // touch buttons (repeat while held for left/right/down)
+  function bindHold(id, name) {
+    const el = document.getElementById(id);
+    let iv = null;
+    const start = e => {
+      e.preventDefault();
+      el.classList.add('pressed');
+      act(name);
+      if (name === 'left' || name === 'right' || name === 'down') {
+        iv = setInterval(() => act(name), 110);
+      }
+    };
+    const end = () => { el.classList.remove('pressed'); if (iv) { clearInterval(iv); iv = null; } };
+    el.addEventListener('touchstart', start, { passive: false });
+    el.addEventListener('touchend', end);
+    el.addEventListener('touchcancel', end);
+    el.addEventListener('mousedown', start);
+    el.addEventListener('mouseup', end);
+    el.addEventListener('mouseleave', end);
+  }
+  bindHold('btnLeft', 'left');
+  bindHold('btnRight', 'right');
+  bindHold('btnDown', 'down');
+  document.getElementById('btnRot').addEventListener('touchstart', e => { e.preventDefault(); act('rot'); }, { passive: false });
+  document.getElementById('btnRot').addEventListener('mousedown', () => act('rot'));
+  document.getElementById('btnDrop').addEventListener('touchstart', e => { e.preventDefault(); act('drop'); }, { passive: false });
+  document.getElementById('btnDrop').addEventListener('mousedown', () => act('drop'));
+
+  // swipe on board: left/right/down move, tap = rotate
+  let tsx = 0, tsy = 0, tst = 0;
+  cv.addEventListener('touchstart', e => {
+    e.preventDefault();
+    tsx = e.touches[0].clientX; tsy = e.touches[0].clientY; tst = Date.now();
+  }, { passive: false });
+  cv.addEventListener('touchend', e => {
+    e.preventDefault();
+    const dx = e.changedTouches[0].clientX - tsx, dy = e.changedTouches[0].clientY - tsy;
+    const dt = Date.now() - tst;
+    if (dt < 250 && Math.abs(dx) < 18 && Math.abs(dy) < 18) { act('rot'); return; }
+    if (dy > 60 && Math.abs(dy) > Math.abs(dx) * 1.6) { act('drop'); return; }
+    if (Math.abs(dx) > 24) act(dx > 0 ? 'right' : 'left');
+  }, { passive: false });
+
+  function start() {
+    grid = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+    score = 0; lines = 0; level = 1; combo = 0; alive = true;
+    dropMs = 620;
+    nextPiece = null;
+    spawn(); spawn(); // seed cur + next
+    document.getElementById('score').textContent = '0';
+    document.getElementById('lines').textContent = '0';
+    document.getElementById('level').textContent = '1';
+    document.getElementById('combo').textContent = '0';
+    document.getElementById('readyOv').classList.add('hidden');
+    document.getElementById('overOv').classList.add('hidden');
+    running = true;
+    if (!raf) raf = requestAnimationFrame(loop);
+  }
+  document.getElementById('startBtn').addEventListener('click', start);
+  document.getElementById('retryBtn').addEventListener('click', start);
+
+  // idle board behind overlay
+  grid = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+  alive = false;
+  raf = requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
