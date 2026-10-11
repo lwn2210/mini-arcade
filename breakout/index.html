@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>NEON BREAKOUT</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='20' r='4' fill='%23ffffff'/%3E%3Crect x='6' y='8' width='8' height='4' fill='%23ff00aa'/%3E%3Crect x='16' y='8' width='8' height='4' fill='%23ffe600'/%3E%3Crect x='26' y='8' width='0' height='0' fill='%2300f0ff'/%3E%3C/svg%3E"><title>NEON BREAKOUT</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23050508'/%3E%3Crect x='8' y='8' width='20' height='9' rx='2' fill='%23ff2d95'/%3E%3Crect x='36' y='8' width='20' height='9' rx='2' fill='%2300f0ff'/%3E%3Crect x='22' y='23' width='20' height='9' rx='2' fill='%23ffe600'/%3E%3Ccircle cx='32' cy='44' r='5' fill='%23ffffff'/%3E%3Crect x='19' y='53' width='26' height='5' rx='2.5' fill='%2300f0ff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -133,6 +134,15 @@ let state = "ready";   // ready | play | clear | over | win
 let stateTimer = 0;
 let newHS = false;
 const keys = { left: false, right: false };
+
+/* ---------- state visual (render-only, tidak menyentuh fisika) ---------- */
+let ballTrail = [];        // riwayat posisi bola untuk trail
+let paddlePrevX = null;    // posisi paddle frame sebelumnya (tracking arah gerak)
+let paddleGlow = 0;        // 0..1 intensitas ekstra saat paddle bergerak
+let overlayPopT = 0;       // timestamp mulai pop-in overlay
+let lastRenderState = null;
+let comboPulse = 0;        // 0..1 pulse saat combo naik
+let lastCombo = 0;
 
 /* ---------- brick layout ---------- */
 const COLS = 10;
@@ -381,10 +391,16 @@ function drawBricks() {
     const full = b.hp >= 2;
     const color = full ? base : shade(base, 0.45);
     neonRect(b.x, b.y, b.w, b.h, color, full ? 14 : 7);
+    // inner highlight gradient: 20% atas lebih terang (murni render)
+    const g = ctx.createLinearGradient(0, b.y, 0, b.y + b.h * 0.2);
+    g.addColorStop(0, "rgba(255,255,255,0.42)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = g;
+    ctx.fillRect(b.x + 1, b.y + 1, b.w - 2, b.h * 0.2);
     // core terang untuk brick 2-hit yang masih utuh
     if (full) {
-      ctx.fillStyle = "rgba(255,255,255,0.5)";
-      ctx.fillRect(b.x + 3, b.y + 3, b.w - 6, 3);
+      ctx.fillStyle = "rgba(255,255,255,0.35)";
+      ctx.fillRect(b.x + 3, b.y + b.h * 0.2, b.w - 6, 2);
     } else if (b.maxHp >= 2) {
       // retakan pada brick yang sudah rusak
       ctx.strokeStyle = "rgba(255,255,255,0.6)";
@@ -402,12 +418,35 @@ function drawBricks() {
 function drawPaddle() {
   const x = paddle.x - paddle.w / 2;
   const y = paddle.y - paddle.h / 2;
-  neonRect(x, y, paddle.w, paddle.h, "#00f0ff", 16);
+  // glow mengikuti arah gerak terakhir: lebih terang saat bergerak
+  const glow = 14 + 12 * paddleGlow;
+  neonRect(x, y, paddle.w, paddle.h, "#00f0ff", glow);
+  if (paddleGlow > 0.05) {
+    ctx.save();
+    ctx.shadowColor = "#00f0ff";
+    ctx.shadowBlur = 18;
+    ctx.fillStyle = "rgba(0,240,255," + (0.3 * paddleGlow).toFixed(3) + ")";
+    ctx.fillRect(x - 3, y - 2, paddle.w + 6, paddle.h + 4);
+    ctx.restore();
+  }
   ctx.fillStyle = "rgba(255,255,255,0.65)";
   ctx.fillRect(x + 4, y + 3, paddle.w - 8, 2);
 }
 
 function drawBall() {
+  // trail pendek: 5 posisi terakhir, alpha menurun (riwayat dicatat saat draw)
+  ballTrail.push({ x: ball.x, y: ball.y });
+  if (ballTrail.length > 5) ballTrail.shift();
+  for (let i = 0; i < ballTrail.length; i++) {
+    const tp = ballTrail[i];
+    const a = ((i + 1) / ballTrail.length) * 0.28;
+    ctx.globalAlpha = a;
+    ctx.fillStyle = "#00f0ff";
+    ctx.beginPath();
+    ctx.arc(tp.x, tp.y, ball.r * (0.4 + 0.5 * (i / ballTrail.length)), 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
   ctx.save();
   ctx.shadowColor = "#ffffff";
   ctx.shadowBlur = 18;
@@ -448,23 +487,50 @@ function drawHUD() {
   text("LV " + level, W - 16, 14, 12, "#b967ff", "right");
   text("♥".repeat(Math.max(0, lives)), W - 16, 36, 12, "#ff2d95", "right");
   const mult = Math.min(1 + combo * 0.5, 5);
+  if (combo !== lastCombo) {
+    if (combo > lastCombo) comboPulse = 1; // pulse saat combo naik
+    lastCombo = combo;
+  }
+  comboPulse *= 0.9;
   if (combo >= 2) {
-    text("COMBO x" + combo + "  (" + mult.toFixed(1) + "x)", W / 2, H - 24, 11, "#39ff14", "center");
+    const s = 11 * (1 + 0.35 * comboPulse);
+    text("COMBO x" + combo + "  (" + mult.toFixed(1) + "x)", W / 2, H - 24 - (s - 11) / 2, s, "#39ff14", "center");
   }
 }
 
 function drawCenterOverlay(lines) {
   ctx.fillStyle = "rgba(5,5,8,0.78)";
   ctx.fillRect(0, 0, W, H);
+  // pop-in: scale 0.9 -> 1 (ease-out cubic, ~240ms)
+  const t = clamp((performance.now() - overlayPopT) / 240, 0, 1);
+  const s = 0.9 + 0.1 * (1 - Math.pow(1 - t, 3));
+  ctx.save();
+  ctx.translate(W / 2, H / 2);
+  ctx.scale(s, s);
+  ctx.translate(-W / 2, -H / 2);
   let y = H / 2 - (lines.length - 1) * 34;
   for (const ln of lines) {
     text(ln.str, W / 2, y, ln.size || 16, ln.color, "center");
     y += (ln.gap || 52);
   }
+  ctx.restore();
 }
 
 function render() {
   ctx.clearRect(0, 0, W, H);
+
+  // trigger pop-in saat masuk overlay state
+  if (state !== lastRenderState) {
+    if (state === "ready" || state === "over" || state === "win") overlayPopT = performance.now();
+    if (state !== "play") ballTrail.length = 0;
+    lastRenderState = state;
+  }
+  // tracking gerak paddle (render-only) untuk glow arah
+  if (paddlePrevX === null) paddlePrevX = paddle.x;
+  const pdx = paddle.x - paddlePrevX;
+  paddlePrevX = paddle.x;
+  if (Math.abs(pdx) > 0.1) paddleGlow = 1;
+  else paddleGlow *= 0.88;
 
   // grid latar samar
   ctx.strokeStyle = "rgba(0,240,255,0.05)";
@@ -495,15 +561,15 @@ function render() {
     text("LEVEL " + level + " CLEARED!", W / 2, H / 2 - 20, 20, "#39ff14", "center");
   } else if (state === "over") {
     drawCenterOverlay([
-      { str: "GAME OVER", size: 30, color: "#ff2d95", gap: 70 },
-      { str: "SCORE " + score, size: 14, color: "#00f0ff", gap: 50 },
+      { str: "GAME OVER", size: 30, color: "#ff2d95", gap: 74 },
+      { str: String(score), size: 34, color: "#00f0ff", gap: 62 },
       { str: newHS ? "NEW HIGH SCORE!" : "HIGH " + highScore, size: 12, color: newHS ? "#ffe600" : "#8888aa", gap: 60 },
       { str: "KLIK / SPASI UNTUK ULANG", size: 11, color: "#ffe600", gap: 40 }
     ]);
   } else if (state === "win") {
     drawCenterOverlay([
-      { str: "YOU WIN!", size: 32, color: "#39ff14", gap: 70 },
-      { str: "SCORE " + score, size: 14, color: "#00f0ff", gap: 50 },
+      { str: "YOU WIN!", size: 32, color: "#39ff14", gap: 74 },
+      { str: String(score), size: 34, color: "#00f0ff", gap: 62 },
       { str: newHS ? "NEW HIGH SCORE!" : "HIGH " + highScore, size: 12, color: newHS ? "#ffe600" : "#8888aa", gap: 60 },
       { str: "KLIK / SPASI UNTUK MAIN LAGI", size: 11, color: "#ffe600", gap: 40 }
     ]);
