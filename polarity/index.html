@@ -254,12 +254,24 @@ let stats={
 
 // ACHIEVEMENTS DEFINITION & PERSISTENCE
 const ACHIEVEMENTS = [
-  {id:'first_absorb', icon:'🔵', title:'First Attraction', desc:'Sedot orb pertama kamu.'},
-  {id:'bomb_kicker',  icon:'⚽', title:'Bomb Kicker',      desc:'Tendang 5 bom menjauh dengan Repel.'},
-  {id:'level_3',      icon:'🚀', title:'Orb Pioneer',      desc:'Bertahan sampai Level 3.'},
-  {id:'hyper_drive',  icon:'⚡', title:'Overcharge Surge', desc:'Penuhi meteran & aktifkan Hyper Multiplier.'},
-  {id:'nuke_master',  icon:'💥', title:'Detonation Master', desc:'Ambil Nuke Orb dan bersihkan arena.'},
-  {id:'score_500',    icon:'👑', title:'Polarity Ace',     desc:'Capai total skor 500+ poin.'}
+  {id:'first_absorb', icon:'🔵',
+   title:{id:'Tarikan Pertama', en:'First Attraction'},
+   desc:{id:'Sedot orb pertama kamu.', en:'Absorb your first orb.'}},
+  {id:'bomb_kicker', icon:'⚽',
+   title:{id:'Penendang Bom', en:'Bomb Kicker'},
+   desc:{id:'Tendang 5 bom menjauh dengan Repel.', en:'Repel 5 bombs away.'}},
+  {id:'level_3', icon:'🚀',
+   title:{id:'Pionir Orb', en:'Orb Pioneer'},
+   desc:{id:'Bertahan sampai Level 3.', en:'Survive to Level 3.'}},
+  {id:'hyper_drive', icon:'⚡',
+   title:{id:'Lonjakan Overcharge', en:'Overcharge Surge'},
+   desc:{id:'Penuhi meteran & aktifkan Hyper Multiplier.', en:'Fill the meter and trigger Hyper Multiplier.'}},
+  {id:'nuke_master', icon:'💥',
+   title:{id:'Master Detonasi', en:'Detonation Master'},
+   desc:{id:'Ambil Nuke Orb dan bersihkan arena.', en:'Grab a Nuke Orb and clear the arena.'}},
+  {id:'score_500', icon:'👑',
+   title:{id:'Ace Polarity', en:'Polarity Ace'},
+   desc:{id:'Capai total skor 500+ poin.', en:'Reach a total score of 500+.'}}
 ];
 
 let unlockedAchieve = JSON.parse(localStorage.getItem('polarity_achievements') || '{}');
@@ -271,7 +283,8 @@ function saveAchievement(id){
   
   const ach = ACHIEVEMENTS.find(a=>a.id===id);
   if(ach){
-    showAchievementToast(ach.icon, ach.title);
+    const ttl = (typeof ach.title === 'object') ? ach.title[LANG] : ach.title;
+    showAchievementToast(ach.icon, ttl);
   }
   renderAchievementsUI();
 }
@@ -293,11 +306,13 @@ function renderAchievementsUI(){
     const isDone = !!unlockedAchieve[a.id];
     const div = document.createElement('div');
     div.className = `achieve-item ${isDone?'unlocked':''}`;
+    const aTitle = (typeof a.title === 'object') ? a.title[LANG] : a.title;
+    const aDesc  = (typeof a.desc  === 'object') ? a.desc[LANG]  : a.desc;
     div.innerHTML = `
       <div class="achieve-badge">${isDone ? a.icon : '🔒'}</div>
       <div class="achieve-text">
-        <h4>${a.title} ${isDone ? '✓' : ''}</h4>
-        <p>${a.desc}</p>
+        <h4>${aTitle} ${isDone ? '✓' : ''}</h4>
+        <p>${aDesc}</p>
       </div>
     `;
     list.appendChild(div);
