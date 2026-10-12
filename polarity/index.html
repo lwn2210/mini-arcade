@@ -87,6 +87,8 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 .btn{border:0;border-radius:999px;padding:12px 32px;background:#00e5ff;color:#03101c;font-size:14px;font-weight:900;letter-spacing:.12em;cursor:pointer;box-shadow:0 0 28px #00c9ff88;transition:transform .1s,box-shadow .1s}
 .btn:hover{transform:scale(1.04);box-shadow:0 0 35px #00c9ff}
 .back{position:fixed;bottom:16px;left:20px;color:#9db2ca;text-decoration:none;font-size:12px;z-index:6;font-weight:700}
+.hud-btn{pointer-events:auto;background:rgba(8,20,36,0.9);border:1px solid #00eaff;color:#00eaff;font:900 11px system-ui;letter-spacing:.1em;padding:5px 10px;border-radius:10px;cursor:pointer}
+.hud-btn:hover{background:#00eaff;color:#03101c}
 </style>
 </head>
 <body>
@@ -99,7 +101,11 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
     <div>POLARITY <span id="sign">＋ CYAN</span></div>
     <div class="multi-badge" id="hudMulti">1x MULTI</div>
   </div>
-  <div><span id="score">0000</span> · BEST <b id="best">0000</b></div>
+  <div style="display:flex;align-items:center;gap:8px;pointer-events:auto">
+    <span id="score">0000</span> · BEST <b id="best">0000</b>
+    <button class="hud-btn" id="langBtn" title="Language">ID</button>
+    <button class="hud-btn" id="btnPause" title="Pause">II</button>
+  </div>
 </div>
 
 <!-- OVERCHARGE METER -->
@@ -143,6 +149,19 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 <div class="bottom-hints">
   <div>KEMUDI: <span class="key-badge">WASD</span> / <span class="key-badge">MOUSE</span> / <span class="key-badge">DRAG</span></div>
   <div>FLIP: <span class="key-badge">SPASI</span> / <span class="key-badge">KLIK</span> / <span class="key-badge">TAP</span></div>
+</div>
+
+<!-- PAUSE OVERLAY -->
+<div class="overlay hidden" id="pause">
+  <div class="panel">
+    <div class="eyebrow" data-i18n="pauseTitle">PAUSED</div>
+    <h1 style="font-size:clamp(28px,7vw,46px)">II</h1>
+    <p style="color:#a7b9ce;font-size:13px;margin:6px 0 18px" data-i18n="pauseHint">Game paused. Tekan ESC / P untuk lanjut.</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn" id="btnResume" data-i18n="resume">LANJUT</button>
+      <button class="btn" id="btnQuit" style="background:#ff5040;box-shadow:0 0 24px rgba(255,80,64,.5)" data-i18n="quit">KELUAR</button>
+    </div>
+  </div>
 </div>
 
 <a class="back" href="../index.html">← MINI ARCADE</a>
@@ -305,6 +324,58 @@ $('btnViewAchieveGO').onclick = ()=>{
   $('tabAchieve').click();
 };
 
+// ===== LANGUAGE SYSTEM (ID / EN) =====
+let LANG = localStorage.getItem('polarity_lang') || 'id';
+const I18N = {
+  id:{
+    how:'CARA MAIN &amp; POWERS', resume:'LANJUT', quit:'KELUAR',
+    pauseTitle:'PAUSED', pauseHint:'Game dijeda. Tekan ESC / P untuk lanjut.',
+    deadBomb:'TERTABRAK BOM MAGNETIK DI LV', deadWall:'MENABRAK BATAS ARENA DI LV',
+    resultLevel:'Level Capai', resultScore:'Skor Akhir', resultBest:'Rekor',
+    play:'MULAI MAIN', again:'MAIN LAGI (ENTER)', goAchieve:'🏆 CEK ACHIEVEMENTS',
+    achHow:'🏆 ACHIEVEMENTS', toastTitle:'ACHIEVEMENT TERBUKA!'
+  },
+  en:{
+    how:'HOW TO PLAY &amp; POWERS', resume:'RESUME', quit:'QUIT',
+    pauseTitle:'PAUSED', pauseHint:'Game paused. Press ESC / P to resume.',
+    deadBomb:'HIT A MAGNETIC BOMB AT LV', deadWall:'CRASHED INTO ARENA WALL AT LV',
+    resultLevel:'Reached Level', resultScore:'Final Score', resultBest:'Best',
+    play:'START GAME', again:'PLAY AGAIN (ENTER)', goAchieve:'🏆 VIEW ACHIEVEMENTS',
+    achHow:'🏆 ACHIEVEMENTS', toastTitle:'ACHIEVEMENT UNLOCKED!'
+  }
+};
+function t_(k){ return (I18N[LANG] && I18N[LANG][k]) || k; }
+function applyLang(){
+  $('langBtn').textContent = LANG.toUpperCase();
+  $('tabHow').innerHTML = t_('how');
+  $('play').textContent = t_('play');
+  $('again').textContent = t_('again');
+  $('btnViewAchieveGO').textContent = t_('goAchieve');
+  $('btnResume').textContent = t_('resume');
+  $('btnQuit').textContent = t_('quit');
+  const pt = document.querySelector('[data-i18n="pauseTitle"]'); if(pt) pt.textContent = t_('pauseTitle');
+  const ph = document.querySelector('[data-i18n="pauseHint"]'); if(ph) ph.textContent = t_('pauseHint');
+}
+$('langBtn').onclick = ()=>{ LANG = (LANG==='id')?'en':'id'; localStorage.setItem('polarity_lang', LANG); applyLang(); };
+applyLang();
+
+// ===== PAUSE SYSTEM =====
+let paused = false;
+function setPaused(v){
+  if(v && (!alive || dying)) return;   // hanya bisa pause saat sedang bermain
+  paused = v;
+  $('pause').classList.toggle('hidden', !paused);
+  if(!paused){ last = performance.now(); requestAnimationFrame(loop); }
+}
+$('btnPause').onclick = ()=>setPaused(!paused);
+$('btnResume').onclick = ()=>setPaused(false);
+$('btnQuit').onclick = ()=>{ setPaused(false); alive=false; dying=false; paused=false;
+  $('pause').classList.add('hidden'); $('start').classList.remove('hidden'); };
+
+// ===== FIX: TAP/TOUCH HARUS BISA KLIK TOMBOL MODAL =====
+// touchstart global tidak boleh preventDefault saat overlay/modal sedang tampil.
+
+
 // POWER-UP TIMERS
 let shieldActive=false, magnetTimer=0, freezeTimer=0;
 
@@ -364,10 +435,13 @@ function pointer(e){
 
 addEventListener('mousemove',pointer);
 addEventListener('touchmove',e=>{pointer(e);e.preventDefault()},{passive:false});
-addEventListener('touchstart',e=>{pointer(e);if(!alive && !dying)reset();else flipPolarity();e.preventDefault()},{passive:false});
+addEventListener('touchstart',e=>{if(e.target&&e.target.closest&&e.target.closest('.overlay,.panel,button,a'))return;pointer(e);if(!alive && !dying)reset();else flipPolarity();e.preventDefault()},{passive:false});
 addEventListener('mousedown',e=>{pointer(e);if(alive && !dying)flipPolarity();});
 addEventListener('keydown',e=>{
   keys[e.key.toLowerCase()]=true;
+  var k=e.key.toLowerCase();
+  if(k==='escape'||k==='p'){ e.preventDefault(); setPaused(!paused); return; }
+  if(paused) return;
   if(e.code==='Space'){e.preventDefault();flipPolarity()}
   if(e.key==='Enter'&&!alive&&!dying)reset();
 });
@@ -457,7 +531,7 @@ function showGameOverModal(){
   best = Math.max(best, score);
   localStorage.setItem('polarity_best', best);
   $('best').textContent = String(best).padStart(4,'0');
-  $('result').textContent = `Level Capai: LV ${level}  |  Skor Akhir: ${String(score).padStart(4,'0')}  |  Rekor: ${String(best).padStart(4,'0')}`;
+  $('result').textContent = `${t_('resultLevel')}: LV ${level}  |  ${t_('resultScore')}: ${String(score).padStart(4,'0')}  |  ${t_('resultBest')}: ${String(best).padStart(4,'0')}`;
   $('end').classList.remove('hidden');
 }
 
@@ -485,6 +559,8 @@ function loop(now){
     }
     return;
   }
+
+  if(paused){ return; }
 
   // Freeze time effect
   let simDt = (freezeTimer > 0) ? dt * 0.45 : dt;
@@ -630,7 +706,7 @@ function loop(now){
           addFloatingText("SHIELD BROKE!", player.x, player.y - 20, '#00ff88');
           o.dead = true;
         } else {
-          triggerDeath(`TERTABRAK BOM MAGNETIK DI LV ${level}!`);
+          triggerDeath(`${t_("deadBomb")} ${level}!`);
           break;
         }
       } else if(o.type === 'shield'){
@@ -748,7 +824,7 @@ function loop(now){
       if(player.y < 76){ player.y = 80; player.vy = 220; }
       if(player.y > h-16){ player.y = h-20; player.vy = -220; }
     } else {
-      triggerDeath(`MENABRAK BATAS ARENA DI LV ${level}!`);
+      triggerDeath(`${t_("deadWall")} ${level}!`);
     }
   }
 
