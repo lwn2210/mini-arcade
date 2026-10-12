@@ -398,7 +398,7 @@ function applyLang(){
   const tt=document.querySelector('.achieve-title'); if(tt) tt.textContent = t_('toastTitle');
   const mb=document.getElementById('btnMusic'); if(mb) mb.textContent = musicOn ? '🔊' : '🔇';
 }
-$('langBtn').onclick = ()=>{ LANG = (LANG==='id')?'en':'id'; localStorage.setItem('polarity_lang', LANG); applyLang();
+$('langBtn').onclick = ()=>{ LANG = (LANG==='id')?'en':'id'; localStorage.setItem('polarity_lang', LANG); applyLang(); };
 
 // ===== MUSIC SYSTEM (WebAudio generated, tanpa aset eksternal) =====
 let audioCtx = null;
@@ -460,8 +460,6 @@ function toggleMusic(){
 
 document.getElementById('btnMusic').onclick = toggleMusic;
 
-// Musik ikut berhenti saat pause / game over
- };
 applyLang();
 
 // ===== PAUSE SYSTEM =====
