@@ -188,7 +188,7 @@
 <body>
   <div class="logo">MINI<span> ARCADE</span></div>
   <div class="tagline">NEON COLLECTION · SINGLE-FILE GAMES · ZERO DEPENDENCY<br>PILIH GAME ▼</div>
-  <div class="status-strip"><span class="status-dot"></span> OPEN 24/7 · SERVER RUNS LOCAL · 7 GAMES</div>
+  <div class="status-strip"><span class="status-dot"></span> OPEN 24/7 · SERVER RUNS LOCAL · 8 GAMES</div>
 
   <div class="grid">
     <a class="card cyan" href="snake/index.html">
@@ -214,6 +214,12 @@
       <h2>NEON TETRIS</h2>
       <p>Klasik block stacker, mobile-first: tombol sentuh gede, swipe & tap di papan. Clear 4 baris sekaligus buat TETRIS!</p>
       <div class="hs" id="hsTetris">★ BEST: 0</div>
+    </a>
+    <a class="card cyan" href="polarity/index.html">
+      <span class="icon">🧲</span>
+      <h2>POLARITY</h2>
+      <p>Arcade momentum puzzler: tarik dan tolak orb dengan flip polaritas, lalu slingshot melewati gate. Bukan runner—medan listrik jadi mesin gerakmu.</p>
+      <div class="hs">⚡ NEW MECHANIC · MAGNETIC MOMENTUM</div>
     </a>
     <a class="card orange featured" href="https://lwn2210.github.io/cyber-raid-2088/" target="_blank" rel="noopener">
       <span class="icon">🛸</span>
@@ -243,7 +249,7 @@
       <label>GAME</label>
       <select id="bugGame">
         <option>snake</option><option>breakout</option><option>flappy</option>
-        <option>tetris</option><option>hero</option><option>survivors</option>
+        <option>tetris</option><option>hero</option><option>survivors</option><option>polarity</option>
         <option>cyber-raid-2088</option><option>hub / lainnya</option>
       </select>
       <label>JUDUL</label>
@@ -277,6 +283,7 @@
     fmt('hsFlappy', 'flappycyber_hs');
     fmt('hsTetris', 'neontetris_hs');
     fmt('hsHero', 'neonhero_hs');
+    // Polarity tracks its best score in its own game screen.
 
     // ===== ticket system (GitHub Issues) =====
     var REPO = 'lwn2210/mini-arcade';

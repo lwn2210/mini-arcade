@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>POLARITY — Mini Arcade</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23050710'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%2300f0ff' stroke-width='2'/%3E%3Cpath d='M12 16h8M16 12v8' stroke='%23ff2bd6' stroke-width='2'/%3E%3C/svg%3E">
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050710;color:#eafaff;font-family:system-ui,sans-serif;touch-action:none}canvas{position:fixed;inset:0;width:100%;height:100%;display:block}.hud{position:fixed;top:0;left:0;right:0;padding:16px 20px;display:flex;justify-content:space-between;pointer-events:none;text-shadow:0 0 12px #00d9ff;font-weight:800;letter-spacing:.12em}.hud span{color:#ff50d7}.meter{position:fixed;top:60px;left:20px;right:20px;height:5px;background:#142337;border-radius:5px;overflow:hidden}.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#00f0ff,#ff2bd6);box-shadow:0 0 12px #00f0ff}.overlay{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse,rgba(9,22,43,.8),rgba(2,5,12,.94));padding:22px;text-align:center}.overlay.hidden{display:none}.panel{max-width:520px}.eyebrow{font-size:11px;letter-spacing:.35em;color:#00f0ff}.panel h1{font-size:clamp(38px,10vw,72px);line-height:1;margin:16px 0;color:#f6fbff;text-shadow:0 0 28px #00cfff}.panel p{color:#a7b9ce;line-height:1.8;font-size:15px}.panel strong{color:#ff55db}.btn{border:0;border-radius:999px;padding:15px 30px;background:#00e5ff;color:#03101c;font-size:15px;font-weight:900;letter-spacing:.12em;cursor:pointer;box-shadow:0 0 28px #00c9ff66}.back{position:fixed;bottom:18px;left:20px;color:#9db2ca;text-decoration:none;font-size:13px;z-index:2}.hint{font-size:12px!important;color:#6e829a!important}
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+<div class="hud"><div>POLARITY <span id="sign">＋ ATTRACT</span></div><div><span id="score">0000</span> · BEST <b id="best">0000</b></div></div><div class="meter"><i id="progress"></i></div>
+<a class="back" href="../index.html">← MINI ARCADE</a>
+<div class="overlay" id="start"><div class="panel"><div class="eyebrow">A MOMENTUM PUZZLE · ARCADE ORIGINAL</div><h1>POLARITY</h1><p>Steer a charged core through a field of drifting orbs. <strong>Attract</strong> pulls them in; flip to <strong>repel</strong> and sling yourself through gates. Build momentum without touching the walls.</p><p><b>Mechanic:</b> position with mouse / WASD / touch, switch polarity with click / Space. The field itself is your engine.</p><button class="btn" id="play">ENTER THE FIELD</button><p class="hint">PHONE: drag to steer, tap to flip · DESKTOP: mouse/WASD + click/Space</p></div></div>
+<div class="overlay hidden" id="end"><div class="panel"><div class="eyebrow">FIELD COLLAPSED</div><h1>RUN ENDED</h1><p id="result"></p><button class="btn" id="again">RE-ENTER FIELD</button></div></div>
+<script>
+(()=>{'use strict';
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');let w=0,h=0,dpr=1;
+function resize(){dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}addEventListener('resize',resize);resize();
+const $=id=>document.getElementById(id), keys={}, mouse={x:w/2,y:h/2,active:false}, player={x:w/2,y:h/2,vx:0,vy:0,r:11};
+let orbs=[],gates=[],particles=[],score=0,best=+(localStorage.getItem('polarity_best')||0),alive=false,flip=1,time=0,last=0,spawn=0,trail=[];
+$('best').textContent=String(best).padStart(4,'0');
+function reset(){player.x=w*.22;player.y=h*.5;player.vx=70;player.vy=0;orbs=[];gates=[];particles=[];trail=[];score=0;time=0;spawn=0;flip=1;alive=true;$('score').textContent='0000';$('sign').textContent='＋ ATTRACT';$('start').classList.add('hidden');$('end').classList.add('hidden');last=performance.now();requestAnimationFrame(loop)}
+function flipPolarity(){if(!alive)return;flip*=-1;$('sign').textContent=flip===1?'＋ ATTRACT':'− REPEL';for(let i=0;i<12;i++){let a=Math.random()*Math.PI*2;particles.push({x:player.x,y:player.y,vx:Math.cos(a)*90,vy:Math.sin(a)*90,life:.35,c:flip===1?'#00eaff':'#ff50d7'})}}
+function pointer(e){const t=e.touches?e.touches[0]:e;mouse.x=t.clientX;mouse.y=t.clientY;mouse.active=true}
+addEventListener('mousemove',pointer);addEventListener('touchmove',e=>{pointer(e);e.preventDefault()},{passive:false});addEventListener('touchstart',e=>{pointer(e);if(!alive)reset();e.preventDefault()},{passive:false});addEventListener('mousedown',e=>{pointer(e);flipPolarity()});addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.code==='Space'){e.preventDefault();flipPolarity()}if(e.key==='Enter'&&!alive)reset()});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);$('play').onclick=reset;$('again').onclick=reset;
+function orb(){let side=Math.random()<.5?1:-1;orbs.push({x:side>0?w+24:-24,y:60+Math.random()*(h-120),vx:-side*(45+Math.random()*45),vy:(Math.random()-.5)*90,r:8+Math.random()*7,charge:Math.random()<.5?1:-1,phase:Math.random()*6})}
+function gate(){let gap=Math.max(150,h*.34-time*1.1);gates.push({x:w+40,gapY:100+Math.random()*Math.max(30,h-200),gap,passed:false})}
+function finish(){if(!alive)return;alive=false;best=Math.max(best,score);localStorage.setItem('polarity_best',best);$('best').textContent=String(best).padStart(4,'0');$('result').textContent=`Score ${String(score).padStart(4,'0')} · Best ${String(best).padStart(4,'0')}. Flip polarity to turn each orb into a slingshot.`;$('end').classList.remove('hidden')}
+function loop(now){if(!alive)return;let dt=Math.min(.033,(now-last)/1000);last=now;time+=dt;spawn-=dt;if(spawn<=0){orb();spawn=Math.max(.38,1.1-time*.008);if(Math.floor(time)%9===0&&Math.floor(time)!==Math.floor(time-dt))gate()}
+let ax=0,ay=0;if(keys.a||keys.arrowleft)ax-=1;if(keys.d||keys.arrowright)ax+=1;if(keys.w||keys.arrowup)ay-=1;if(keys.s||keys.arrowdown)ay+=1;if(mouse.active){ax+=(mouse.x-player.x)*.004;ay+=(mouse.y-player.y)*.004}player.vx+=ax*190*dt;player.vy+=ay*190*dt;
+for(const o of orbs){o.x+=o.vx*dt;o.y+=o.vy*dt+Math.sin(time*2+o.phase)*16*dt;let dx=player.x-o.x,dy=player.y-o.y,d=Math.hypot(dx,dy)||1;let force=flip*o.charge*620/(d*d+150);o.vx+=dx/d*force*dt;o.vy+=dy/d*force*dt;if(d<player.r+o.r){score+=10;player.vx-=dx/d*o.charge*65;player.vy-=dy/d*o.charge*65;for(let j=0;j<8;j++)particles.push({x:o.x,y:o.y,vx:(Math.random()-.5)*180,vy:(Math.random()-.5)*180,life:.35,c:o.charge===flip?'#00eaff':'#ff50d7'});o.dead=true}}
+orbs=orbs.filter(o=>!o.dead&&o.x>-70&&o.x<w+100&&o.y>-40&&o.y<h+40);
+for(const g of gates){g.x-=Math.max(100,150+time*1.1)*dt;if(!g.passed&&g.x<player.x){g.passed=true;score+=25}if(Math.abs(g.x-player.x)<player.r+12&&(player.y<g.gapY-g.gap/2||player.y>g.gapY+g.gap/2))finish()}
+gates=gates.filter(g=>g.x>-50);
+player.vx*=Math.pow(.985,dt*60);player.vy*=Math.pow(.985,dt*60);player.x+=player.vx*dt;player.y+=player.vy*dt;if(player.x<20||player.x>w-20||player.y<78||player.y>h-20)finish();
+trail.push({x:player.x,y:player.y});if(trail.length>16)trail.shift();particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt});particles=particles.filter(p=>p.life>0);$('score').textContent=String(score).padStart(4,'0');$('progress').style.width=`${Math.min(100,time/45*100)}%`;
+draw();if(alive)requestAnimationFrame(loop)}
+function draw(){ctx.clearRect(0,0,w,h);ctx.fillStyle='#060b17';ctx.fillRect(0,0,w,h);ctx.strokeStyle='rgba(70,120,160,.11)';ctx.lineWidth=1;for(let x=0;x<w;x+=42){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}for(let y=0;y<h;y+=42){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+for(const g of gates){ctx.fillStyle='#ff50d7';ctx.shadowBlur=20;ctx.shadowColor='#ff50d7';ctx.fillRect(g.x,0,7,g.gapY-g.gap/2);ctx.fillRect(g.x,g.gapY+g.gap/2,7,h-g.gapY-g.gap/2);ctx.shadowBlur=0;ctx.fillStyle='#ffc3f0';ctx.fillRect(g.x-3,g.gapY-g.gap/2-3,13,6);ctx.fillRect(g.x-3,g.gapY+g.gap/2-3,13,6)}
+for(const o of orbs){let c=o.charge===1?'#00eaff':'#ff50d7';ctx.beginPath();ctx.arc(o.x,o.y,o.r+9,0,Math.PI*2);ctx.fillStyle=c+'18';ctx.fill();ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,Math.PI*2);ctx.fillStyle=c;ctx.shadowColor=c;ctx.shadowBlur=17;ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#06101b';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(o.charge===1?'+':'−',o.x,o.y)}
+trail.forEach((p,i)=>{ctx.globalAlpha=i/trail.length*.38;ctx.beginPath();ctx.arc(p.x,p.y,player.r*(i/trail.length),0,Math.PI*2);ctx.fillStyle=flip===1?'#00eaff':'#ff50d7';ctx.fill()});ctx.globalAlpha=1;ctx.beginPath();ctx.arc(player.x,player.y,player.r,0,Math.PI*2);ctx.fillStyle='#f5fbff';ctx.shadowColor=flip===1?'#00eaff':'#ff50d7';ctx.shadowBlur=22;ctx.fill();ctx.shadowBlur=0;ctx.beginPath();ctx.arc(player.x,player.y,4,0,Math.PI*2);ctx.fillStyle=flip===1?'#00d9ff':'#ff40d0';ctx.fill();for(const p of particles){ctx.globalAlpha=Math.max(0,p.life/.35);ctx.fillStyle=p.c;ctx.fillRect(p.x,p.y,3,3)}ctx.globalAlpha=1;ctx.textAlign='left';ctx.textBaseline='alphabetic'}
+draw();
+})();
+</script>
+</body>
+</html>
