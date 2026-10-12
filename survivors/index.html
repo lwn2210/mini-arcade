@@ -69,6 +69,7 @@
   <div class="col right">
     <div><span class="label">SCORE</span> <span class="val pink" id="hScore">0</span></div>
     <div><span class="label">LV</span> <span class="val" id="hLvl">1</span></div>
+    <div><span class="label">COMBO</span> <span class="val" id="hCombo" style="color:#ffe600; opacity:0; transition:opacity .2s;">x1</span></div>
   </div>
 </div>
 <div id="dmgflash"></div>
@@ -145,7 +146,7 @@ function inputDir(){ let x=0,y=0; if(keys['a']||keys['arrowleft'])x--; if(keys['
 // ===== game state =====
 const G = {
   running:false, paused:false, over:false,
-  time:0, score:0, kills:0,
+  time:0, score:0, kills:0, combo:1, comboT:0,
   shake:0, hitstop:0,
   best: +(localStorage.getItem('neonSurvivorsBest')||0)
 };
@@ -169,7 +170,7 @@ function resetGame(){
   player={x:W/2,y:H/2,r:12,hp:100,maxHp:100,spd:180,dmg:10,frMul:1,fireT:0,multi:1,pierce:0,blast:0,armor:0,orbs:0,orbA:0,crit:.05,xpMul:1,xp:0,lvl:1,xpNext:5,magnet:70,inv:0};
   bullets=[];enemies=[];gems=[];parts=[];orbs=[];dmgTexts=[];
   spawnT=0; waveN=0;
-  Object.assign(G,{running:true,paused:false,over:false,time:0,score:0,kills:0,shake:0,hitstop:0});
+  Object.assign(G,{running:true,paused:false,over:false,time:0,score:0,kills:0,combo:1,comboT:0,shake:0,hitstop:0});
   $('hLvl').textContent='1'; $('hScore').textContent='0';
   updateHp();
 }
@@ -220,7 +221,10 @@ function damageEnemy(e,dmg,bx,by){
   if(e.hp<=0) killEnemy(e);
 }
 function killEnemy(e){
-  e.dead=true; G.kills++; G.score+=Math.round(e.score);
+  e.dead=true; G.kills++;
+  G.combo++; G.comboT=2.5;
+  G.score+=Math.round(e.score*(1+Math.min(G.combo,50)*.1));
+  if(G.combo>=5&&G.combo%5===0){ dmgTexts.push({x:e.x,y:e.y-e.r-14,txt:'COMBO x'+Math.min(G.combo,50),c:'#ff2bd6',life:.8,big:true}); }
   $('hScore').textContent=G.score;
   const n=e.type==='boss'?26:8;
   for(let i=0;i<n;i++){ const a=rand(0,TAU),s=rand(40,e.type==='boss'?300:160); parts.push({x:e.x,y:e.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:rand(.3,.7),c:e.c,r:rand(1.5,3.5)}); }
@@ -349,6 +353,11 @@ function update(dt){
   dmgTexts=dmgTexts.filter(t=>t.life>0);
 
   G.shake=Math.max(0,G.shake-dt*30);
+
+  // combo decay
+  if(G.comboT>0){ G.comboT-=dt; if(G.comboT<=0)G.combo=1; }
+  const hc=$('hCombo');
+  if(hc){ if(G.combo>=3&&G.comboT>0){ hc.textContent='x'+Math.min(G.combo,50); hc.style.opacity=1; } else hc.style.opacity=0; }
 }
 function clamp(v,a,b){return v<a?a:v>b?b:v;}
 
