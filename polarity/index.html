@@ -6,29 +6,120 @@
 <title>POLARITY — Mini Arcade</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23050710'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%2300f0ff' stroke-width='2'/%3E%3Cpath d='M12 16h8M16 12v8' stroke='%23ff2bd6' stroke-width='2'/%3E%3C/svg%3E">
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050710;color:#eafaff;font-family:system-ui,sans-serif;touch-action:none}canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
-.hud{position:fixed;top:0;left:0;right:0;padding:16px 20px;display:flex;justify-content:space-between;pointer-events:none;text-shadow:0 0 12px #00d9ff;font-weight:800;letter-spacing:.12em}
-.hud span{color:#ff50d7}
-.meter{position:fixed;top:60px;left:20px;right:20px;height:5px;background:#142337;border-radius:5px;overflow:hidden}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050710;color:#eafaff;font-family:system-ui,sans-serif;touch-action:none}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+
+/* TOP HUD */
+.hud{position:fixed;top:0;left:0;right:0;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;pointer-events:none;text-shadow:0 0 12px #00d9ff;font-weight:900;letter-spacing:.12em;z-index:5}
+.hud span{color:#00eaff}
+
+/* IN-GAME MINI GUIDE / STATUS BAR */
+.guide-bar{position:fixed;top:54px;left:50%;transform:translateX(-50%);display:flex;gap:12px;background:rgba(8,16,30,0.85);border:1px solid rgba(0,234,255,0.3);border-radius:30px;padding:6px 16px;font-size:12px;font-weight:700;letter-spacing:.05em;pointer-events:none;z-index:5;backdrop-filter:blur(4px);box-shadow:0 0 20px rgba(0,0,0,0.5)}
+.guide-item{display:flex;align-items:center;gap:6px}
+.badge-repel{color:#ff5040;display:flex;align-items:center;gap:4px}
+.badge-attract{color:#00eaff;display:flex;align-items:center;gap:4px}
+.badge-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* BOTTOM ON-SCREEN CONTROLS & HOW-TO */
+.bottom-hints{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:18px;align-items:center;font-size:12px;font-weight:800;letter-spacing:.08em;pointer-events:none;z-index:5;text-shadow:0 0 8px #000;background:rgba(5,10,20,0.7);padding:6px 18px;border-radius:20px;border:1px solid rgba(255,255,255,0.1)}
+.key-badge{background:#1a2b42;color:#00eaff;padding:3px 8px;border-radius:6px;border:1px solid #00eaff;font-size:11px}
+
+.meter{position:fixed;top:46px;left:20px;right:20px;height:4px;background:#142337;border-radius:5px;overflow:hidden;z-index:4}
 .meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#00f0ff,#ff2bd6);box-shadow:0 0 12px #00f0ff}
-.overlay{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse,rgba(9,22,43,.8),rgba(2,5,12,.94));padding:22px;text-align:center}
+
+/* OVERLAYS */
+.overlay{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse,rgba(9,22,43,.92),rgba(2,5,12,.97));padding:20px;text-align:center;z-index:10}
 .overlay.hidden{display:none}
-.panel{max-width:520px}
+.panel{max-width:560px;background:rgba(10,20,35,0.75);border:1px solid rgba(0,234,255,0.25);border-radius:24px;padding:28px 24px;box-shadow:0 0 40px rgba(0,200,255,0.15)}
 .eyebrow{font-size:11px;letter-spacing:.35em;color:#00f0ff}
-.panel h1{font-size:clamp(38px,10vw,72px);line-height:1;margin:16px 0;color:#f6fbff;text-shadow:0 0 28px #00cfff}
-.panel p{color:#a7b9ce;line-height:1.8;font-size:15px}
-.panel strong{color:#ff55db}
-.btn{border:0;border-radius:999px;padding:15px 30px;background:#00e5ff;color:#03101c;font-size:15px;font-weight:900;letter-spacing:.12em;cursor:pointer;box-shadow:0 0 28px #00c9ff66}
-.back{position:fixed;bottom:18px;left:20px;color:#9db2ca;text-decoration:none;font-size:13px;z-index:2}
-.hint{font-size:12px!important;color:#6e829a!important}
+.panel h1{font-size:clamp(34px,9vw,60px);line-height:1;margin:12px 0;color:#f6fbff;text-shadow:0 0 28px #00cfff}
+
+/* VISUAL RULES CARDS IN MODAL */
+.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0;text-align:left}
+.rule-card{padding:12px 14px;border-radius:14px;font-size:13px;line-height:1.4}
+.card-repel{background:rgba(255,80,60,0.12);border:1px solid #ff5040;color:#ff9e94}
+.card-attract{background:rgba(0,234,255,0.12);border:1px solid #00eaff;color:#9bf0ff}
+.card-title{font-weight:900;font-size:14px;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.rule-card b{color:#fff}
+
+.controls-box{background:rgba(255,255,255,0.05);border-radius:12px;padding:10px 14px;font-size:12px;color:#cbd5e1;margin-bottom:20px;line-height:1.6}
+.btn{border:0;border-radius:999px;padding:14px 34px;background:#00e5ff;color:#03101c;font-size:15px;font-weight:900;letter-spacing:.12em;cursor:pointer;box-shadow:0 0 28px #00c9ff88;transition:transform .1s,box-shadow .1s}
+.btn:hover{transform:scale(1.04);box-shadow:0 0 35px #00c9ff}
+.back{position:fixed;bottom:18px;left:20px;color:#9db2ca;text-decoration:none;font-size:13px;z-index:6;font-weight:700}
 </style>
 </head>
 <body>
 <canvas id="game"></canvas>
-<div class="hud"><div>POLARITY <span id="sign">＋ CYAN</span></div><div><span id="score">0000</span> · BEST <b id="best">0000</b></div></div><div class="meter"><i id="progress"></i></div>
+
+<!-- TOP HUD -->
+<div class="hud">
+  <div>POLARITY <span id="sign">＋ CYAN</span></div>
+  <div><span id="score">0000</span> · BEST <b id="best">0000</b></div>
+</div>
+
+<!-- IN-GAME LIVE MECHANIC REMINDER (Always visible in-game) -->
+<div class="guide-bar">
+  <div class="guide-item badge-repel">
+    <span class="badge-dot" style="background:#ff5040;box-shadow:0 0 8px #ff5040"></span>
+    WARNA SAMA = <b>TOLAK (SLINGSHOT)</b>
+  </div>
+  <div style="color:#64748b">|</div>
+  <div class="guide-item badge-attract">
+    <span class="badge-dot" style="background:#00eaff;box-shadow:0 0 8px #00eaff"></span>
+    WARNA BEDA = <b>TARIK (+10 PTS)</b>
+  </div>
+</div>
+
+<div class="meter"><i id="progress"></i></div>
+
+<!-- BOTTOM CONTROL HINTS -->
+<div class="bottom-hints">
+  <div>KEMUDI: <span class="key-badge">WASD</span> / <span class="key-badge">MOUSE</span> / <span class="key-badge">DRAG</span></div>
+  <div>FLIP WARNA: <span class="key-badge">SPASI</span> / <span class="key-badge">KLIK</span> / <span class="key-badge">TAP</span></div>
+</div>
+
 <a class="back" href="../index.html">← MINI ARCADE</a>
-<div class="overlay" id="start"><div class="panel"><div class="eyebrow">A MOMENTUM PUZZLE · ARCADE ORIGINAL</div><h1>POLARITY</h1><p>Kendali inti magnetik: <strong>WARNA SAMA = SALING TOLAK (REPEL)</strong> dengan efek slingshot & shockwave garis medan! <strong>WARNA BEDA = SALING TARIK</strong> sedot orb untuk score.</p><p><b>Kontrol:</b> Arahkan kursor / WASD / Drag layar. Tekan <strong>SPASI / Tap Layar</strong> untuk Flip Polaritas!</p><button class="btn" id="play">ENTER THE FIELD</button><p class="hint">HP: drag untuk kemudi, tap untuk flip · PC: mouse/WASD + Space/Klik</p></div></div>
-<div class="overlay hidden" id="end"><div class="panel"><div class="eyebrow">FIELD COLLAPSED</div><h1>RUN ENDED</h1><p id="result"></p><button class="btn" id="again">RE-ENTER FIELD</button></div></div>
+
+<!-- START SCREEN -->
+<div class="overlay" id="start">
+  <div class="panel">
+    <div class="eyebrow">ARCADE MOMENTUM PUZZLE</div>
+    <h1>POLARITY</h1>
+    
+    <!-- VISUAL RULE CARDS -->
+    <div class="rules-grid">
+      <div class="rule-card card-repel">
+        <div class="card-title" style="color:#ff5040">🔴 WARNA SAMA</div>
+        <b>SALING TOLAK!</b> Gunakan dorongan garis merah untuk <b>nge-rem mendadak</b> atau <b>slingshot</b> nembus celah laser pink!
+      </div>
+      <div class="rule-card card-attract">
+        <div class="card-title" style="color:#00eaff">🔵 WARNA BEDA</div>
+        <b>SALING TARIK!</b> Sedot orb masuk ke inti untuk dapat <b>+10 SCORE</b>. Hati-hati jangan sampai terseret nabrak laser!
+      </div>
+    </div>
+
+    <div class="controls-box">
+      ⚠️ <b>TANTANGAN:</b> Laser pink makin cepat & celahnya makin sempit. Jangan nabrak laser atau dinding arena!
+    </div>
+
+    <button class="btn" id="play">MULAI MAIN</button>
+  </div>
+</div>
+
+<!-- GAME OVER SCREEN -->
+<div class="overlay hidden" id="end">
+  <div class="panel">
+    <div class="eyebrow" style="color:#ff5040">NABRAK / KELUAR ARENA</div>
+    <h1 style="color:#ff50d7">GAME OVER</h1>
+    <p id="result" style="font-size:15px;color:#cbd5e1;line-height:1.8;margin:16px 0"></p>
+    <div class="controls-box" style="margin-bottom:20px">
+      💡 <b>TIPS:</b> Begitu celah laser pink muncul di depan, langsung <b>TEKAN SPASI / TAP</b> untuk ganti warna agar terpental pas di celah kosong!
+    </div>
+    <button class="btn" id="again">MAIN LAGI (ENTER)</button>
+  </div>
+</div>
+
 <script>
 (()=>{'use strict';
 const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');let w=0,h=0,dpr=1;
@@ -107,7 +198,7 @@ function finish(){
   best=Math.max(best,score);
   localStorage.setItem('polarity_best',best);
   $('best').textContent=String(best).padStart(4,'0');
-  $('result').textContent=`Score ${String(score).padStart(4,'0')} · Best ${String(best).padStart(4,'0')}. Gunakan repel shockwave sebagai pendorong gesit!`;
+  $('result').textContent=`Skor Kamu: ${String(score).padStart(4,'0')}  |  Rekor Terbaik: ${String(best).padStart(4,'0')}`;
   $('end').classList.remove('hidden');
 }
 
@@ -121,7 +212,7 @@ function loop(now){
     if(Math.floor(time)%8===0&&Math.floor(time)!==Math.floor(time-dt))gate();
   }
 
-  // 1. Responsive direct steering (less sluggish, better grip)
+  // 1. Responsive direct steering
   let ax=0,ay=0;
   if(keys.a||keys.arrowleft)ax-=1;
   if(keys.d||keys.arrowright)ax+=1;
@@ -170,7 +261,7 @@ function loop(now){
         let fy = (dy/d) * forceMag * 0.85;
         o.vx += fx * dt;
         o.vy += fy * dt;
-        player.vx -= fx * 0.25 * dt; // sedikit tarikan balik
+        player.vx -= fx * 0.25 * dt;
         player.vy -= fy * 0.25 * dt;
         o.repelPulse = 0;
       }
@@ -181,7 +272,6 @@ function loop(now){
     // Touch / Collision
     if(d < player.r + o.r){
       if(!sameCharge){
-        // ATTRACT capture! Score +10
         score += 10;
         shockwaves.push({x:o.x, y:o.y, r:5, maxR:45, c:o.charge===1?'#00eaff':'#ff50d7', life:1});
         for(let j=0;j<10;j++){
@@ -190,7 +280,6 @@ function loop(now){
         }
         o.dead = true;
       } else {
-        // REPEL bumper blast!
         let bounce = 160;
         player.vx += (dx/d) * bounce;
         player.vy += (dy/d) * bounce;
@@ -262,17 +351,17 @@ function draw(){
 
       ctx.save();
       if(sameCharge){
-        // REPEL FORCE LINES: Garis energi zig-zag / tolak warna merah-oranye terang
+        // REPEL: Garis merah-oranye keluar
         ctx.strokeStyle = `rgba(255, 90, 70, ${alpha * 0.85})`;
         ctx.lineWidth = 1.8 + (1 - d/220)*2.2;
         ctx.setLineDash([6, 5]);
-        ctx.lineDashOffset = -time * 90; // Gerak keluar (menolak!)
+        ctx.lineDashOffset = -time * 90;
         ctx.beginPath();
         ctx.moveTo(player.x, player.y);
         ctx.lineTo(o.x, o.y);
         ctx.stroke();
 
-        // Repel Arc Cushion di antara keduanya
+        // Repel Arc Cushion
         let midX = player.x - (dx * 0.4), midY = player.y - (dy * 0.4);
         let arcR = 12 + (1 - d/220)*18;
         let ang = Math.atan2(dy, dx);
@@ -282,12 +371,20 @@ function draw(){
         ctx.lineWidth = 2.4;
         ctx.setLineDash([]);
         ctx.stroke();
+
+        // TEXT HINT DI ATAS ORB (REPEL)
+        if(d < 160){
+          ctx.fillStyle = `rgba(255, 120, 100, ${alpha})`;
+          ctx.font = 'bold 10px system-ui';
+          ctx.textAlign = 'center';
+          ctx.fillText('REPEL!', o.x, o.y - o.r - 8);
+        }
       } else {
-        // ATTRACT FORCE LINES: Garis sinar halus mengarah masuk ke player
+        // ATTRACT: Garis cyan masuk
         ctx.strokeStyle = `rgba(0, 240, 255, ${alpha * 0.6})`;
         ctx.lineWidth = 1.2;
         ctx.setLineDash([4, 4]);
-        ctx.lineDashOffset = time * 70; // Gerak masuk (menarik!)
+        ctx.lineDashOffset = time * 70;
         ctx.beginPath();
         ctx.moveTo(player.x, player.y);
         ctx.lineTo(o.x, o.y);
@@ -310,7 +407,7 @@ function draw(){
     ctx.fillRect(g.x-2, g.gapY + g.gap/2 - 2, 12, 6);
   }
 
-  // 3. Shockwave Rings (Penanda Flip & Impact)
+  // 3. Shockwave Rings
   for(const s of shockwaves){
     ctx.save();
     ctx.beginPath();
@@ -329,13 +426,11 @@ function draw(){
     let c = o.charge===1 ? '#00eaff' : '#ff50d7';
     let isRepelling = (flip === o.charge && o.repelPulse > 0.05);
 
-    // Glow aura
     ctx.beginPath();
     ctx.arc(o.x, o.y, o.r + (isRepelling ? 12 : 7), 0, Math.PI*2);
     ctx.fillStyle = isRepelling ? 'rgba(255,80,60,0.25)' : (c + '18');
     ctx.fill();
 
-    // Body
     ctx.beginPath();
     ctx.arc(o.x, o.y, o.r, 0, Math.PI*2);
     ctx.fillStyle = c;
@@ -344,7 +439,6 @@ function draw(){
     ctx.fill();
     ctx.shadowBlur = 0;
 
-    // Symbol
     ctx.fillStyle = '#06101b';
     ctx.font = '900 12px sans-serif';
     ctx.textAlign = 'center';
@@ -355,7 +449,6 @@ function draw(){
   // 5. Player Core & Dynamic Field Ring
   let pColor = flip===1 ? '#00eaff' : '#ff50d7';
 
-  // Trail
   trail.forEach((p,i)=>{
     ctx.globalAlpha = (i/trail.length)*0.35;
     ctx.beginPath();
@@ -365,7 +458,6 @@ function draw(){
   });
   ctx.globalAlpha = 1;
 
-  // Aura Medan Magnet Player (Pulsing Ring)
   let auraPulse = Math.sin(time*8)*4;
   ctx.beginPath();
   ctx.arc(player.x, player.y, player.r + 8 + auraPulse, 0, Math.PI*2);
@@ -375,7 +467,6 @@ function draw(){
   ctx.stroke();
   ctx.globalAlpha = 1;
 
-  // Player Body
   ctx.beginPath();
   ctx.arc(player.x, player.y, player.r, 0, Math.PI*2);
   ctx.fillStyle = '#ffffff';
@@ -384,13 +475,11 @@ function draw(){
   ctx.fill();
   ctx.shadowBlur = 0;
 
-  // Core Dot & Symbol
   ctx.beginPath();
   ctx.arc(player.x, player.y, 6, 0, Math.PI*2);
   ctx.fillStyle = pColor;
   ctx.fill();
 
-  // 6. Particles
   for(const p of particles){
     ctx.globalAlpha = Math.max(0, p.life/p.maxLife);
     ctx.fillStyle = p.c;
