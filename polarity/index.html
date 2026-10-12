@@ -11,11 +11,22 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050710;col
 canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 
 /* TOP HUD */
-.hud{position:fixed;top:0;left:0;right:0;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;pointer-events:none;text-shadow:0 0 12px #00d9ff;font-weight:900;letter-spacing:.12em;z-index:5}
+.hud{position:fixed;top:0;left:0;right:0;padding:10px 18px;display:flex;justify-content:space-between;align-items:center;pointer-events:none;text-shadow:0 0 12px #00d9ff;font-weight:900;letter-spacing:.1em;z-index:5}
+.hud-left{display:flex;align-items:center;gap:12px}
+.level-badge{background:linear-gradient(90deg,#ff00aa,#00f0ff);color:#03101c;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:900;box-shadow:0 0 12px rgba(0,240,255,0.6)}
 .hud span{color:#00eaff}
+.multi-badge{font-size:13px;color:#ffe600;text-shadow:0 0 10px #ffe600;transition:transform .15s}
+.multi-badge.hyper{color:#ff00ea;text-shadow:0 0 15px #ff00ea;animation:hyperPulse .5s infinite alternate}
+@keyframes hyperPulse{from{transform:scale(1)}to{transform:scale(1.25)}}
+
+/* OVERCHARGE METER */
+.meter-container{position:fixed;top:40px;left:20px;right:20px;height:7px;background:#142337;border-radius:6px;overflow:hidden;z-index:4;box-shadow:inset 0 0 6px rgba(0,0,0,0.8)}
+.meter-fill{display:block;height:100%;width:0;background:linear-gradient(90deg,#00f0ff,#ffe600,#ff00aa);box-shadow:0 0 14px #00f0ff;transition:width .12s}
+.meter-fill.full{box-shadow:0 0 20px #ffe600;animation:barGlow .4s infinite alternate}
+@keyframes barGlow{from{filter:brightness(1)}to{filter:brightness(1.6)}}
 
 /* IN-GAME MINI GUIDE / STATUS BAR */
-.guide-bar{position:fixed;top:50px;left:50%;transform:translateX(-50%);display:flex;gap:10px;background:rgba(8,16,30,0.88);border:1px solid rgba(0,234,255,0.3);border-radius:30px;padding:6px 14px;font-size:11px;font-weight:700;letter-spacing:.04em;pointer-events:none;z-index:5;backdrop-filter:blur(4px);box-shadow:0 0 20px rgba(0,0,0,0.6);white-space:nowrap}
+.guide-bar{position:fixed;top:54px;left:50%;transform:translateX(-50%);display:flex;gap:10px;background:rgba(8,16,30,0.88);border:1px solid rgba(0,234,255,0.3);border-radius:30px;padding:5px 14px;font-size:11px;font-weight:700;letter-spacing:.03em;pointer-events:none;z-index:5;backdrop-filter:blur(4px);box-shadow:0 0 20px rgba(0,0,0,0.6);white-space:nowrap}
 .guide-item{display:flex;align-items:center;gap:5px}
 .badge-repel{color:#ff5040}
 .badge-attract{color:#00eaff}
@@ -23,18 +34,16 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 .badge-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
 
 /* STATUS EFFECTS HUD */
-.status-bar{position:fixed;top:86px;left:50%;transform:translateX(-50%);display:flex;gap:8px;pointer-events:none;z-index:5}
-.status-pill{background:rgba(0,0,0,0.7);padding:4px 10px;border-radius:12px;font-size:11px;font-weight:800;border:1px solid #fff;display:none}
+.status-bar{position:fixed;top:88px;left:50%;transform:translateX(-50%);display:flex;gap:8px;pointer-events:none;z-index:5}
+.status-pill{background:rgba(0,0,0,0.75);padding:4px 10px;border-radius:12px;font-size:11px;font-weight:800;border:1px solid #fff;display:none}
 .pill-shield{border-color:#00ff88;color:#00ff88;box-shadow:0 0 10px rgba(0,255,136,0.4)}
 .pill-magnet{border-color:#ffe600;color:#ffe600;box-shadow:0 0 10px rgba(255,230,0,0.4)}
 .pill-freeze{border-color:#00cfff;color:#00cfff;box-shadow:0 0 10px rgba(0,207,255,0.4)}
+.pill-hyper{border-color:#ff00aa;color:#fff;background:linear-gradient(90deg,rgba(255,0,170,0.8),rgba(255,230,0,0.8));box-shadow:0 0 15px rgba(255,0,170,0.8)}
 
 /* BOTTOM ON-SCREEN CONTROLS */
 .bottom-hints{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:16px;align-items:center;font-size:11px;font-weight:800;letter-spacing:.06em;pointer-events:none;z-index:5;text-shadow:0 0 8px #000;background:rgba(5,10,20,0.75);padding:6px 16px;border-radius:20px;border:1px solid rgba(255,255,255,0.12);white-space:nowrap}
 .key-badge{background:#1a2b42;color:#00eaff;padding:2px 7px;border-radius:6px;border:1px solid #00eaff;font-size:10px}
-
-.meter{position:fixed;top:42px;left:20px;right:20px;height:4px;background:#142337;border-radius:5px;overflow:hidden;z-index:4}
-.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#00f0ff,#ff2bd6);box-shadow:0 0 12px #00f0ff}
 
 /* OVERLAYS */
 .overlay{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse,rgba(9,22,43,.92),rgba(2,5,12,.97));padding:20px;text-align:center;z-index:10;overflow-y:auto}
@@ -43,7 +52,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 .eyebrow{font-size:11px;letter-spacing:.35em;color:#00f0ff}
 .panel h1{font-size:clamp(32px,8vw,56px);line-height:1;margin:10px 0;color:#f6fbff;text-shadow:0 0 28px #00cfff}
 
-/* VISUAL RULES CARDS IN MODAL */
+/* RULES GRID */
 .rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0;text-align:left}
 .rule-card{padding:10px 12px;border-radius:12px;font-size:12px;line-height:1.4}
 .card-repel{background:rgba(255,80,60,0.12);border:1px solid #ff5040;color:#ff9e94}
@@ -63,15 +72,22 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 
 <!-- TOP HUD -->
 <div class="hud">
-  <div>POLARITY <span id="sign">＋ CYAN</span></div>
+  <div class="hud-left">
+    <div class="level-badge" id="hudLevel">LV 1</div>
+    <div>POLARITY <span id="sign">＋ CYAN</span></div>
+    <div class="multi-badge" id="hudMulti">1x MULTI</div>
+  </div>
   <div><span id="score">0000</span> · BEST <b id="best">0000</b></div>
 </div>
+
+<!-- OVERCHARGE METER -->
+<div class="meter-container"><i class="meter-fill" id="meterFill"></i></div>
 
 <!-- IN-GAME LIVE MECHANIC REMINDER -->
 <div class="guide-bar">
   <div class="guide-item badge-attract">
     <span class="badge-dot" style="background:#00eaff;box-shadow:0 0 8px #00eaff"></span>
-    BEDA = <b>TARIK (+10)</b>
+    BEDA = <b>TARIK (+PTS & METER)</b>
   </div>
   <div style="color:#64748b">|</div>
   <div class="guide-item badge-repel">
@@ -86,12 +102,11 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 
 <!-- STATUS EFFECTS HUD -->
 <div class="status-bar">
+  <div class="status-pill pill-hyper" id="pillHyper">🔥 OVERCHARGE HYPER (3x MULTI)!</div>
   <div class="status-pill pill-shield" id="pillShield">🛡️ SHIELD (1 HIT)</div>
   <div class="status-pill pill-magnet" id="pillMagnet">🧲 SUPER MAGNET</div>
   <div class="status-pill pill-freeze" id="pillFreeze">❄️ SLOW TIME</div>
 </div>
-
-<div class="meter"><i id="progress"></i></div>
 
 <!-- BOTTOM CONTROL HINTS -->
 <div class="bottom-hints">
@@ -110,19 +125,19 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
     <div class="rules-grid">
       <div class="rule-card card-attract">
         <div class="card-title" style="color:#00eaff">🔵 SEDOT ORB</div>
-        Warna Beda = Tarik! Kumpulkan orb poin &amp; power-up langka.
+        Warna Beda = Tarik! Kumpulkan orb untuk score dan isi <b>Overcharge Meter</b>.
       </div>
       <div class="rule-card card-repel">
         <div class="card-title" style="color:#ff5040">🔴 TOLAK / TENDANG</div>
         Warna Sama = Tolak! Gunakan untuk <b>slingshot</b> &amp; <b>menendang bom</b> menjauh!
       </div>
       <div class="rule-card card-bomb">
-        <div class="card-title" style="color:#ffcc00">💣 BOM MAGNETIK</div>
-        Punya polaritas (+ / -). Jika salah warna, <b>bom mengejar kamu!</b> Kena = Meledak.
+        <div class="card-title" style="color:#ffcc00">💣 TANTANGAN LEVEL</div>
+        Tiap Level naik: bom makin cepat, orbit mengejar, dan rintangan makin padat!
       </div>
       <div class="rule-card card-power">
-        <div class="card-title" style="color:#00ff88">⭐ POWER-UP ORBS</div>
-        🛡️ <b>Shield</b> (Anti Ledak) · 🧲 <b>Super Magnet</b> · ❄️ <b>Freeze Time</b>.
+        <div class="card-title" style="color:#00ff88">⚡ OVERCHARGE METER</div>
+        Penuhi bar di atas untuk aktifkan <b>HYPER MULTI-SCORE (2x - 5x)</b>!
       </div>
     </div>
 
@@ -147,9 +162,15 @@ function resize(){dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight
 addEventListener('resize',resize);resize();
 
 const $=id=>document.getElementById(id), keys={}, mouse={x:w/2,y:h/2,active:false}, player={x:w/2,y:h/2,vx:0,vy:0,r:14};
-let orbs=[],particles=[],shockwaves=[],score=0,best=+(localStorage.getItem('polarity_best')||0);
+let orbs=[],particles=[],shockwaves=[],floatingTexts=[],score=0,best=+(localStorage.getItem('polarity_best')||0);
 let alive=false,dying=false,deathTimer=0,hitFlash=0,screenShake=0;
 let flip=1,time=0,last=0,spawn=0,trail=[];
+
+// LEVEL & PROGRESSION
+let level=1;
+let overchargeEnergy=0;      // 0 .. 100
+let hyperTimer=0;            // countdown saat hyper aktif
+let currentMultiplier=1;
 
 // POWER-UP TIMERS
 let shieldActive=false, magnetTimer=0, freezeTimer=0;
@@ -158,13 +179,19 @@ $('best').textContent=String(best).padStart(4,'0');
 
 function reset(){
   player.x=w*0.5;player.y=h*0.5;player.vx=0;player.vy=0;
-  orbs=[];particles=[];shockwaves=[];trail=[];
+  orbs=[];particles=[];shockwaves=[];floatingTexts=[];trail=[];
   score=0;time=0;spawn=0;flip=1;alive=true;dying=false;deathTimer=0;hitFlash=0;screenShake=0;
+  level=1;overchargeEnergy=0;hyperTimer=0;currentMultiplier=1;
   shieldActive=false;magnetTimer=0;freezeTimer=0;
   mouse.active=false;
   $('score').textContent='0000';
   $('sign').textContent='＋ CYAN';
   $('sign').style.color='#00eaff';
+  $('hudLevel').textContent='LV 1';
+  $('hudMulti').textContent='1x MULTI';
+  $('hudMulti').className='multi-badge';
+  $('meterFill').style.width='0%';
+  $('meterFill').classList.remove('full');
   $('start').classList.add('hidden');
   $('end').classList.add('hidden');
   updateStatusPills();
@@ -176,6 +203,11 @@ function updateStatusPills(){
   $('pillShield').style.display = shieldActive ? 'block' : 'none';
   $('pillMagnet').style.display = (magnetTimer > 0) ? 'block' : 'none';
   $('pillFreeze').style.display = (freezeTimer > 0) ? 'block' : 'none';
+  $('pillHyper').style.display = (hyperTimer > 0) ? 'block' : 'none';
+}
+
+function addFloatingText(txt, x, y, color){
+  floatingTexts.push({txt, x, y, color, life:0.8, maxLife:0.8});
 }
 
 function flipPolarity(){
@@ -211,29 +243,34 @@ $('play').onclick=reset;$('again').onclick=reset;
 function spawnOrb(){
   const edge = Math.floor(Math.random() * 4);
   let x, y, vx, vy;
+  // Per level: kecepatan orb dan pergerakan makin agresif
+  let baseSpeed = 45 + (level - 1) * 12;
   if(edge === 0){
     x = -24; y = 90 + Math.random()*(h - 180);
-    vx = 45 + Math.random()*50; vy = (Math.random()-0.5)*50;
+    vx = baseSpeed + Math.random()*50; vy = (Math.random()-0.5)*(50 + level*6);
   } else if(edge === 1){
     x = w + 24; y = 90 + Math.random()*(h - 180);
-    vx = -(45 + Math.random()*50); vy = (Math.random()-0.5)*50;
+    vx = -(baseSpeed + Math.random()*50); vy = (Math.random()-0.5)*(50 + level*6);
   } else if(edge === 2){
     x = 40 + Math.random()*(w - 80); y = 60;
-    vx = (Math.random()-0.5)*50; vy = 45 + Math.random()*50;
+    vx = (Math.random()-0.5)*(50 + level*6); vy = baseSpeed + Math.random()*50;
   } else {
     x = 40 + Math.random()*(w - 80); y = h + 24;
-    vx = (Math.random()-0.5)*50; vy = -(45 + Math.random()*50);
+    vx = (Math.random()-0.5)*(50 + level*6); vy = -(baseSpeed + Math.random()*50);
   }
 
+  // Peluang bom meningkat tiap level (Level 1: 20%, Level 5+: hingga 42%)
+  let bombChance = Math.min(0.42, 0.18 + (level - 1) * 0.05);
   let roll = Math.random();
   let type = "normal";
-  if(roll < 0.22){
+
+  if(roll < bombChance){
     type = "bomb";
-  } else if(roll < 0.26){
+  } else if(roll < bombChance + 0.04){
     type = "shield";
-  } else if(roll < 0.29){
+  } else if(roll < bombChance + 0.08){
     type = "magnet";
-  } else if(roll < 0.32){
+  } else if(roll < bombChance + 0.12){
     type = "freeze";
   }
 
@@ -286,7 +323,7 @@ function showGameOverModal(){
   best = Math.max(best, score);
   localStorage.setItem('polarity_best', best);
   $('best').textContent = String(best).padStart(4,'0');
-  $('result').textContent = `Skor Akhir: ${String(score).padStart(4,'0')}  |  Rekor Terbaik: ${String(best).padStart(4,'0')}`;
+  $('result').textContent = `Level Capai: LV ${level}  |  Skor Akhir: ${String(score).padStart(4,'0')}  |  Rekor: ${String(best).padStart(4,'0')}`;
   $('end').classList.remove('hidden');
 }
 
@@ -319,6 +356,29 @@ function loop(now){
   let simDt = (freezeTimer > 0) ? dt * 0.45 : dt;
   if(freezeTimer > 0){ freezeTimer -= dt; }
   if(magnetTimer > 0){ magnetTimer -= dt; }
+
+  // 1. OVERCHARGE & HYPER MULTIPLIER MECHANIC
+  if(hyperTimer > 0){
+    hyperTimer -= dt;
+    currentMultiplier = Math.min(5, 2 + Math.floor(level / 2)); // 2x s/d 5x
+    overchargeEnergy = (hyperTimer / 7.0) * 100;
+    $('meterFill').style.width = `${overchargeEnergy}%`;
+    $('meterFill').classList.add('full');
+    $('hudMulti').textContent = `${currentMultiplier}x MULTI!`;
+    $('hudMulti').className = 'multi-badge hyper';
+    if(hyperTimer <= 0){
+      currentMultiplier = 1;
+      overchargeEnergy = 0;
+      $('meterFill').classList.remove('full');
+      $('hudMulti').textContent = '1x MULTI';
+      $('hudMulti').className = 'multi-badge';
+    }
+  } else {
+    currentMultiplier = 1;
+    $('hudMulti').textContent = '1x MULTI';
+    $('hudMulti').className = 'multi-badge';
+    $('meterFill').style.width = `${overchargeEnergy}%`;
+  }
   updateStatusPills();
 
   time += dt;
@@ -326,12 +386,24 @@ function loop(now){
   hitFlash = Math.max(0, hitFlash - dt*5);
   screenShake = Math.max(0, screenShake - dt*30);
 
-  if(spawn <= 0){
-    spawnOrb();
-    spawn = Math.max(.35, 1.0 - time*0.009);
+  // 2. LEVEL PROGRESSION (Setiap 20 detik atau skor naik 250)
+  let targetLevel = 1 + Math.floor(time / 18);
+  if(targetLevel > level){
+    level = targetLevel;
+    $('hudLevel').textContent = `LV ${level}`;
+    shockwaves.push({x:player.x, y:player.y, r:10, maxR:180, c:'#ffe600', life:1.2});
+    addFloatingText(`LEVEL UP! LV ${level}`, player.x, player.y - 28, '#ffe600');
+    screenShake = 10;
   }
 
-  // 1. Direct Steering
+  // Spawn interval makin cepat per level
+  let spawnRate = Math.max(0.24, (1.0 - (level - 1)*0.08) - time*0.005);
+  if(spawn <= 0){
+    spawnOrb();
+    spawn = spawnRate;
+  }
+
+  // 3. Direct Steering
   let ax=0,ay=0;
   if(keys.a||keys.arrowleft)ax-=1;
   if(keys.d||keys.arrowright)ax+=1;
@@ -348,11 +420,11 @@ function loop(now){
   player.vx += ax * 520 * dt;
   player.vy += ay * 520 * dt;
 
-  // 2. Physics & Polarity Interplay
+  // 4. Physics & Polarity Interplay
   for(const o of orbs){
     o.x += o.vx * simDt;
-    o.y += o.vy * simDt + Math.sin(time*2.5+o.phase)*16*simDt;
-    o.angle = (o.angle || 0) + (o.type === 'bomb' ? simDt*2 : simDt);
+    o.y += o.vy * simDt + Math.sin(time*2.5+o.phase)*(16 + level*2)*simDt;
+    o.angle = (o.angle || 0) + (o.type === 'bomb' ? simDt*(2 + level*0.3) : simDt);
 
     let dx = player.x - o.x, dy = player.y - o.y;
     let d = Math.hypot(dx,dy) || 1;
@@ -361,10 +433,11 @@ function loop(now){
     let sameCharge = (flip === o.charge);
 
     if(d < forceRange){
-      let forceMag = 20000 / (d*d + 300);
+      let forceMag = (20000 + level*1500) / (d*d + 300);
 
       if(o.type === 'bomb'){
         if(sameCharge){
+          // REPEL BOMB: tendang bom keluar
           let fx = (dx/d) * forceMag * 2.2;
           let fy = (dy/d) * forceMag * 2.2;
           player.vx += fx * dt;
@@ -373,19 +446,22 @@ function loop(now){
           o.vy -= fy * 1.4 * dt;
           o.repelPulse = Math.max(o.repelPulse, (1 - d/220));
         } else {
-          let fx = (dx/d) * forceMag * 1.2;
-          let fy = (dy/d) * forceMag * 1.2;
+          // ATTRACT BOMB: bom mengejar makin cepat di level tinggi
+          let seekSpeed = 1.2 + (level - 1)*0.18;
+          let fx = (dx/d) * forceMag * seekSpeed;
+          let fy = (dy/d) * forceMag * seekSpeed;
           o.vx += fx * dt;
           o.vy += fy * dt;
           o.repelPulse = 0;
         }
       } else {
         if(magnetTimer > 0){
-          let fx = (dx/d) * 380;
-          let fy = (dy/d) * 380;
+          let fx = (dx/d) * 400;
+          let fy = (dy/d) * 400;
           o.vx += fx * dt;
           o.vy += fy * dt;
         } else if(sameCharge){
+          // REPEL
           let fx = (dx/d) * forceMag * 1.6;
           let fy = (dy/d) * forceMag * 1.6;
           player.vx += fx * dt;
@@ -394,6 +470,7 @@ function loop(now){
           o.vy -= fy * 0.7 * dt;
           o.repelPulse = Math.max(o.repelPulse, (1 - d/220));
         } else {
+          // ATTRACT
           let fx = (dx/d) * forceMag * 0.85;
           let fy = (dy/d) * forceMag * 0.85;
           o.vx += fx * dt;
@@ -416,32 +493,53 @@ function loop(now){
           hitFlash = 0.8;
           screenShake = 12;
           shockwaves.push({x:o.x, y:o.y, r:10, maxR:90, c:'#00ff88', life:1});
+          addFloatingText("SHIELD BROKE!", player.x, player.y - 20, '#00ff88');
           o.dead = true;
         } else {
-          triggerDeath("TERTABRAK BOM MAGNETIK!");
-          break; // Hentikan loop orbs, frame loop berikutnya akan render animasi dying
+          triggerDeath(`TERTABRAK BOM MAGNETIK DI LV ${level}!`);
+          break;
         }
       } else if(o.type === 'shield'){
         shieldActive = true;
-        score += 20;
+        score += 20 * currentMultiplier;
         shockwaves.push({x:o.x, y:o.y, r:10, maxR:80, c:'#00ff88', life:1});
+        addFloatingText(`+${20*currentMultiplier} 🛡️`, o.x, o.y - 15, '#00ff88');
         updateStatusPills();
         o.dead = true;
       } else if(o.type === 'magnet'){
         magnetTimer = 6.0;
-        score += 20;
+        score += 20 * currentMultiplier;
         shockwaves.push({x:o.x, y:o.y, r:10, maxR:80, c:'#ffe600', life:1});
+        addFloatingText(`+${20*currentMultiplier} 🧲`, o.x, o.y - 15, '#ffe600');
         updateStatusPills();
         o.dead = true;
       } else if(o.type === 'freeze'){
         freezeTimer = 5.0;
-        score += 20;
+        score += 20 * currentMultiplier;
         shockwaves.push({x:o.x, y:o.y, r:10, maxR:80, c:'#00cfff', life:1});
+        addFloatingText(`+${20*currentMultiplier} ❄️`, o.x, o.y - 15, '#00cfff');
         updateStatusPills();
         o.dead = true;
       } else {
         if(!sameCharge || magnetTimer > 0){
-          score += 10;
+          // ABSORB ORB & CHARGE OVERCHARGE BAR!
+          let gained = 10 * currentMultiplier;
+          score += gained;
+          addFloatingText(`+${gained}`, o.x, o.y - 12, (currentMultiplier > 1)?'#ff00ea':'#00eaff');
+
+          // Isi Overcharge Meter jika tidak sedang Hyper
+          if(hyperTimer <= 0){
+            overchargeEnergy = Math.min(100, overchargeEnergy + 9);
+            $('meterFill').style.width = `${overchargeEnergy}%`;
+            if(overchargeEnergy >= 100){
+              // AKTIFKAN HYPER MODE!
+              hyperTimer = 7.0; // 7 detik Hyper Mode
+              shockwaves.push({x:player.x, y:player.y, r:15, maxR:220, c:'#ff00ea', life:1.5});
+              screenShake = 14;
+              addFloatingText(`⚡ HYPER OVERCHARGE ${Math.min(5, 2 + Math.floor(level/2))}X!`, player.x, player.y - 32, '#ffe600');
+            }
+          }
+
           shockwaves.push({x:o.x, y:o.y, r:5, maxR:45, c:o.charge===1?'#00eaff':'#ff50d7', life:1});
           for(let j=0;j<10;j++){
             let a=Math.random()*Math.PI*2, sp=60+Math.random()*120;
@@ -449,6 +547,7 @@ function loop(now){
           }
           o.dead = true;
         } else {
+          // Bouncer membal
           let bounce = 175;
           player.vx += (dx/d) * bounce;
           player.vy += (dy/d) * bounce;
@@ -477,12 +576,13 @@ function loop(now){
       updateStatusPills();
       hitFlash = 0.7;
       screenShake = 10;
+      addFloatingText("SHIELD BOUNCE!", player.x, player.y, '#00ff88');
       if(player.x < 16){ player.x = 20; player.vx = 220; }
       if(player.x > w-16){ player.x = w-20; player.vx = -220; }
       if(player.y < 76){ player.y = 80; player.vy = 220; }
       if(player.y > h-16){ player.y = h-20; player.vy = -220; }
     } else {
-      triggerDeath("MENABRAK BATAS DINDING ARENA!");
+      triggerDeath(`MENABRAK BATAS ARENA DI LV ${level}!`);
     }
   }
 
@@ -498,11 +598,12 @@ function loop(now){
   shockwaves.forEach(s=>{s.r += (s.maxR - s.r)*12*dt; s.life -= dt*2.4;});
   shockwaves = shockwaves.filter(s=>s.life>0);
 
+  floatingTexts.forEach(f=>{f.y -= dt*30; f.life -= dt;});
+  floatingTexts = floatingTexts.filter(f=>f.life>0);
+
   $('score').textContent = String(score).padStart(4,'0');
-  $('progress').style.width = `${Math.min(100,time/45*100)}%`;
 
   draw();
-  // Request frame jika masih hidup ATAU sedang proses animasi meledak (dying)
   if(alive || dying) requestAnimationFrame(loop);
 }
 
@@ -525,7 +626,7 @@ function draw(){
   for(let y=0;y<h;y+=44){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
 
   // Arena Boundary Glow Line
-  ctx.strokeStyle = (screenShake > 6) ? '#ff5040' : 'rgba(0, 234, 255, 0.25)';
+  ctx.strokeStyle = (screenShake > 6) ? '#ff5040' : ((hyperTimer > 0) ? '#ff00aa' : 'rgba(0, 234, 255, 0.25)');
   ctx.lineWidth = 2;
   ctx.strokeRect(16, 76, w - 32, h - 92);
 
@@ -562,8 +663,8 @@ function draw(){
           ctx.lineDashOffset = -time * 90;
           ctx.beginPath();ctx.moveTo(player.x, player.y);ctx.lineTo(o.x, o.y);ctx.stroke();
         } else {
-          ctx.strokeStyle = `rgba(0, 240, 255, ${alpha * 0.6})`;
-          ctx.lineWidth = 1.2;
+          ctx.strokeStyle = (hyperTimer > 0) ? `rgba(255, 0, 170, ${alpha * 0.8})` : `rgba(0, 240, 255, ${alpha * 0.6})`;
+          ctx.lineWidth = 1.4;
           ctx.setLineDash([4, 4]);
           ctx.lineDashOffset = time * 70;
           ctx.beginPath();ctx.moveTo(player.x, player.y);ctx.lineTo(o.x, o.y);ctx.stroke();
@@ -707,15 +808,17 @@ function draw(){
   let pColor = flip===1 ? '#00eaff' : '#ff50d7';
 
   if(!dying){
+    // Trail
     trail.forEach((p,i)=>{
       ctx.globalAlpha = (i/trail.length)*0.35;
       ctx.beginPath();
       ctx.arc(p.x, p.y, player.r*(i/trail.length), 0, Math.PI*2);
-      ctx.fillStyle = pColor;
+      ctx.fillStyle = (hyperTimer > 0) ? '#ff00ea' : pColor;
       ctx.fill();
     });
     ctx.globalAlpha = 1;
 
+    // SHIELD BUBBLE
     if(shieldActive){
       ctx.beginPath();
       ctx.arc(player.x, player.y, player.r + 14, 0, Math.PI*2);
@@ -727,26 +830,29 @@ function draw(){
       ctx.shadowBlur = 0;
     }
 
+    // Pulsing aura ring (Hyper Rainbow Glow jika aktif)
     let auraPulse = Math.sin(time*8)*4;
     ctx.beginPath();
     ctx.arc(player.x, player.y, player.r + 8 + auraPulse, 0, Math.PI*2);
-    ctx.strokeStyle = (hitFlash > 0.1) ? '#ffffff' : pColor;
-    ctx.globalAlpha = (hitFlash > 0.1) ? 0.9 : 0.45;
-    ctx.lineWidth = (hitFlash > 0.1) ? 3 : 1.5;
+    ctx.strokeStyle = (hitFlash > 0.1) ? '#ffffff' : ((hyperTimer > 0) ? '#ffe600' : pColor);
+    ctx.globalAlpha = (hitFlash > 0.1) ? 0.9 : 0.6;
+    ctx.lineWidth = (hyperTimer > 0) ? 3.5 : 1.8;
     ctx.stroke();
     ctx.globalAlpha = 1;
 
+    // Body
     ctx.beginPath();
     ctx.arc(player.x, player.y, player.r, 0, Math.PI*2);
-    ctx.fillStyle = (hitFlash > 0.1) ? '#ffffff' : '#ffffff';
-    ctx.shadowColor = (hitFlash > 0.1) ? '#ffffaa' : pColor;
-    ctx.shadowBlur = (hitFlash > 0.1) ? 35 : 24;
+    ctx.fillStyle = '#ffffff';
+    ctx.shadowColor = (hyperTimer > 0) ? '#ff00ea' : pColor;
+    ctx.shadowBlur = (hyperTimer > 0) ? 35 : 24;
     ctx.fill();
     ctx.shadowBlur = 0;
 
+    // Core Dot
     ctx.beginPath();
     ctx.arc(player.x, player.y, 6, 0, Math.PI*2);
-    ctx.fillStyle = (hitFlash > 0.1) ? '#ffffff' : pColor;
+    ctx.fillStyle = (hyperTimer > 0) ? '#ffe600' : pColor;
     ctx.fill();
   }
 
@@ -758,7 +864,20 @@ function draw(){
   }
   ctx.globalAlpha = 1;
 
-  // 6. Hit Flash Overlay
+  // 6. Floating Score Texts
+  for(const f of floatingTexts){
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, f.life / f.maxLife);
+    ctx.fillStyle = f.color;
+    ctx.font = '900 13px system-ui';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = f.color;
+    ctx.shadowBlur = 8;
+    ctx.fillText(f.txt, f.x, f.y);
+    ctx.restore();
+  }
+
+  // 7. Hit Flash Overlay
   if(hitFlash > 0.05){
     ctx.fillStyle = `rgba(255, 255, 255, ${hitFlash * 0.35})`;
     ctx.fillRect(0, 0, w, h);
