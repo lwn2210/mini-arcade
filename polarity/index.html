@@ -90,7 +90,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
     <div class="rules-grid">
       <div class="rule-card card-repel">
         <div class="card-title" style="color:#ff5040">🔴 WARNA SAMA</div>
-        <b>SALING TOLAK!</b> Gunakan tolakan untuk <b>rem mendadak</b> atau <b>slingshot</b> nembus celah laser pink!
+        <b>SALING TOLAK!</b> Gunakan tolakan untuk <b>slingshot</b>, bermanuver, atau hindari dinding arena!
       </div>
       <div class="rule-card card-attract">
         <div class="card-title" style="color:#00eaff">🔵 WARNA BEDA</div>
@@ -99,7 +99,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
     </div>
 
     <div class="controls-box">
-      ⚠️ <b>TANTANGAN:</b> Gerbang laser terus bergerak dari kanan. Jangan AFK atau diam, celah laser selalu berpindah! Hindari benturan laser dan dinding arena.
+      ⚠️ <b>KONTROL NETRAL:</b> Kemudi penuh ke segala arah tanpa arus paksaan. Hindari tabrakan dengan batas arena!
     </div>
 
     <button class="btn" id="play">MULAI MAIN</button>
@@ -109,11 +109,11 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 <!-- GAME OVER SCREEN -->
 <div class="overlay hidden" id="end">
   <div class="panel">
-    <div class="eyebrow" style="color:#ff5040">NABRAK / KELUAR ARENA</div>
+    <div class="eyebrow" style="color:#ff5040">KELUAR ARENA</div>
     <h1 style="color:#ff50d7">GAME OVER</h1>
     <p id="result" style="font-size:15px;color:#cbd5e1;line-height:1.8;margin:16px 0"></p>
     <div class="controls-box" style="margin-bottom:20px">
-      💡 <b>TIPS:</b> Pantau posisi celah gerbang laser di depan, lalu gunakan <b>FLIP POLARITAS (SPASI / TAP)</b> untuk melontarkan diri pas ke celah yang aman!
+      💡 <b>TIPS:</b> Pantau posisi orb di sekitar, lalu gunakan <b>FLIP POLARITAS (SPASI / TAP)</b> untuk rem mendadak atau dorongan arah seimbang!
     </div>
     <button class="btn" id="again">MAIN LAGI (ENTER)</button>
   </div>
@@ -126,13 +126,13 @@ function resize(){dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight
 addEventListener('resize',resize);resize();
 
 const $=id=>document.getElementById(id), keys={}, mouse={x:w/2,y:h/2,active:false}, player={x:w/2,y:h/2,vx:0,vy:0,r:14};
-let orbs=[],gates=[],particles=[],shockwaves=[],score=0,best=+(localStorage.getItem('polarity_best')||0),alive=false,flip=1,time=0,last=0,spawn=0,gateTimer=2.5,lastGateGapY=h*0.5,trail=[];
+let orbs=[],particles=[],shockwaves=[],score=0,best=+(localStorage.getItem('polarity_best')||0),alive=false,flip=1,time=0,last=0,spawn=0,trail=[];
 $('best').textContent=String(best).padStart(4,'0');
 
 function reset(){
-  player.x=w*.2;player.y=h*.5;player.vx=50;player.vy=0;
-  orbs=[];gates=[];particles=[];shockwaves=[];trail=[];
-  score=0;time=0;spawn=0;gateTimer=2.0;lastGateGapY=h*0.5;flip=1;alive=true;
+  player.x=w*0.5;player.y=h*0.5;player.vx=0;player.vy=0;
+  orbs=[];particles=[];shockwaves=[];trail=[];
+  score=0;time=0;spawn=0;flip=1;alive=true;
   mouse.active=false;
   $('score').textContent='0000';
   $('sign').textContent='＋ CYAN';
@@ -174,39 +174,29 @@ addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
 $('play').onclick=reset;$('again').onclick=reset;
 
 function orb(){
-  // Orb muncul dari sisi kanan saja (bergerak ke kiri melawan pemain)
-  let yPos = 80 + Math.random()*(h-160);
+  // Spawn acak dari tepi mana pun dengan arah melintas arena
+  const edge = Math.floor(Math.random() * 4);
+  let x, y, vx, vy;
+  if(edge === 0){ // kiri
+    x = -20; y = 80 + Math.random()*(h - 160);
+    vx = 40 + Math.random()*50; vy = (Math.random()-0.5)*60;
+  } else if(edge === 1){ // kanan
+    x = w + 20; y = 80 + Math.random()*(h - 160);
+    vx = -(40 + Math.random()*50); vy = (Math.random()-0.5)*60;
+  } else if(edge === 2){ // atas
+    x = 40 + Math.random()*(w - 80); y = 60;
+    vx = (Math.random()-0.5)*60; vy = 40 + Math.random()*50;
+  } else { // bawah
+    x = 40 + Math.random()*(w - 80); y = h + 20;
+    vx = (Math.random()-0.5)*60; vy = -(40 + Math.random()*50);
+  }
+
   orbs.push({
-    x: w + 40,
-    y: yPos,
-    vx: -(65 + Math.random()*55 + time*1.2),
-    vy: (Math.random()-.5)*40,
+    x, y, vx, vy,
     r: 10 + Math.random()*5,
-    charge: Math.random()<.5?1:-1,
+    charge: Math.random()<0.5?1:-1,
     phase: Math.random()*6,
     repelPulse: 0
-  });
-}
-
-function spawnGate(){
-  // Gap dipersempit dan posisinya dijamin JAUH dari posisi tengah awal agar pemain yang diam pasti tertabrak laser!
-  let gap = Math.max(105, h*0.28 - time*1.5);
-  let minY = 90 + gap/2;
-  let maxY = (h - 90) - gap/2;
-  let gapY;
-  // Pilih gap yang beda jauh dari posisi terakhir
-  if(lastGateGapY > h*0.5){
-    gapY = minY + Math.random()*(h*0.35);
-  } else {
-    gapY = (h - 90 - h*0.35) + Math.random()*(h*0.35);
-  }
-  lastGateGapY = gapY;
-
-  gates.push({
-    x: w + 50,
-    gapY: gapY,
-    gap: gap,
-    passed: false
   });
 }
 
@@ -223,18 +213,14 @@ function finish(){
 function loop(now){
   if(!alive)return;
   let dt=Math.min(.033,(now-last)/1000);
-  last=now;time+=dt;spawn-=dt;gateTimer-=dt;
+  last=now;time+=dt;spawn-=dt;
 
   if(spawn<=0){
     orb();
-    spawn=Math.max(.45, 1.2 - time*0.012);
-  }
-  if(gateTimer<=0){
-    spawnGate();
-    gateTimer=Math.max(2.4, 4.8 - time*0.035);
+    spawn=Math.max(.4, 1.1 - time*0.01);
   }
 
-  // 1. Responsive direct steering
+  // 1. Fully balanced omnidirectional steering
   let ax=0,ay=0;
   if(keys.a||keys.arrowleft)ax-=1;
   if(keys.d||keys.arrowright)ax+=1;
@@ -251,21 +237,18 @@ function loop(now){
   player.vx += ax * 520 * dt;
   player.vy += ay * 520 * dt;
 
-  // Sedikit gaya geser konstan ke kiri (arus laser menantang pemain agar tidak diam di tempat)
-  player.vx -= 18 * dt;
-
   // 2. Physics & Polarity Interplay
   for(const o of orbs){
     o.x += o.vx*dt;
     o.y += o.vy*dt + Math.sin(time*2.5+o.phase)*18*dt;
     let dx = player.x - o.x, dy = player.y - o.y;
     let d = Math.hypot(dx,dy) || 1;
-    let sameCharge = (flip === o.charge); // Sama = REPEL, Beda = ATTRACT
+    let sameCharge = (flip === o.charge);
 
     if(d < 220){
       let forceMag = 18000 / (d*d + 300);
       if(sameCharge){
-        // REPEL: Saling tolak kuat!
+        // REPEL: Saling tolak simetris
         let fx = (dx/d) * forceMag * 1.6;
         let fy = (dy/d) * forceMag * 1.6;
         player.vx += fx * dt;
@@ -314,30 +297,7 @@ function loop(now){
     }
   }
 
-  orbs = orbs.filter(o=>!o.dead && o.x>-80 && o.x<w+120 && o.y>-50 && o.y<h+50);
-
-  // Gates logic
-  for(const g of gates){
-    let gSpeed = Math.max(140, 185 + time*1.8);
-    g.x -= gSpeed * dt;
-
-    // Cek tabrakan laser (garis atas dan bawah celah)
-    let inXZone = Math.abs(g.x - player.x) < (player.r + 5);
-    let hitLaser = (player.y - player.r < (g.gapY - g.gap/2)) || (player.y + player.r > (g.gapY + g.gap/2));
-
-    if(inXZone && hitLaser){
-      finish();
-      return;
-    }
-
-    // Hanya jika lolos dengan aman melalui celah
-    if(!g.passed && g.x < player.x){
-      g.passed = true;
-      score += 25;
-      shockwaves.push({x:player.x, y:player.y, r:15, maxR:95, c:'#00ff88', life:1});
-    }
-  }
-  gates = gates.filter(g=>g.x > -60);
+  orbs = orbs.filter(o=>!o.dead && o.x>-90 && o.x<w+90 && o.y>-70 && o.y<h+70);
 
   // Damping & screen boundary
   player.vx *= Math.pow(0.92, dt*60);
@@ -426,20 +386,7 @@ function draw(){
     }
   }
 
-  // 2. Laser Gates
-  for(const g of gates){
-    ctx.fillStyle='#ff2bd6';
-    ctx.shadowBlur=22;
-    ctx.shadowColor='#ff2bd6';
-    ctx.fillRect(g.x, 0, 8, g.gapY - g.gap/2);
-    ctx.fillRect(g.x, g.gapY + g.gap/2, 8, h - (g.gapY + g.gap/2));
-    ctx.shadowBlur=0;
-    ctx.fillStyle='#ffffff';
-    ctx.fillRect(g.x-2, g.gapY - g.gap/2 - 4, 12, 6);
-    ctx.fillRect(g.x-2, g.gapY + g.gap/2 - 2, 12, 6);
-  }
-
-  // 3. Shockwave Rings
+  // 2. Shockwave Rings
   for(const s of shockwaves){
     ctx.save();
     ctx.beginPath();
@@ -453,7 +400,7 @@ function draw(){
     ctx.restore();
   }
 
-  // 4. Orbs
+  // 3. Orbs
   for(const o of orbs){
     let c = o.charge===1 ? '#00eaff' : '#ff50d7';
     let isRepelling = (flip === o.charge && o.repelPulse > 0.05);
@@ -478,7 +425,7 @@ function draw(){
     ctx.fillText(o.charge===1?'+':'−', o.x, o.y);
   }
 
-  // 5. Player Core & Dynamic Field Ring
+  // 4. Player Core & Dynamic Field Ring
   let pColor = flip===1 ? '#00eaff' : '#ff50d7';
 
   trail.forEach((p,i)=>{
