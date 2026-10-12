@@ -643,19 +643,27 @@ function loop(now){
     let dx = player.x - o.x, dy = player.y - o.y;
     let d = Math.hypot(dx,dy) || 1;
 
-    let forceRange = (magnetTimer > 0 && o.type !== 'bomb') ? 500 : 220;
+    let forceRange = (magnetTimer > 0 && o.type !== 'bomb') ? 460 : 190;
     let sameCharge = (flip === o.charge);
 
+    // Radius dampak ke PLAYER jauh lebih kecil dari radius visual:
+    // player hanya "merasakan" gaya kalau orb benar-benar dekat.
+    let playerForceRange = 105;
+
     if(d < forceRange){
-      let forceMag = (20000 + level*1500) / (d*d + 300);
+      let forceMag = (14000 + level*1200) / (d*d + 420);
 
       if(o.type === 'bomb'){
         if(sameCharge){
-          // REPEL BOMB
+          // REPEL BOMB (hanya saat dekat)
+          if(d < playerForceRange){
+            let fx = (dx/d) * forceMag * 2.2;
+            let fy = (dy/d) * forceMag * 2.2;
+            player.vx += fx * dt;
+            player.vy += fy * dt;
+          }
           let fx = (dx/d) * forceMag * 2.2;
           let fy = (dy/d) * forceMag * 2.2;
-          player.vx += fx * dt;
-          player.vy += fy * dt;
           o.vx -= fx * 1.4 * dt;
           o.vy -= fy * 1.4 * dt;
           o.repelPulse = Math.max(o.repelPulse, (1 - d/220));
@@ -677,8 +685,10 @@ function loop(now){
         } else if(sameCharge){
           let fx = (dx/d) * forceMag * 1.6;
           let fy = (dy/d) * forceMag * 1.6;
-          player.vx += fx * dt;
-          player.vy += fy * dt;
+          if(d < playerForceRange){
+            player.vx += fx * dt;
+            player.vy += fy * dt;
+          }
           o.vx -= fx * 0.7 * dt;
           o.vy -= fy * 0.7 * dt;
           o.repelPulse = Math.max(o.repelPulse, (1 - d/220));
