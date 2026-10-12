@@ -225,12 +225,6 @@ function spawnOrb(){
     vx = (Math.random()-0.5)*50; vy = -(45 + Math.random()*50);
   }
 
-  // TIPE ORB:
-  // 1. "normal" (70%) - Orb poin (+ / -)
-  // 2. "bomb"   (20%) - Bom magnetik berduri (+ / -)
-  // 3. "shield" (4%)  - Power-up Tameng
-  // 4. "magnet" (3%)  - Power-up Super Magnet
-  // 5. "freeze" (3%)  - Power-up Freeze Time
   let roll = Math.random();
   let type = "normal";
   if(roll < 0.22){
@@ -363,7 +357,6 @@ function loop(now){
     let dx = player.x - o.x, dy = player.y - o.y;
     let d = Math.hypot(dx,dy) || 1;
 
-    // JIKA SUPER MAGNET AKTIF: Semua orb ditarik paksa
     let forceRange = (magnetTimer > 0 && o.type !== 'bomb') ? 500 : 220;
     let sameCharge = (flip === o.charge);
 
@@ -371,9 +364,7 @@ function loop(now){
       let forceMag = 20000 / (d*d + 300);
 
       if(o.type === 'bomb'){
-        // BOM: Jika sama charge = TOLAK KUAT (tendang bom!). Jika beda charge = BOM MENGEJAR!
         if(sameCharge){
-          // REPEL BOMB! Slingshot tendang bom
           let fx = (dx/d) * forceMag * 2.2;
           let fy = (dy/d) * forceMag * 2.2;
           player.vx += fx * dt;
@@ -382,7 +373,6 @@ function loop(now){
           o.vy -= fy * 1.4 * dt;
           o.repelPulse = Math.max(o.repelPulse, (1 - d/220));
         } else {
-          // ATTRACT BOMB! Bahaya, bom ditarik mendekati player!
           let fx = (dx/d) * forceMag * 1.2;
           let fy = (dy/d) * forceMag * 1.2;
           o.vx += fx * dt;
@@ -390,15 +380,12 @@ function loop(now){
           o.repelPulse = 0;
         }
       } else {
-        // ORB BIASA & POWER-UP
         if(magnetTimer > 0){
-          // Paksa sedot
           let fx = (dx/d) * 380;
           let fy = (dy/d) * 380;
           o.vx += fx * dt;
           o.vy += fy * dt;
         } else if(sameCharge){
-          // REPEL
           let fx = (dx/d) * forceMag * 1.6;
           let fy = (dy/d) * forceMag * 1.6;
           player.vx += fx * dt;
@@ -407,7 +394,6 @@ function loop(now){
           o.vy -= fy * 0.7 * dt;
           o.repelPulse = Math.max(o.repelPulse, (1 - d/220));
         } else {
-          // ATTRACT
           let fx = (dx/d) * forceMag * 0.85;
           let fy = (dy/d) * forceMag * 0.85;
           o.vx += fx * dt;
@@ -424,9 +410,7 @@ function loop(now){
     // Touch / Collision
     if(d < player.r + o.r){
       if(o.type === 'bomb'){
-        // NABRAK BOM!
         if(shieldActive){
-          // Tahan 1 hit dari tameng
           shieldActive = false;
           updateStatusPills();
           hitFlash = 0.8;
@@ -434,9 +418,8 @@ function loop(now){
           shockwaves.push({x:o.x, y:o.y, r:10, maxR:90, c:'#00ff88', life:1});
           o.dead = true;
         } else {
-          // MELEDAK MATI!
           triggerDeath("TERTABRAK BOM MAGNETIK!");
-          return;
+          break; // Hentikan loop orbs, frame loop berikutnya akan render animasi dying
         }
       } else if(o.type === 'shield'){
         shieldActive = true;
@@ -445,19 +428,18 @@ function loop(now){
         updateStatusPills();
         o.dead = true;
       } else if(o.type === 'magnet'){
-        magnetTimer = 6.0; // 6 detik super magnet
+        magnetTimer = 6.0;
         score += 20;
         shockwaves.push({x:o.x, y:o.y, r:10, maxR:80, c:'#ffe600', life:1});
         updateStatusPills();
         o.dead = true;
       } else if(o.type === 'freeze'){
-        freezeTimer = 5.0; // 5 detik slow time
+        freezeTimer = 5.0;
         score += 20;
         shockwaves.push({x:o.x, y:o.y, r:10, maxR:80, c:'#00cfff', life:1});
         updateStatusPills();
         o.dead = true;
       } else {
-        // ORB BIASA
         if(!sameCharge || magnetTimer > 0){
           score += 10;
           shockwaves.push({x:o.x, y:o.y, r:5, maxR:45, c:o.charge===1?'#00eaff':'#ff50d7', life:1});
@@ -467,7 +449,6 @@ function loop(now){
           }
           o.dead = true;
         } else {
-          // Bouncer membal
           let bounce = 175;
           player.vx += (dx/d) * bounce;
           player.vy += (dy/d) * bounce;
@@ -490,26 +471,26 @@ function loop(now){
   player.y += player.vy * dt;
 
   // BOUNDARY DEATH CHECK
-  if(player.x < 16 || player.x > w-16 || player.y < 76 || player.y > h-16){
+  if(!dying && (player.x < 16 || player.x > w-16 || player.y < 76 || player.y > h-16)){
     if(shieldActive){
       shieldActive = false;
       updateStatusPills();
       hitFlash = 0.7;
       screenShake = 10;
-      // Membal kembali ke dalam
       if(player.x < 16){ player.x = 20; player.vx = 220; }
       if(player.x > w-16){ player.x = w-20; player.vx = -220; }
       if(player.y < 76){ player.y = 80; player.vy = 220; }
       if(player.y > h-16){ player.y = h-20; player.vy = -220; }
     } else {
       triggerDeath("MENABRAK BATAS DINDING ARENA!");
-      return;
     }
   }
 
   // Trail
-  trail.push({x:player.x,y:player.y});
-  if(trail.length > 14) trail.shift();
+  if(!dying){
+    trail.push({x:player.x,y:player.y});
+    if(trail.length > 14) trail.shift();
+  }
 
   particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt});
   particles = particles.filter(p=>p.life>0);
@@ -521,7 +502,8 @@ function loop(now){
   $('progress').style.width = `${Math.min(100,time/45*100)}%`;
 
   draw();
-  if(alive) requestAnimationFrame(loop);
+  // Request frame jika masih hidup ATAU sedang proses animasi meledak (dying)
+  if(alive || dying) requestAnimationFrame(loop);
 }
 
 function draw(){
@@ -560,16 +542,13 @@ function draw(){
 
         ctx.save();
         if(o.type === 'bomb'){
-          // LINE TO BOMB:
           if(sameCharge){
-            // Repel Line (Dorong bom)
             ctx.strokeStyle = `rgba(255, 200, 0, ${alpha * 0.9})`;
             ctx.lineWidth = 2.2;
             ctx.setLineDash([6, 4]);
             ctx.lineDashOffset = -time * 90;
             ctx.beginPath();ctx.moveTo(player.x, player.y);ctx.lineTo(o.x, o.y);ctx.stroke();
           } else {
-            // Danger Attract Line (Bom mengejar!)
             ctx.strokeStyle = `rgba(255, 40, 40, ${alpha * 0.95})`;
             ctx.lineWidth = 2.4;
             ctx.setLineDash([4, 4]);
@@ -577,14 +556,12 @@ function draw(){
             ctx.beginPath();ctx.moveTo(player.x, player.y);ctx.lineTo(o.x, o.y);ctx.stroke();
           }
         } else if(sameCharge && magnetTimer <= 0){
-          // REPEL
           ctx.strokeStyle = `rgba(255, 90, 70, ${alpha * 0.85})`;
           ctx.lineWidth = 1.8 + (1 - d/220)*2.0;
           ctx.setLineDash([6, 5]);
           ctx.lineDashOffset = -time * 90;
           ctx.beginPath();ctx.moveTo(player.x, player.y);ctx.lineTo(o.x, o.y);ctx.stroke();
         } else {
-          // ATTRACT
           ctx.strokeStyle = `rgba(0, 240, 255, ${alpha * 0.6})`;
           ctx.lineWidth = 1.2;
           ctx.setLineDash([4, 4]);
@@ -614,14 +591,12 @@ function draw(){
   for(const o of orbs){
     ctx.save();
     if(o.type === 'bomb'){
-      // 💣 BOM MAGNETIK BERDURI
       let isRepelling = (!dying && flip === o.charge && o.repelPulse > 0.05);
       let bombColor = isRepelling ? '#ffcc00' : '#ff2233';
 
       ctx.translate(o.x, o.y);
       ctx.rotate(o.angle);
 
-      // Duri bom
       ctx.fillStyle = '#ff4444';
       ctx.shadowColor = bombColor;
       ctx.shadowBlur = 15;
@@ -630,7 +605,6 @@ function draw(){
         ctx.fillRect(-2, -o.r - 5, 4, 10);
       }
 
-      // Bola bom utama
       ctx.beginPath();
       ctx.arc(0, 0, o.r, 0, Math.PI*2);
       ctx.fillStyle = '#1c070a';
@@ -640,7 +614,6 @@ function draw(){
       ctx.stroke();
       ctx.shadowBlur = 0;
 
-      // Symbol di bom
       ctx.fillStyle = bombColor;
       ctx.font = '900 13px sans-serif';
       ctx.textAlign = 'center';
@@ -648,7 +621,6 @@ function draw(){
       ctx.fillText(o.charge===1?'+':'−', 0, 0);
 
     } else if(o.type === 'shield'){
-      // 🛡️ SHIELD POWER-UP (HIJAU EMERALD)
       ctx.beginPath();
       ctx.arc(o.x, o.y, o.r + 4, 0, Math.PI*2);
       ctx.fillStyle = 'rgba(0,255,136,0.2)';
@@ -668,7 +640,6 @@ function draw(){
       ctx.fillText('🛡️', o.x, o.y);
 
     } else if(o.type === 'magnet'){
-      // 🧲 SUPER MAGNET POWER-UP (KUNING EMAS)
       ctx.beginPath();
       ctx.arc(o.x, o.y, o.r + 4, 0, Math.PI*2);
       ctx.fillStyle = 'rgba(255,230,0,0.2)';
@@ -688,7 +659,6 @@ function draw(){
       ctx.fillText('🧲', o.x, o.y);
 
     } else if(o.type === 'freeze'){
-      // ❄️ FREEZE TIME POWER-UP (CYAN ES)
       ctx.beginPath();
       ctx.arc(o.x, o.y, o.r + 4, 0, Math.PI*2);
       ctx.fillStyle = 'rgba(0,207,255,0.2)';
@@ -708,7 +678,6 @@ function draw(){
       ctx.fillText('❄️', o.x, o.y);
 
     } else {
-      // ORB BIASA
       let c = o.charge===1 ? '#00eaff' : '#ff50d7';
       let isRepelling = (!dying && flip === o.charge && o.repelPulse > 0.05);
 
@@ -738,7 +707,6 @@ function draw(){
   let pColor = flip===1 ? '#00eaff' : '#ff50d7';
 
   if(!dying){
-    // Trail
     trail.forEach((p,i)=>{
       ctx.globalAlpha = (i/trail.length)*0.35;
       ctx.beginPath();
@@ -748,7 +716,6 @@ function draw(){
     });
     ctx.globalAlpha = 1;
 
-    // SHIELD BUBBLE (Jika Tameng Aktif)
     if(shieldActive){
       ctx.beginPath();
       ctx.arc(player.x, player.y, player.r + 14, 0, Math.PI*2);
@@ -760,7 +727,6 @@ function draw(){
       ctx.shadowBlur = 0;
     }
 
-    // Pulsing aura ring
     let auraPulse = Math.sin(time*8)*4;
     ctx.beginPath();
     ctx.arc(player.x, player.y, player.r + 8 + auraPulse, 0, Math.PI*2);
@@ -770,16 +736,14 @@ function draw(){
     ctx.stroke();
     ctx.globalAlpha = 1;
 
-    // Body
     ctx.beginPath();
     ctx.arc(player.x, player.y, player.r, 0, Math.PI*2);
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = (hitFlash > 0.1) ? '#ffffff' : '#ffffff';
     ctx.shadowColor = (hitFlash > 0.1) ? '#ffffaa' : pColor;
     ctx.shadowBlur = (hitFlash > 0.1) ? 35 : 24;
     ctx.fill();
     ctx.shadowBlur = 0;
 
-    // Core Dot
     ctx.beginPath();
     ctx.arc(player.x, player.y, 6, 0, Math.PI*2);
     ctx.fillStyle = (hitFlash > 0.1) ? '#ffffff' : pColor;
