@@ -537,22 +537,26 @@ function loop(now){
     spawn = spawnRate;
   }
 
-  // 3. Direct Steering
+  // 3. Smooth Steering (No phantom tethering / No leash bug)
   let ax=0,ay=0;
-  if(keys.a||keys.arrowleft)ax-=1;
-  if(keys.d||keys.arrowright)ax+=1;
-  if(keys.w||keys.arrowup)ay-=1;
-  if(keys.s||keys.arrowdown)ay+=1;
-  if(mouse.active){
+  let keyActive = false;
+  if(keys.a||keys.arrowleft){ ax-=1; keyActive=true; }
+  if(keys.d||keys.arrowright){ ax+=1; keyActive=true; }
+  if(keys.w||keys.arrowup){ ay-=1; keyActive=true; }
+  if(keys.s||keys.arrowdown){ ay+=1; keyActive=true; }
+
+  // Mouse only steers if keys are NOT pressed and cursor is dragged/moved
+  if(!keyActive && mouse.active){
     let mdx=mouse.x-player.x, mdy=mouse.y-player.y;
     let md=Math.hypot(mdx,mdy);
-    if(md>8){
-      ax += (mdx/md) * Math.min(1.8, md*0.015);
-      ay += (mdy/md) * Math.min(1.8, md*0.015);
+    if(md > 12){
+      let pull = Math.min(1.4, md * 0.007);
+      ax += (mdx/md) * pull;
+      ay += (mdy/md) * pull;
     }
   }
-  player.vx += ax * 520 * dt;
-  player.vy += ay * 520 * dt;
+  player.vx += ax * 580 * dt;
+  player.vy += ay * 580 * dt;
 
   // 4. Physics & Polarity Interplay
   for(const o of orbs){
@@ -607,8 +611,6 @@ function loop(now){
           let fy = (dy/d) * forceMag * 0.85;
           o.vx += fx * dt;
           o.vy += fy * dt;
-          player.vx -= fx * 0.25 * dt;
-          player.vy -= fy * 0.25 * dt;
           o.repelPulse = 0;
         }
       }
