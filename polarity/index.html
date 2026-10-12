@@ -103,6 +103,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
   </div>
   <div style="display:flex;align-items:center;gap:8px;pointer-events:auto">
     <span id="score">0000</span> · BEST <b id="best">0000</b>
+    <button class="hud-btn" id="btnMusic" title="Music">🔊</button>
     <button class="hud-btn" id="langBtn" title="Language">ID</button>
     <button class="hud-btn" id="btnPause" title="Pause">II</button>
   </div>
@@ -115,15 +116,15 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 <div class="guide-bar">
   <div class="guide-item badge-attract">
     <span class="badge-dot" style="background:#00eaff;box-shadow:0 0 8px #00eaff"></span>
-    BEDA = <b>TARIK (+PTS & METER)</b>
+    <span id="gAttract">BEDA = <b>TARIK (+PTS & METER)</b></span>
   </div>
   <div style="color:#64748b">|</div>
   <div class="guide-item badge-repel">
     <span class="badge-dot" style="background:#ff5040;box-shadow:0 0 8px #ff5040"></span>
-    SAMA = <b>TOLAK (TENDANG BOM)</b>
+    <span id="gRepel">SAMA = <b>TOLAK (TENDANG BOM)</b></span>
   </div>
   <div style="color:#64748b">|</div>
-  <div class="guide-item badge-bomb">
+  <div class="guide-item badge-bomb" id="gBomb">
     💣 <b>HINDARI BOM</b>
   </div>
 </div>
@@ -348,7 +349,15 @@ const I18N = {
     deadBomb:'TERTABRAK BOM MAGNETIK DI LV', deadWall:'MENABRAK BATAS ARENA DI LV',
     resultLevel:'Level Capai', resultScore:'Skor Akhir', resultBest:'Rekor',
     play:'MULAI MAIN', again:'MAIN LAGI (ENTER)', goAchieve:'🏆 CEK ACHIEVEMENTS',
-    achHow:'🏆 ACHIEVEMENTS', toastTitle:'ACHIEVEMENT TERBUKA!'
+    achHow:'🏆 ACHIEVEMENTS', toastTitle:'ACHIEVEMENT TERBUKA!',
+    gAttract:'BEDA = <b>TARIK (+PTS & METER)</b>',
+    gRepel:'SAMA = <b>TOLAK (TENDANG BOM)</b>',
+    gBomb:'💣 <b>HINDARI BOM</b>',
+    pillHyper:'🔥 OVERCHARGE HYPER (3x MULTI)!',
+    pillShield:'🛡️ SHIELD (1 HIT)',
+    pillMagnet:'🧲 SUPER MAGNET',
+    pillFreeze:'❄️ SLOW TIME',
+    music:'MUSIK', musicOn:'ON', musicOff:'OFF'
   },
   en:{
     how:'HOW TO PLAY &amp; POWERS', resume:'RESUME', quit:'QUIT',
@@ -356,7 +365,15 @@ const I18N = {
     deadBomb:'HIT A MAGNETIC BOMB AT LV', deadWall:'CRASHED INTO ARENA WALL AT LV',
     resultLevel:'Reached Level', resultScore:'Final Score', resultBest:'Best',
     play:'START GAME', again:'PLAY AGAIN (ENTER)', goAchieve:'🏆 VIEW ACHIEVEMENTS',
-    achHow:'🏆 ACHIEVEMENTS', toastTitle:'ACHIEVEMENT UNLOCKED!'
+    achHow:'🏆 ACHIEVEMENTS', toastTitle:'ACHIEVEMENT UNLOCKED!',
+    gAttract:'DIFFERENT = <b>ATTRACT (+PTS &amp; METER)</b>',
+    gRepel:'SAME = <b>REPEL (KICK BOMBS)</b>',
+    gBomb:'💣 <b>AVOID BOMBS</b>',
+    pillHyper:'🔥 OVERCHARGE HYPER (3x MULTI)!',
+    pillShield:'🛡️ SHIELD (1 HIT)',
+    pillMagnet:'🧲 SUPER MAGNET',
+    pillFreeze:'❄️ SLOW TIME',
+    music:'MUSIC', musicOn:'ON', musicOff:'OFF'
   }
 };
 function t_(k){ return (I18N[LANG] && I18N[LANG][k]) || k; }
@@ -370,8 +387,81 @@ function applyLang(){
   $('btnQuit').textContent = t_('quit');
   const pt = document.querySelector('[data-i18n="pauseTitle"]'); if(pt) pt.textContent = t_('pauseTitle');
   const ph = document.querySelector('[data-i18n="pauseHint"]'); if(ph) ph.textContent = t_('pauseHint');
+  // Guide bar & status pills & toast
+  const ga=document.getElementById('gAttract'); if(ga) ga.innerHTML = t_('gAttract');
+  const gr=document.getElementById('gRepel');   if(gr) gr.innerHTML = t_('gRepel');
+  const gb=document.getElementById('gBomb');     if(gb) gb.innerHTML = t_('gBomb');
+  const ph2=document.getElementById('pillHyper');  if(ph2) ph2.textContent = t_('pillHyper');
+  const ps=document.getElementById('pillShield');  if(ps) ps.textContent = t_('pillShield');
+  const pm=document.getElementById('pillMagnet');  if(pm) pm.textContent = t_('pillMagnet');
+  const pf=document.getElementById('pillFreeze');  if(pf) pf.textContent = t_('pillFreeze');
+  const tt=document.querySelector('.achieve-title'); if(tt) tt.textContent = t_('toastTitle');
+  const mb=document.getElementById('btnMusic'); if(mb) mb.textContent = musicOn ? '🔊' : '🔇';
 }
-$('langBtn').onclick = ()=>{ LANG = (LANG==='id')?'en':'id'; localStorage.setItem('polarity_lang', LANG); applyLang(); };
+$('langBtn').onclick = ()=>{ LANG = (LANG==='id')?'en':'id'; localStorage.setItem('polarity_lang', LANG); applyLang();
+
+// ===== MUSIC SYSTEM (WebAudio generated, tanpa aset eksternal) =====
+let audioCtx = null;
+let musicOn = (localStorage.getItem('polarity_music') !== 'off');
+let musicTimer = null;
+let musicStep = 0;
+
+// Skala minor neon (Hz) — arpeggio dasar
+const MUSIC_SCALE = [220.00, 261.63, 293.66, 349.23, 392.00, 440.00, 523.25, 587.33];
+
+function startMusic(){
+  if(!musicOn) return;
+  try{
+    if(!audioCtx){ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }
+    if(audioCtx.state === 'suspended'){ audioCtx.resume(); }
+  }catch(e){ return; }
+  if(musicTimer) return;
+
+  musicTimer = setInterval(()=>{
+    if(!alive || paused || !audioCtx) return;
+    if(audioCtx.state !== 'running') return;
+
+    // Bass pulse tiap 4 step
+    if(musicStep % 4 === 0){
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type='sine'; o.frequency.value = 55;
+      g.gain.setValueAtTime(0.10, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(); o.stop(audioCtx.currentTime + 0.45);
+    }
+
+    // Arpeggio melodi (tempo ikut level)
+    const idx = MUSIC_SCALE[(musicStep * 3 + level) % MUSIC_SCALE.length];
+    const o2 = audioCtx.createOscillator(), g2 = audioCtx.createGain();
+    o2.type='triangle';
+    o2.frequency.value = idx * (hyperTimer > 0 ? 1.5 : 1);
+    const vol = hyperTimer > 0 ? 0.06 : 0.035;
+    g2.gain.setValueAtTime(vol, audioCtx.currentTime);
+    g2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.28);
+    o2.connect(g2); g2.connect(audioCtx.destination);
+    o2.start(); o2.stop(audioCtx.currentTime + 0.28);
+
+    musicStep++;
+  }, 280);
+}
+
+function stopMusic(){
+  if(musicTimer){ clearInterval(musicTimer); musicTimer = null; }
+}
+
+function toggleMusic(){
+  musicOn = !musicOn;
+  localStorage.setItem('polarity_music', musicOn ? 'on' : 'off');
+  const btn = document.getElementById('btnMusic');
+  if(btn) btn.textContent = musicOn ? '🔊' : '🔇';
+  if(musicOn){ startMusic(); } else { stopMusic(); }
+}
+
+document.getElementById('btnMusic').onclick = toggleMusic;
+
+// Musik ikut berhenti saat pause / game over
+ };
 applyLang();
 
 // ===== PAUSE SYSTEM =====
@@ -385,6 +475,7 @@ function setPaused(v){
 $('btnPause').onclick = ()=>setPaused(!paused);
 $('btnResume').onclick = ()=>setPaused(false);
 $('btnQuit').onclick = ()=>{ setPaused(false); alive=false; dying=false; paused=false;
+  stopMusic();
   $('pause').classList.add('hidden'); $('start').classList.remove('hidden'); };
 
 // ===== FIX: TAP/TOUCH HARUS BISA KLIK TOMBOL MODAL =====
@@ -416,6 +507,7 @@ function reset(){
   $('end').classList.add('hidden');
   updateStatusPills();
   last=performance.now();
+  startMusic();
   requestAnimationFrame(loop);
 }
 
