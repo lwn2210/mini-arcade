@@ -21,7 +21,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 .badge-attract{color:#00eaff;display:flex;align-items:center;gap:4px}
 .badge-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
 
-/* BOTTOM ON-SCREEN CONTROLS & HOW-TO */
+/* BOTTOM ON-SCREEN CONTROLS */
 .bottom-hints{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:18px;align-items:center;font-size:12px;font-weight:800;letter-spacing:.08em;pointer-events:none;z-index:5;text-shadow:0 0 8px #000;background:rgba(5,10,20,0.7);padding:6px 18px;border-radius:20px;border:1px solid rgba(255,255,255,0.1)}
 .key-badge{background:#1a2b42;color:#00eaff;padding:3px 8px;border-radius:6px;border:1px solid #00eaff;font-size:11px}
 
@@ -99,7 +99,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
     </div>
 
     <div class="controls-box">
-      ⚠️ <b>KONTROL NETRAL:</b> Kemudi penuh ke segala arah tanpa arus paksaan. Hindari tabrakan dengan batas arena!
+      ⚠️ <b>PERINGATAN:</b> Jangan sentuh batas dinding arena! Jika terlempar menabrak batas, inti akan hancur meledak.
     </div>
 
     <button class="btn" id="play">MULAI MAIN</button>
@@ -109,11 +109,11 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 <!-- GAME OVER SCREEN -->
 <div class="overlay hidden" id="end">
   <div class="panel">
-    <div class="eyebrow" style="color:#ff5040">KELUAR ARENA</div>
+    <div class="eyebrow" style="color:#ff5040">INTI MELEDAK / HANCUR</div>
     <h1 style="color:#ff50d7">GAME OVER</h1>
     <p id="result" style="font-size:15px;color:#cbd5e1;line-height:1.8;margin:16px 0"></p>
     <div class="controls-box" style="margin-bottom:20px">
-      💡 <b>TIPS:</b> Pantau posisi orb di sekitar, lalu gunakan <b>FLIP POLARITAS (SPASI / TAP)</b> untuk rem mendadak atau dorongan arah seimbang!
+      💡 <b>TIPS:</b> Jika terdorong terlalu kencang ke arah dinding, segera <b>FLIP POLARITAS (SPASI / TAP)</b> untuk rem mendadak!
     </div>
     <button class="btn" id="again">MAIN LAGI (ENTER)</button>
   </div>
@@ -126,13 +126,15 @@ function resize(){dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight
 addEventListener('resize',resize);resize();
 
 const $=id=>document.getElementById(id), keys={}, mouse={x:w/2,y:h/2,active:false}, player={x:w/2,y:h/2,vx:0,vy:0,r:14};
-let orbs=[],particles=[],shockwaves=[],score=0,best=+(localStorage.getItem('polarity_best')||0),alive=false,flip=1,time=0,last=0,spawn=0,trail=[];
+let orbs=[],particles=[],shockwaves=[],score=0,best=+(localStorage.getItem('polarity_best')||0);
+let alive=false,dying=false,deathTimer=0,hitFlash=0,screenShake=0;
+let flip=1,time=0,last=0,spawn=0,trail=[];
 $('best').textContent=String(best).padStart(4,'0');
 
 function reset(){
   player.x=w*0.5;player.y=h*0.5;player.vx=0;player.vy=0;
   orbs=[];particles=[];shockwaves=[];trail=[];
-  score=0;time=0;spawn=0;flip=1;alive=true;
+  score=0;time=0;spawn=0;flip=1;alive=true;dying=false;deathTimer=0;hitFlash=0;screenShake=0;
   mouse.active=false;
   $('score').textContent='0000';
   $('sign').textContent='＋ CYAN';
@@ -144,7 +146,7 @@ function reset(){
 }
 
 function flipPolarity(){
-  if(!alive)return;
+  if(!alive || dying)return;
   flip*=-1;
   const isCyan = flip===1;
   $('sign').textContent=isCyan?'＋ CYAN':'− MAGENTA';
@@ -163,30 +165,29 @@ function pointer(e){
 
 addEventListener('mousemove',pointer);
 addEventListener('touchmove',e=>{pointer(e);e.preventDefault()},{passive:false});
-addEventListener('touchstart',e=>{pointer(e);if(!alive)reset();else flipPolarity();e.preventDefault()},{passive:false});
-addEventListener('mousedown',e=>{pointer(e);if(alive)flipPolarity();});
+addEventListener('touchstart',e=>{pointer(e);if(!alive && !dying)reset();else flipPolarity();e.preventDefault()},{passive:false});
+addEventListener('mousedown',e=>{pointer(e);if(alive && !dying)flipPolarity();});
 addEventListener('keydown',e=>{
   keys[e.key.toLowerCase()]=true;
   if(e.code==='Space'){e.preventDefault();flipPolarity()}
-  if(e.key==='Enter'&&!alive)reset();
+  if(e.key==='Enter'&&!alive&&!dying)reset();
 });
 addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
 $('play').onclick=reset;$('again').onclick=reset;
 
 function orb(){
-  // Spawn acak dari tepi mana pun dengan arah melintas arena
   const edge = Math.floor(Math.random() * 4);
   let x, y, vx, vy;
-  if(edge === 0){ // kiri
+  if(edge === 0){
     x = -20; y = 80 + Math.random()*(h - 160);
     vx = 40 + Math.random()*50; vy = (Math.random()-0.5)*60;
-  } else if(edge === 1){ // kanan
+  } else if(edge === 1){
     x = w + 20; y = 80 + Math.random()*(h - 160);
     vx = -(40 + Math.random()*50); vy = (Math.random()-0.5)*60;
-  } else if(edge === 2){ // atas
+  } else if(edge === 2){
     x = 40 + Math.random()*(w - 80); y = 60;
     vx = (Math.random()-0.5)*60; vy = 40 + Math.random()*50;
-  } else { // bawah
+  } else {
     x = 40 + Math.random()*(w - 80); y = h + 20;
     vx = (Math.random()-0.5)*60; vy = -(40 + Math.random()*50);
   }
@@ -200,27 +201,85 @@ function orb(){
   });
 }
 
-function finish(){
-  if(!alive)return;
-  alive=false;
-  best=Math.max(best,score);
-  localStorage.setItem('polarity_best',best);
-  $('best').textContent=String(best).padStart(4,'0');
-  $('result').textContent=`Skor Kamu: ${String(score).padStart(4,'0')}  |  Rekor Terbaik: ${String(best).padStart(4,'0')}`;
+// ANIMASI KEMATIAN / HANCUR (DEATH ANIMATION)
+function triggerDeath(reasonX, reasonY){
+  if(dying || !alive) return;
+  dying = true;
+  deathTimer = 0.9; // 0.9 detik slow-mo explosion
+  hitFlash = 1.0;
+  screenShake = 18;
+
+  let pColor = flip===1 ? '#00eaff' : '#ff50d7';
+
+  // 1. Double Shockwave
+  shockwaves.push({x:player.x, y:player.y, r:10, maxR:160, c:'#ffffff', life:1.2});
+  shockwaves.push({x:player.x, y:player.y, r:5, maxR:120, c:pColor, life:1.0});
+
+  // 2. Burst 40 Shrapnel Sparks
+  for(let i=0; i<45; i++){
+    let ang = Math.random() * Math.PI * 2;
+    let spd = 60 + Math.random() * 260;
+    particles.push({
+      x: player.x,
+      y: player.y,
+      vx: Math.cos(ang) * spd,
+      vy: Math.sin(ang) * spd,
+      life: 0.6 + Math.random()*0.5,
+      maxLife: 0.9,
+      c: (i%3===0)?'#ffffff':((i%3===1)?pColor:'#ff5040'),
+      size: 2.5 + Math.random()*3.5
+    });
+  }
+}
+
+function showGameOverModal(){
+  alive = false;
+  dying = false;
+  best = Math.max(best, score);
+  localStorage.setItem('polarity_best', best);
+  $('best').textContent = String(best).padStart(4,'0');
+  $('result').textContent = `Skor Kamu: ${String(score).padStart(4,'0')}  |  Rekor Terbaik: ${String(best).padStart(4,'0')}`;
   $('end').classList.remove('hidden');
 }
 
 function loop(now){
-  if(!alive)return;
-  let dt=Math.min(.033,(now-last)/1000);
-  last=now;time+=dt;spawn-=dt;
+  if(!alive && !dying) return;
+  let dt = Math.min(.033, (now-last)/1000);
+  last = now;
 
-  if(spawn<=0){
-    orb();
-    spawn=Math.max(.4, 1.1 - time*0.01);
+  // JIKA SEDANG ANIMASI DEATH
+  if(dying){
+    deathTimer -= dt;
+    screenShake = Math.max(0, screenShake - dt*25);
+    hitFlash = Math.max(0, hitFlash - dt*3.0);
+
+    // Update partikel ledakan
+    particles.forEach(p=>{p.x+=p.vx*dt*0.7; p.y+=p.vy*dt*0.7; p.life-=dt});
+    particles = particles.filter(p=>p.life>0);
+
+    shockwaves.forEach(s=>{s.r += (s.maxR - s.r)*8*dt; s.life -= dt*1.8;});
+    shockwaves = shockwaves.filter(s=>s.life>0);
+
+    draw();
+    if(deathTimer <= 0){
+      showGameOverModal();
+    } else {
+      requestAnimationFrame(loop);
+    }
+    return;
   }
 
-  // 1. Fully balanced omnidirectional steering
+  time += dt;
+  spawn -= dt;
+  hitFlash = Math.max(0, hitFlash - dt*5);
+  screenShake = Math.max(0, screenShake - dt*30);
+
+  if(spawn <= 0){
+    orb();
+    spawn = Math.max(.4, 1.1 - time*0.01);
+  }
+
+  // 1. Direct Steering
   let ax=0,ay=0;
   if(keys.a||keys.arrowleft)ax-=1;
   if(keys.d||keys.arrowright)ax+=1;
@@ -279,6 +338,7 @@ function loop(now){
     // Touch / Collision
     if(d < player.r + o.r){
       if(!sameCharge){
+        // ABSORB / SCORE
         score += 10;
         shockwaves.push({x:o.x, y:o.y, r:5, maxR:45, c:o.charge===1?'#00eaff':'#ff50d7', life:1});
         for(let j=0;j<10;j++){
@@ -287,12 +347,22 @@ function loop(now){
         }
         o.dead = true;
       } else {
-        let bounce = 170;
+        // REPEL IMPACT / HIT ANIMATION!
+        let bounce = 175;
         player.vx += (dx/d) * bounce;
         player.vy += (dy/d) * bounce;
         o.vx -= (dx/d) * bounce * 0.8;
         o.vy -= (dy/d) * bounce * 0.8;
-        shockwaves.push({x:(player.x+o.x)/2, y:(player.y+o.y)/2, r:8, maxR:60, c:'#ffffff', life:1});
+
+        // Visual Hit Response
+        hitFlash = 0.5;
+        screenShake = 6;
+        shockwaves.push({x:(player.x+o.x)/2, y:(player.y+o.y)/2, r:8, maxR:70, c:'#ffdd55', life:1});
+        for(let k=0; k<8; k++){
+          let spd = 70 + Math.random()*90;
+          let ang = Math.atan2(dy, dx) + (Math.random()-.5);
+          particles.push({x:(player.x+o.x)/2, y:(player.y+o.y)/2, vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd, life:.3, maxLife:.3, c:'#ffffff', size:3});
+        }
       }
     }
   }
@@ -304,9 +374,14 @@ function loop(now){
   player.vy *= Math.pow(0.92, dt*60);
   player.x += player.vx * dt;
   player.y += player.vy * dt;
-  if(player.x < 16 || player.x > w-16 || player.y < 76 || player.y > h-16) finish();
 
-  // Trail & Particle updates
+  // BOUNDARY DEATH CHECK
+  if(player.x < 16 || player.x > w-16 || player.y < 76 || player.y > h-16){
+    triggerDeath(player.x, player.y);
+    return;
+  }
+
+  // Trail
   trail.push({x:player.x,y:player.y});
   if(trail.length > 14) trail.shift();
 
@@ -324,6 +399,14 @@ function loop(now){
 }
 
 function draw(){
+  ctx.save();
+  // SCREEN SHAKE EFFECT
+  if(screenShake > 0){
+    let rx = (Math.random() - 0.5) * screenShake;
+    let ry = (Math.random() - 0.5) * screenShake;
+    ctx.translate(rx, ry);
+  }
+
   ctx.clearRect(0,0,w,h);
   ctx.fillStyle='#050813';
   ctx.fillRect(0,0,w,h);
@@ -334,55 +417,62 @@ function draw(){
   for(let x=0;x<w;x+=44){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}
   for(let y=0;y<h;y+=44){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
 
+  // Arena Boundary Glow Line
+  ctx.strokeStyle = (screenShake > 6) ? '#ff5040' : 'rgba(0, 234, 255, 0.25)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(16, 76, w - 32, h - 92);
+
   // 1. VISUAL REPEL & ATTRACT FIELD LINES
-  for(const o of orbs){
-    let dx = player.x - o.x, dy = player.y - o.y;
-    let d = Math.hypot(dx,dy) || 1;
-    if(d < 220){
-      let sameCharge = (flip === o.charge);
-      let alpha = Math.pow(1 - d/220, 1.3);
+  if(!dying){
+    for(const o of orbs){
+      let dx = player.x - o.x, dy = player.y - o.y;
+      let d = Math.hypot(dx,dy) || 1;
+      if(d < 220){
+        let sameCharge = (flip === o.charge);
+        let alpha = Math.pow(1 - d/220, 1.3);
 
-      ctx.save();
-      if(sameCharge){
-        // REPEL: Garis merah-oranye keluar
-        ctx.strokeStyle = `rgba(255, 90, 70, ${alpha * 0.85})`;
-        ctx.lineWidth = 1.8 + (1 - d/220)*2.2;
-        ctx.setLineDash([6, 5]);
-        ctx.lineDashOffset = -time * 90;
-        ctx.beginPath();
-        ctx.moveTo(player.x, player.y);
-        ctx.lineTo(o.x, o.y);
-        ctx.stroke();
+        ctx.save();
+        if(sameCharge){
+          // REPEL LINES
+          ctx.strokeStyle = `rgba(255, 90, 70, ${alpha * 0.85})`;
+          ctx.lineWidth = 1.8 + (1 - d/220)*2.2;
+          ctx.setLineDash([6, 5]);
+          ctx.lineDashOffset = -time * 90;
+          ctx.beginPath();
+          ctx.moveTo(player.x, player.y);
+          ctx.lineTo(o.x, o.y);
+          ctx.stroke();
 
-        // Repel Arc Cushion
-        let midX = player.x - (dx * 0.4), midY = player.y - (dy * 0.4);
-        let arcR = 12 + (1 - d/220)*18;
-        let ang = Math.atan2(dy, dx);
-        ctx.beginPath();
-        ctx.arc(midX, midY, arcR, ang - Math.PI/2.5, ang + Math.PI/2.5);
-        ctx.strokeStyle = `rgba(255, 220, 100, ${alpha * 0.9})`;
-        ctx.lineWidth = 2.4;
-        ctx.setLineDash([]);
-        ctx.stroke();
+          // Repel Arc Cushion
+          let midX = player.x - (dx * 0.4), midY = player.y - (dy * 0.4);
+          let arcR = 12 + (1 - d/220)*18;
+          let ang = Math.atan2(dy, dx);
+          ctx.beginPath();
+          ctx.arc(midX, midY, arcR, ang - Math.PI/2.5, ang + Math.PI/2.5);
+          ctx.strokeStyle = `rgba(255, 220, 100, ${alpha * 0.9})`;
+          ctx.lineWidth = 2.4;
+          ctx.setLineDash([]);
+          ctx.stroke();
 
-        if(d < 160){
-          ctx.fillStyle = `rgba(255, 120, 100, ${alpha})`;
-          ctx.font = 'bold 10px system-ui';
-          ctx.textAlign = 'center';
-          ctx.fillText('REPEL!', o.x, o.y - o.r - 8);
+          if(d < 160){
+            ctx.fillStyle = `rgba(255, 120, 100, ${alpha})`;
+            ctx.font = 'bold 10px system-ui';
+            ctx.textAlign = 'center';
+            ctx.fillText('REPEL!', o.x, o.y - o.r - 8);
+          }
+        } else {
+          // ATTRACT LINES
+          ctx.strokeStyle = `rgba(0, 240, 255, ${alpha * 0.6})`;
+          ctx.lineWidth = 1.2;
+          ctx.setLineDash([4, 4]);
+          ctx.lineDashOffset = time * 70;
+          ctx.beginPath();
+          ctx.moveTo(player.x, player.y);
+          ctx.lineTo(o.x, o.y);
+          ctx.stroke();
         }
-      } else {
-        // ATTRACT: Garis cyan masuk
-        ctx.strokeStyle = `rgba(0, 240, 255, ${alpha * 0.6})`;
-        ctx.lineWidth = 1.2;
-        ctx.setLineDash([4, 4]);
-        ctx.lineDashOffset = time * 70;
-        ctx.beginPath();
-        ctx.moveTo(player.x, player.y);
-        ctx.lineTo(o.x, o.y);
-        ctx.stroke();
+        ctx.restore();
       }
-      ctx.restore();
     }
   }
 
@@ -393,7 +483,7 @@ function draw(){
     ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
     ctx.strokeStyle = s.c;
     ctx.globalAlpha = Math.max(0, s.life);
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 3.5;
     ctx.shadowBlur = 15;
     ctx.shadowColor = s.c;
     ctx.stroke();
@@ -403,7 +493,7 @@ function draw(){
   // 3. Orbs
   for(const o of orbs){
     let c = o.charge===1 ? '#00eaff' : '#ff50d7';
-    let isRepelling = (flip === o.charge && o.repelPulse > 0.05);
+    let isRepelling = (!dying && flip === o.charge && o.repelPulse > 0.05);
 
     ctx.beginPath();
     ctx.arc(o.x, o.y, o.r + (isRepelling ? 12 : 7), 0, Math.PI*2);
@@ -425,46 +515,61 @@ function draw(){
     ctx.fillText(o.charge===1?'+':'−', o.x, o.y);
   }
 
-  // 4. Player Core & Dynamic Field Ring
+  // 4. Player Core
   let pColor = flip===1 ? '#00eaff' : '#ff50d7';
 
-  trail.forEach((p,i)=>{
-    ctx.globalAlpha = (i/trail.length)*0.35;
+  if(!dying){
+    // Trail
+    trail.forEach((p,i)=>{
+      ctx.globalAlpha = (i/trail.length)*0.35;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, player.r*(i/trail.length), 0, Math.PI*2);
+      ctx.fillStyle = pColor;
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+
+    // Pulsing aura ring
+    let auraPulse = Math.sin(time*8)*4;
     ctx.beginPath();
-    ctx.arc(p.x, p.y, player.r*(i/trail.length), 0, Math.PI*2);
-    ctx.fillStyle = pColor;
+    ctx.arc(player.x, player.y, player.r + 8 + auraPulse, 0, Math.PI*2);
+    ctx.strokeStyle = (hitFlash > 0.1) ? '#ffffff' : pColor;
+    ctx.globalAlpha = (hitFlash > 0.1) ? 0.9 : 0.45;
+    ctx.lineWidth = (hitFlash > 0.1) ? 3 : 1.5;
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // Body (Flash white on impact)
+    ctx.beginPath();
+    ctx.arc(player.x, player.y, player.r, 0, Math.PI*2);
+    ctx.fillStyle = (hitFlash > 0.1) ? '#ffffff' : '#ffffff';
+    ctx.shadowColor = (hitFlash > 0.1) ? '#ffffaa' : pColor;
+    ctx.shadowBlur = (hitFlash > 0.1) ? 35 : 24;
     ctx.fill();
-  });
-  ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
 
-  let auraPulse = Math.sin(time*8)*4;
-  ctx.beginPath();
-  ctx.arc(player.x, player.y, player.r + 8 + auraPulse, 0, Math.PI*2);
-  ctx.strokeStyle = pColor;
-  ctx.globalAlpha = 0.45;
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-  ctx.globalAlpha = 1;
+    // Core Dot
+    ctx.beginPath();
+    ctx.arc(player.x, player.y, 6, 0, Math.PI*2);
+    ctx.fillStyle = (hitFlash > 0.1) ? '#ffffff' : pColor;
+    ctx.fill();
+  }
 
-  ctx.beginPath();
-  ctx.arc(player.x, player.y, player.r, 0, Math.PI*2);
-  ctx.fillStyle = '#ffffff';
-  ctx.shadowColor = pColor;
-  ctx.shadowBlur = 24;
-  ctx.fill();
-  ctx.shadowBlur = 0;
-
-  ctx.beginPath();
-  ctx.arc(player.x, player.y, 6, 0, Math.PI*2);
-  ctx.fillStyle = pColor;
-  ctx.fill();
-
+  // 5. Particles (Ledakan / Percikan)
   for(const p of particles){
     ctx.globalAlpha = Math.max(0, p.life/p.maxLife);
     ctx.fillStyle = p.c;
     ctx.fillRect(p.x, p.y, p.size, p.size);
   }
   ctx.globalAlpha = 1;
+
+  // 6. SCREEN HIT FLASH OVERLAY
+  if(hitFlash > 0.05){
+    ctx.fillStyle = `rgba(255, 255, 255, ${hitFlash * 0.35})`;
+    ctx.fillRect(0, 0, w, h);
+  }
+
+  ctx.restore();
 }
 
 draw();
