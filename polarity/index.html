@@ -11,42 +11,51 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050710;col
 canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 
 /* TOP HUD */
-.hud{position:fixed;top:0;left:0;right:0;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;pointer-events:none;text-shadow:0 0 12px #00d9ff;font-weight:900;letter-spacing:.12em;z-index:5}
+.hud{position:fixed;top:0;left:0;right:0;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;pointer-events:none;text-shadow:0 0 12px #00d9ff;font-weight:900;letter-spacing:.12em;z-index:5}
 .hud span{color:#00eaff}
 
 /* IN-GAME MINI GUIDE / STATUS BAR */
-.guide-bar{position:fixed;top:54px;left:50%;transform:translateX(-50%);display:flex;gap:12px;background:rgba(8,16,30,0.85);border:1px solid rgba(0,234,255,0.3);border-radius:30px;padding:6px 16px;font-size:12px;font-weight:700;letter-spacing:.05em;pointer-events:none;z-index:5;backdrop-filter:blur(4px);box-shadow:0 0 20px rgba(0,0,0,0.5)}
-.guide-item{display:flex;align-items:center;gap:6px}
-.badge-repel{color:#ff5040;display:flex;align-items:center;gap:4px}
-.badge-attract{color:#00eaff;display:flex;align-items:center;gap:4px}
+.guide-bar{position:fixed;top:50px;left:50%;transform:translateX(-50%);display:flex;gap:10px;background:rgba(8,16,30,0.88);border:1px solid rgba(0,234,255,0.3);border-radius:30px;padding:6px 14px;font-size:11px;font-weight:700;letter-spacing:.04em;pointer-events:none;z-index:5;backdrop-filter:blur(4px);box-shadow:0 0 20px rgba(0,0,0,0.6);white-space:nowrap}
+.guide-item{display:flex;align-items:center;gap:5px}
+.badge-repel{color:#ff5040}
+.badge-attract{color:#00eaff}
+.badge-bomb{color:#ffcc00}
 .badge-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
 
-/* BOTTOM ON-SCREEN CONTROLS */
-.bottom-hints{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:18px;align-items:center;font-size:12px;font-weight:800;letter-spacing:.08em;pointer-events:none;z-index:5;text-shadow:0 0 8px #000;background:rgba(5,10,20,0.7);padding:6px 18px;border-radius:20px;border:1px solid rgba(255,255,255,0.1)}
-.key-badge{background:#1a2b42;color:#00eaff;padding:3px 8px;border-radius:6px;border:1px solid #00eaff;font-size:11px}
+/* STATUS EFFECTS HUD */
+.status-bar{position:fixed;top:86px;left:50%;transform:translateX(-50%);display:flex;gap:8px;pointer-events:none;z-index:5}
+.status-pill{background:rgba(0,0,0,0.7);padding:4px 10px;border-radius:12px;font-size:11px;font-weight:800;border:1px solid #fff;display:none}
+.pill-shield{border-color:#00ff88;color:#00ff88;box-shadow:0 0 10px rgba(0,255,136,0.4)}
+.pill-magnet{border-color:#ffe600;color:#ffe600;box-shadow:0 0 10px rgba(255,230,0,0.4)}
+.pill-freeze{border-color:#00cfff;color:#00cfff;box-shadow:0 0 10px rgba(0,207,255,0.4)}
 
-.meter{position:fixed;top:46px;left:20px;right:20px;height:4px;background:#142337;border-radius:5px;overflow:hidden;z-index:4}
+/* BOTTOM ON-SCREEN CONTROLS */
+.bottom-hints{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:16px;align-items:center;font-size:11px;font-weight:800;letter-spacing:.06em;pointer-events:none;z-index:5;text-shadow:0 0 8px #000;background:rgba(5,10,20,0.75);padding:6px 16px;border-radius:20px;border:1px solid rgba(255,255,255,0.12);white-space:nowrap}
+.key-badge{background:#1a2b42;color:#00eaff;padding:2px 7px;border-radius:6px;border:1px solid #00eaff;font-size:10px}
+
+.meter{position:fixed;top:42px;left:20px;right:20px;height:4px;background:#142337;border-radius:5px;overflow:hidden;z-index:4}
 .meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#00f0ff,#ff2bd6);box-shadow:0 0 12px #00f0ff}
 
 /* OVERLAYS */
-.overlay{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse,rgba(9,22,43,.92),rgba(2,5,12,.97));padding:20px;text-align:center;z-index:10}
+.overlay{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse,rgba(9,22,43,.92),rgba(2,5,12,.97));padding:20px;text-align:center;z-index:10;overflow-y:auto}
 .overlay.hidden{display:none}
-.panel{max-width:560px;background:rgba(10,20,35,0.75);border:1px solid rgba(0,234,255,0.25);border-radius:24px;padding:28px 24px;box-shadow:0 0 40px rgba(0,200,255,0.15)}
+.panel{max-width:580px;background:rgba(10,20,35,0.85);border:1px solid rgba(0,234,255,0.25);border-radius:24px;padding:26px 22px;box-shadow:0 0 40px rgba(0,200,255,0.15)}
 .eyebrow{font-size:11px;letter-spacing:.35em;color:#00f0ff}
-.panel h1{font-size:clamp(34px,9vw,60px);line-height:1;margin:12px 0;color:#f6fbff;text-shadow:0 0 28px #00cfff}
+.panel h1{font-size:clamp(32px,8vw,56px);line-height:1;margin:10px 0;color:#f6fbff;text-shadow:0 0 28px #00cfff}
 
 /* VISUAL RULES CARDS IN MODAL */
-.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0;text-align:left}
-.rule-card{padding:12px 14px;border-radius:14px;font-size:13px;line-height:1.4}
+.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0;text-align:left}
+.rule-card{padding:10px 12px;border-radius:12px;font-size:12px;line-height:1.4}
 .card-repel{background:rgba(255,80,60,0.12);border:1px solid #ff5040;color:#ff9e94}
 .card-attract{background:rgba(0,234,255,0.12);border:1px solid #00eaff;color:#9bf0ff}
-.card-title{font-weight:900;font-size:14px;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.card-bomb{background:rgba(255,200,0,0.12);border:1px solid #ffcc00;color:#ffe680}
+.card-power{background:rgba(0,255,136,0.12);border:1px solid #00ff88;color:#9effc5}
+.card-title{font-weight:900;font-size:13px;margin-bottom:3px;display:flex;align-items:center;gap:6px}
 .rule-card b{color:#fff}
 
-.controls-box{background:rgba(255,255,255,0.05);border-radius:12px;padding:10px 14px;font-size:12px;color:#cbd5e1;margin-bottom:20px;line-height:1.6}
 .btn{border:0;border-radius:999px;padding:14px 34px;background:#00e5ff;color:#03101c;font-size:15px;font-weight:900;letter-spacing:.12em;cursor:pointer;box-shadow:0 0 28px #00c9ff88;transition:transform .1s,box-shadow .1s}
 .btn:hover{transform:scale(1.04);box-shadow:0 0 35px #00c9ff}
-.back{position:fixed;bottom:18px;left:20px;color:#9db2ca;text-decoration:none;font-size:13px;z-index:6;font-weight:700}
+.back{position:fixed;bottom:16px;left:20px;color:#9db2ca;text-decoration:none;font-size:12px;z-index:6;font-weight:700}
 </style>
 </head>
 <body>
@@ -60,15 +69,26 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 
 <!-- IN-GAME LIVE MECHANIC REMINDER -->
 <div class="guide-bar">
-  <div class="guide-item badge-repel">
-    <span class="badge-dot" style="background:#ff5040;box-shadow:0 0 8px #ff5040"></span>
-    WARNA SAMA = <b>TOLAK (SLINGSHOT)</b>
-  </div>
-  <div style="color:#64748b">|</div>
   <div class="guide-item badge-attract">
     <span class="badge-dot" style="background:#00eaff;box-shadow:0 0 8px #00eaff"></span>
-    WARNA BEDA = <b>TARIK (+10 PTS)</b>
+    BEDA = <b>TARIK (+10)</b>
   </div>
+  <div style="color:#64748b">|</div>
+  <div class="guide-item badge-repel">
+    <span class="badge-dot" style="background:#ff5040;box-shadow:0 0 8px #ff5040"></span>
+    SAMA = <b>TOLAK (TENDANG BOM)</b>
+  </div>
+  <div style="color:#64748b">|</div>
+  <div class="guide-item badge-bomb">
+    💣 <b>HINDARI BOM</b>
+  </div>
+</div>
+
+<!-- STATUS EFFECTS HUD -->
+<div class="status-bar">
+  <div class="status-pill pill-shield" id="pillShield">🛡️ SHIELD (1 HIT)</div>
+  <div class="status-pill pill-magnet" id="pillMagnet">🧲 SUPER MAGNET</div>
+  <div class="status-pill pill-freeze" id="pillFreeze">❄️ SLOW TIME</div>
 </div>
 
 <div class="meter"><i id="progress"></i></div>
@@ -84,22 +104,26 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 <!-- START SCREEN -->
 <div class="overlay" id="start">
   <div class="panel">
-    <div class="eyebrow">ARCADE MOMENTUM PUZZLE</div>
+    <div class="eyebrow">ARCADE ACTION SURVIVOR</div>
     <h1>POLARITY</h1>
     
     <div class="rules-grid">
-      <div class="rule-card card-repel">
-        <div class="card-title" style="color:#ff5040">🔴 WARNA SAMA</div>
-        <b>SALING TOLAK!</b> Gunakan tolakan untuk <b>slingshot</b>, bermanuver, atau hindari dinding arena!
-      </div>
       <div class="rule-card card-attract">
-        <div class="card-title" style="color:#00eaff">🔵 WARNA BEDA</div>
-        <b>SALING TARIK!</b> Dekati orb beda warna untuk sedot dan dapat <b>+10 SCORE</b>.
+        <div class="card-title" style="color:#00eaff">🔵 SEDOT ORB</div>
+        Warna Beda = Tarik! Kumpulkan orb poin &amp; power-up langka.
       </div>
-    </div>
-
-    <div class="controls-box">
-      ⚠️ <b>PERINGATAN:</b> Jangan sentuh batas dinding arena! Jika terlempar menabrak batas, inti akan hancur meledak.
+      <div class="rule-card card-repel">
+        <div class="card-title" style="color:#ff5040">🔴 TOLAK / TENDANG</div>
+        Warna Sama = Tolak! Gunakan untuk <b>slingshot</b> &amp; <b>menendang bom</b> menjauh!
+      </div>
+      <div class="rule-card card-bomb">
+        <div class="card-title" style="color:#ffcc00">💣 BOM MAGNETIK</div>
+        Punya polaritas (+ / -). Jika salah warna, <b>bom mengejar kamu!</b> Kena = Meledak.
+      </div>
+      <div class="rule-card card-power">
+        <div class="card-title" style="color:#00ff88">⭐ POWER-UP ORBS</div>
+        🛡️ <b>Shield</b> (Anti Ledak) · 🧲 <b>Super Magnet</b> · ❄️ <b>Freeze Time</b>.
+      </div>
     </div>
 
     <button class="btn" id="play">MULAI MAIN</button>
@@ -109,12 +133,9 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 <!-- GAME OVER SCREEN -->
 <div class="overlay hidden" id="end">
   <div class="panel">
-    <div class="eyebrow" style="color:#ff5040">INTI MELEDAK / HANCUR</div>
+    <div class="eyebrow" style="color:#ff5040" id="deathReason">INTI MELEDAK!</div>
     <h1 style="color:#ff50d7">GAME OVER</h1>
-    <p id="result" style="font-size:15px;color:#cbd5e1;line-height:1.8;margin:16px 0"></p>
-    <div class="controls-box" style="margin-bottom:20px">
-      💡 <b>TIPS:</b> Jika terdorong terlalu kencang ke arah dinding, segera <b>FLIP POLARITAS (SPASI / TAP)</b> untuk rem mendadak!
-    </div>
+    <p id="result" style="font-size:15px;color:#cbd5e1;line-height:1.8;margin:14px 0"></p>
     <button class="btn" id="again">MAIN LAGI (ENTER)</button>
   </div>
 </div>
@@ -129,20 +150,32 @@ const $=id=>document.getElementById(id), keys={}, mouse={x:w/2,y:h/2,active:fals
 let orbs=[],particles=[],shockwaves=[],score=0,best=+(localStorage.getItem('polarity_best')||0);
 let alive=false,dying=false,deathTimer=0,hitFlash=0,screenShake=0;
 let flip=1,time=0,last=0,spawn=0,trail=[];
+
+// POWER-UP TIMERS
+let shieldActive=false, magnetTimer=0, freezeTimer=0;
+
 $('best').textContent=String(best).padStart(4,'0');
 
 function reset(){
   player.x=w*0.5;player.y=h*0.5;player.vx=0;player.vy=0;
   orbs=[];particles=[];shockwaves=[];trail=[];
   score=0;time=0;spawn=0;flip=1;alive=true;dying=false;deathTimer=0;hitFlash=0;screenShake=0;
+  shieldActive=false;magnetTimer=0;freezeTimer=0;
   mouse.active=false;
   $('score').textContent='0000';
   $('sign').textContent='＋ CYAN';
   $('sign').style.color='#00eaff';
   $('start').classList.add('hidden');
   $('end').classList.add('hidden');
+  updateStatusPills();
   last=performance.now();
   requestAnimationFrame(loop);
+}
+
+function updateStatusPills(){
+  $('pillShield').style.display = shieldActive ? 'block' : 'none';
+  $('pillMagnet').style.display = (magnetTimer > 0) ? 'block' : 'none';
+  $('pillFreeze').style.display = (freezeTimer > 0) ? 'block' : 'none';
 }
 
 function flipPolarity(){
@@ -175,47 +208,68 @@ addEventListener('keydown',e=>{
 addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
 $('play').onclick=reset;$('again').onclick=reset;
 
-function orb(){
+function spawnOrb(){
   const edge = Math.floor(Math.random() * 4);
   let x, y, vx, vy;
   if(edge === 0){
-    x = -20; y = 80 + Math.random()*(h - 160);
-    vx = 40 + Math.random()*50; vy = (Math.random()-0.5)*60;
+    x = -24; y = 90 + Math.random()*(h - 180);
+    vx = 45 + Math.random()*50; vy = (Math.random()-0.5)*50;
   } else if(edge === 1){
-    x = w + 20; y = 80 + Math.random()*(h - 160);
-    vx = -(40 + Math.random()*50); vy = (Math.random()-0.5)*60;
+    x = w + 24; y = 90 + Math.random()*(h - 180);
+    vx = -(45 + Math.random()*50); vy = (Math.random()-0.5)*50;
   } else if(edge === 2){
     x = 40 + Math.random()*(w - 80); y = 60;
-    vx = (Math.random()-0.5)*60; vy = 40 + Math.random()*50;
+    vx = (Math.random()-0.5)*50; vy = 45 + Math.random()*50;
   } else {
-    x = 40 + Math.random()*(w - 80); y = h + 20;
-    vx = (Math.random()-0.5)*60; vy = -(40 + Math.random()*50);
+    x = 40 + Math.random()*(w - 80); y = h + 24;
+    vx = (Math.random()-0.5)*50; vy = -(45 + Math.random()*50);
   }
+
+  // TIPE ORB:
+  // 1. "normal" (70%) - Orb poin (+ / -)
+  // 2. "bomb"   (20%) - Bom magnetik berduri (+ / -)
+  // 3. "shield" (4%)  - Power-up Tameng
+  // 4. "magnet" (3%)  - Power-up Super Magnet
+  // 5. "freeze" (3%)  - Power-up Freeze Time
+  let roll = Math.random();
+  let type = "normal";
+  if(roll < 0.22){
+    type = "bomb";
+  } else if(roll < 0.26){
+    type = "shield";
+  } else if(roll < 0.29){
+    type = "magnet";
+  } else if(roll < 0.32){
+    type = "freeze";
+  }
+
+  let r = 11 + Math.random()*4;
+  if(type === "bomb") r = 15;
+  if(type !== "normal" && type !== "bomb") r = 13;
 
   orbs.push({
     x, y, vx, vy,
-    r: 10 + Math.random()*5,
+    r,
+    type,
     charge: Math.random()<0.5?1:-1,
     phase: Math.random()*6,
-    repelPulse: 0
+    repelPulse: 0,
+    angle: 0
   });
 }
 
-// ANIMASI KEMATIAN / HANCUR (DEATH ANIMATION)
-function triggerDeath(reasonX, reasonY){
+function triggerDeath(reasonText){
   if(dying || !alive) return;
   dying = true;
-  deathTimer = 0.9; // 0.9 detik slow-mo explosion
+  deathTimer = 0.9;
   hitFlash = 1.0;
-  screenShake = 18;
+  screenShake = 22;
+  $('deathReason').textContent = reasonText || "INTI MELEDAK!";
 
   let pColor = flip===1 ? '#00eaff' : '#ff50d7';
+  shockwaves.push({x:player.x, y:player.y, r:10, maxR:170, c:'#ffffff', life:1.2});
+  shockwaves.push({x:player.x, y:player.y, r:5, maxR:130, c:pColor, life:1.0});
 
-  // 1. Double Shockwave
-  shockwaves.push({x:player.x, y:player.y, r:10, maxR:160, c:'#ffffff', life:1.2});
-  shockwaves.push({x:player.x, y:player.y, r:5, maxR:120, c:pColor, life:1.0});
-
-  // 2. Burst 40 Shrapnel Sparks
   for(let i=0; i<45; i++){
     let ang = Math.random() * Math.PI * 2;
     let spd = 60 + Math.random() * 260;
@@ -238,7 +292,7 @@ function showGameOverModal(){
   best = Math.max(best, score);
   localStorage.setItem('polarity_best', best);
   $('best').textContent = String(best).padStart(4,'0');
-  $('result').textContent = `Skor Kamu: ${String(score).padStart(4,'0')}  |  Rekor Terbaik: ${String(best).padStart(4,'0')}`;
+  $('result').textContent = `Skor Akhir: ${String(score).padStart(4,'0')}  |  Rekor Terbaik: ${String(best).padStart(4,'0')}`;
   $('end').classList.remove('hidden');
 }
 
@@ -247,13 +301,11 @@ function loop(now){
   let dt = Math.min(.033, (now-last)/1000);
   last = now;
 
-  // JIKA SEDANG ANIMASI DEATH
   if(dying){
     deathTimer -= dt;
     screenShake = Math.max(0, screenShake - dt*25);
     hitFlash = Math.max(0, hitFlash - dt*3.0);
 
-    // Update partikel ledakan
     particles.forEach(p=>{p.x+=p.vx*dt*0.7; p.y+=p.vy*dt*0.7; p.life-=dt});
     particles = particles.filter(p=>p.life>0);
 
@@ -269,14 +321,20 @@ function loop(now){
     return;
   }
 
+  // Freeze time effect
+  let simDt = (freezeTimer > 0) ? dt * 0.45 : dt;
+  if(freezeTimer > 0){ freezeTimer -= dt; }
+  if(magnetTimer > 0){ magnetTimer -= dt; }
+  updateStatusPills();
+
   time += dt;
   spawn -= dt;
   hitFlash = Math.max(0, hitFlash - dt*5);
   screenShake = Math.max(0, screenShake - dt*30);
 
   if(spawn <= 0){
-    orb();
-    spawn = Math.max(.4, 1.1 - time*0.01);
+    spawnOrb();
+    spawn = Math.max(.35, 1.0 - time*0.009);
   }
 
   // 1. Direct Steering
@@ -298,38 +356,66 @@ function loop(now){
 
   // 2. Physics & Polarity Interplay
   for(const o of orbs){
-    o.x += o.vx*dt;
-    o.y += o.vy*dt + Math.sin(time*2.5+o.phase)*18*dt;
+    o.x += o.vx * simDt;
+    o.y += o.vy * simDt + Math.sin(time*2.5+o.phase)*16*simDt;
+    o.angle = (o.angle || 0) + (o.type === 'bomb' ? simDt*2 : simDt);
+
     let dx = player.x - o.x, dy = player.y - o.y;
     let d = Math.hypot(dx,dy) || 1;
+
+    // JIKA SUPER MAGNET AKTIF: Semua orb ditarik paksa
+    let forceRange = (magnetTimer > 0 && o.type !== 'bomb') ? 500 : 220;
     let sameCharge = (flip === o.charge);
 
-    if(d < 220){
-      let forceMag = 18000 / (d*d + 300);
-      if(sameCharge){
-        // REPEL: Saling tolak simetris
-        let fx = (dx/d) * forceMag * 1.6;
-        let fy = (dy/d) * forceMag * 1.6;
-        player.vx += fx * dt;
-        player.vy += fy * dt;
-        o.vx -= fx * 0.7 * dt;
-        o.vy -= fy * 0.7 * dt;
-        o.repelPulse = Math.max(o.repelPulse, (1 - d/220));
+    if(d < forceRange){
+      let forceMag = 20000 / (d*d + 300);
 
-        if(d < 120 && Math.random() < 0.25){
-          let midX = (player.x + o.x)/2, midY = (player.y + o.y)/2;
-          let pAng = Math.atan2(dy, dx) + (Math.random()-.5)*1.2;
-          particles.push({x:midX, y:midY, vx:Math.cos(pAng)*120, vy:Math.sin(pAng)*120, life:.25, maxLife:.25, c:'#ffffff', size:2.2});
+      if(o.type === 'bomb'){
+        // BOM: Jika sama charge = TOLAK KUAT (tendang bom!). Jika beda charge = BOM MENGEJAR!
+        if(sameCharge){
+          // REPEL BOMB! Slingshot tendang bom
+          let fx = (dx/d) * forceMag * 2.2;
+          let fy = (dy/d) * forceMag * 2.2;
+          player.vx += fx * dt;
+          player.vy += fy * dt;
+          o.vx -= fx * 1.4 * dt;
+          o.vy -= fy * 1.4 * dt;
+          o.repelPulse = Math.max(o.repelPulse, (1 - d/220));
+        } else {
+          // ATTRACT BOMB! Bahaya, bom ditarik mendekati player!
+          let fx = (dx/d) * forceMag * 1.2;
+          let fy = (dy/d) * forceMag * 1.2;
+          o.vx += fx * dt;
+          o.vy += fy * dt;
+          o.repelPulse = 0;
         }
       } else {
-        // ATTRACT: Tarik orb ke inti pemain
-        let fx = (dx/d) * forceMag * 0.85;
-        let fy = (dy/d) * forceMag * 0.85;
-        o.vx += fx * dt;
-        o.vy += fy * dt;
-        player.vx -= fx * 0.25 * dt;
-        player.vy -= fy * 0.25 * dt;
-        o.repelPulse = 0;
+        // ORB BIASA & POWER-UP
+        if(magnetTimer > 0){
+          // Paksa sedot
+          let fx = (dx/d) * 380;
+          let fy = (dy/d) * 380;
+          o.vx += fx * dt;
+          o.vy += fy * dt;
+        } else if(sameCharge){
+          // REPEL
+          let fx = (dx/d) * forceMag * 1.6;
+          let fy = (dy/d) * forceMag * 1.6;
+          player.vx += fx * dt;
+          player.vy += fy * dt;
+          o.vx -= fx * 0.7 * dt;
+          o.vy -= fy * 0.7 * dt;
+          o.repelPulse = Math.max(o.repelPulse, (1 - d/220));
+        } else {
+          // ATTRACT
+          let fx = (dx/d) * forceMag * 0.85;
+          let fy = (dy/d) * forceMag * 0.85;
+          o.vx += fx * dt;
+          o.vy += fy * dt;
+          player.vx -= fx * 0.25 * dt;
+          player.vy -= fy * 0.25 * dt;
+          o.repelPulse = 0;
+        }
       }
     } else {
       o.repelPulse = Math.max(0, o.repelPulse - dt*2);
@@ -337,37 +423,65 @@ function loop(now){
 
     // Touch / Collision
     if(d < player.r + o.r){
-      if(!sameCharge){
-        // ABSORB / SCORE
-        score += 10;
-        shockwaves.push({x:o.x, y:o.y, r:5, maxR:45, c:o.charge===1?'#00eaff':'#ff50d7', life:1});
-        for(let j=0;j<10;j++){
-          let a=Math.random()*Math.PI*2, sp=60+Math.random()*120;
-          particles.push({x:o.x,y:o.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:.35,maxLife:.35,c:o.charge===1?'#00eaff':'#ff50d7',size:3});
+      if(o.type === 'bomb'){
+        // NABRAK BOM!
+        if(shieldActive){
+          // Tahan 1 hit dari tameng
+          shieldActive = false;
+          updateStatusPills();
+          hitFlash = 0.8;
+          screenShake = 12;
+          shockwaves.push({x:o.x, y:o.y, r:10, maxR:90, c:'#00ff88', life:1});
+          o.dead = true;
+        } else {
+          // MELEDAK MATI!
+          triggerDeath("TERTABRAK BOM MAGNETIK!");
+          return;
         }
+      } else if(o.type === 'shield'){
+        shieldActive = true;
+        score += 20;
+        shockwaves.push({x:o.x, y:o.y, r:10, maxR:80, c:'#00ff88', life:1});
+        updateStatusPills();
+        o.dead = true;
+      } else if(o.type === 'magnet'){
+        magnetTimer = 6.0; // 6 detik super magnet
+        score += 20;
+        shockwaves.push({x:o.x, y:o.y, r:10, maxR:80, c:'#ffe600', life:1});
+        updateStatusPills();
+        o.dead = true;
+      } else if(o.type === 'freeze'){
+        freezeTimer = 5.0; // 5 detik slow time
+        score += 20;
+        shockwaves.push({x:o.x, y:o.y, r:10, maxR:80, c:'#00cfff', life:1});
+        updateStatusPills();
         o.dead = true;
       } else {
-        // REPEL IMPACT / HIT ANIMATION!
-        let bounce = 175;
-        player.vx += (dx/d) * bounce;
-        player.vy += (dy/d) * bounce;
-        o.vx -= (dx/d) * bounce * 0.8;
-        o.vy -= (dy/d) * bounce * 0.8;
-
-        // Visual Hit Response
-        hitFlash = 0.5;
-        screenShake = 6;
-        shockwaves.push({x:(player.x+o.x)/2, y:(player.y+o.y)/2, r:8, maxR:70, c:'#ffdd55', life:1});
-        for(let k=0; k<8; k++){
-          let spd = 70 + Math.random()*90;
-          let ang = Math.atan2(dy, dx) + (Math.random()-.5);
-          particles.push({x:(player.x+o.x)/2, y:(player.y+o.y)/2, vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd, life:.3, maxLife:.3, c:'#ffffff', size:3});
+        // ORB BIASA
+        if(!sameCharge || magnetTimer > 0){
+          score += 10;
+          shockwaves.push({x:o.x, y:o.y, r:5, maxR:45, c:o.charge===1?'#00eaff':'#ff50d7', life:1});
+          for(let j=0;j<10;j++){
+            let a=Math.random()*Math.PI*2, sp=60+Math.random()*120;
+            particles.push({x:o.x,y:o.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:.35,maxLife:.35,c:o.charge===1?'#00eaff':'#ff50d7',size:3});
+          }
+          o.dead = true;
+        } else {
+          // Bouncer membal
+          let bounce = 175;
+          player.vx += (dx/d) * bounce;
+          player.vy += (dy/d) * bounce;
+          o.vx -= (dx/d) * bounce * 0.8;
+          o.vy -= (dy/d) * bounce * 0.8;
+          hitFlash = 0.5;
+          screenShake = 6;
+          shockwaves.push({x:(player.x+o.x)/2, y:(player.y+o.y)/2, r:8, maxR:70, c:'#ffdd55', life:1});
         }
       }
     }
   }
 
-  orbs = orbs.filter(o=>!o.dead && o.x>-90 && o.x<w+90 && o.y>-70 && o.y<h+70);
+  orbs = orbs.filter(o=>!o.dead && o.x>-100 && o.x<w+100 && o.y>-80 && o.y<h+80);
 
   // Damping & screen boundary
   player.vx *= Math.pow(0.92, dt*60);
@@ -377,8 +491,20 @@ function loop(now){
 
   // BOUNDARY DEATH CHECK
   if(player.x < 16 || player.x > w-16 || player.y < 76 || player.y > h-16){
-    triggerDeath(player.x, player.y);
-    return;
+    if(shieldActive){
+      shieldActive = false;
+      updateStatusPills();
+      hitFlash = 0.7;
+      screenShake = 10;
+      // Membal kembali ke dalam
+      if(player.x < 16){ player.x = 20; player.vx = 220; }
+      if(player.x > w-16){ player.x = w-20; player.vx = -220; }
+      if(player.y < 76){ player.y = 80; player.vy = 220; }
+      if(player.y > h-16){ player.y = h-20; player.vy = -220; }
+    } else {
+      triggerDeath("MENABRAK BATAS DINDING ARENA!");
+      return;
+    }
   }
 
   // Trail
@@ -400,7 +526,6 @@ function loop(now){
 
 function draw(){
   ctx.save();
-  // SCREEN SHAKE EFFECT
   if(screenShake > 0){
     let rx = (Math.random() - 0.5) * screenShake;
     let ry = (Math.random() - 0.5) * screenShake;
@@ -422,54 +547,49 @@ function draw(){
   ctx.lineWidth = 2;
   ctx.strokeRect(16, 76, w - 32, h - 92);
 
-  // 1. VISUAL REPEL & ATTRACT FIELD LINES
+  // 1. VISUAL FORCE LINES
   if(!dying){
     for(const o of orbs){
       let dx = player.x - o.x, dy = player.y - o.y;
       let d = Math.hypot(dx,dy) || 1;
-      if(d < 220){
+      let forceRange = (magnetTimer > 0 && o.type !== 'bomb') ? 450 : 220;
+
+      if(d < forceRange){
         let sameCharge = (flip === o.charge);
-        let alpha = Math.pow(1 - d/220, 1.3);
+        let alpha = Math.pow(1 - d/forceRange, 1.2);
 
         ctx.save();
-        if(sameCharge){
-          // REPEL LINES
+        if(o.type === 'bomb'){
+          // LINE TO BOMB:
+          if(sameCharge){
+            // Repel Line (Dorong bom)
+            ctx.strokeStyle = `rgba(255, 200, 0, ${alpha * 0.9})`;
+            ctx.lineWidth = 2.2;
+            ctx.setLineDash([6, 4]);
+            ctx.lineDashOffset = -time * 90;
+            ctx.beginPath();ctx.moveTo(player.x, player.y);ctx.lineTo(o.x, o.y);ctx.stroke();
+          } else {
+            // Danger Attract Line (Bom mengejar!)
+            ctx.strokeStyle = `rgba(255, 40, 40, ${alpha * 0.95})`;
+            ctx.lineWidth = 2.4;
+            ctx.setLineDash([4, 4]);
+            ctx.lineDashOffset = time * 90;
+            ctx.beginPath();ctx.moveTo(player.x, player.y);ctx.lineTo(o.x, o.y);ctx.stroke();
+          }
+        } else if(sameCharge && magnetTimer <= 0){
+          // REPEL
           ctx.strokeStyle = `rgba(255, 90, 70, ${alpha * 0.85})`;
-          ctx.lineWidth = 1.8 + (1 - d/220)*2.2;
+          ctx.lineWidth = 1.8 + (1 - d/220)*2.0;
           ctx.setLineDash([6, 5]);
           ctx.lineDashOffset = -time * 90;
-          ctx.beginPath();
-          ctx.moveTo(player.x, player.y);
-          ctx.lineTo(o.x, o.y);
-          ctx.stroke();
-
-          // Repel Arc Cushion
-          let midX = player.x - (dx * 0.4), midY = player.y - (dy * 0.4);
-          let arcR = 12 + (1 - d/220)*18;
-          let ang = Math.atan2(dy, dx);
-          ctx.beginPath();
-          ctx.arc(midX, midY, arcR, ang - Math.PI/2.5, ang + Math.PI/2.5);
-          ctx.strokeStyle = `rgba(255, 220, 100, ${alpha * 0.9})`;
-          ctx.lineWidth = 2.4;
-          ctx.setLineDash([]);
-          ctx.stroke();
-
-          if(d < 160){
-            ctx.fillStyle = `rgba(255, 120, 100, ${alpha})`;
-            ctx.font = 'bold 10px system-ui';
-            ctx.textAlign = 'center';
-            ctx.fillText('REPEL!', o.x, o.y - o.r - 8);
-          }
+          ctx.beginPath();ctx.moveTo(player.x, player.y);ctx.lineTo(o.x, o.y);ctx.stroke();
         } else {
-          // ATTRACT LINES
+          // ATTRACT
           ctx.strokeStyle = `rgba(0, 240, 255, ${alpha * 0.6})`;
           ctx.lineWidth = 1.2;
           ctx.setLineDash([4, 4]);
           ctx.lineDashOffset = time * 70;
-          ctx.beginPath();
-          ctx.moveTo(player.x, player.y);
-          ctx.lineTo(o.x, o.y);
-          ctx.stroke();
+          ctx.beginPath();ctx.moveTo(player.x, player.y);ctx.lineTo(o.x, o.y);ctx.stroke();
         }
         ctx.restore();
       }
@@ -490,29 +610,128 @@ function draw(){
     ctx.restore();
   }
 
-  // 3. Orbs
+  // 3. Render Orbs & Power-ups
   for(const o of orbs){
-    let c = o.charge===1 ? '#00eaff' : '#ff50d7';
-    let isRepelling = (!dying && flip === o.charge && o.repelPulse > 0.05);
+    ctx.save();
+    if(o.type === 'bomb'){
+      // 💣 BOM MAGNETIK BERDURI
+      let isRepelling = (!dying && flip === o.charge && o.repelPulse > 0.05);
+      let bombColor = isRepelling ? '#ffcc00' : '#ff2233';
 
-    ctx.beginPath();
-    ctx.arc(o.x, o.y, o.r + (isRepelling ? 12 : 7), 0, Math.PI*2);
-    ctx.fillStyle = isRepelling ? 'rgba(255,80,60,0.25)' : (c + '18');
-    ctx.fill();
+      ctx.translate(o.x, o.y);
+      ctx.rotate(o.angle);
 
-    ctx.beginPath();
-    ctx.arc(o.x, o.y, o.r, 0, Math.PI*2);
-    ctx.fillStyle = c;
-    ctx.shadowColor = isRepelling ? '#ff5040' : c;
-    ctx.shadowBlur = isRepelling ? 24 : 16;
-    ctx.fill();
-    ctx.shadowBlur = 0;
+      // Duri bom
+      ctx.fillStyle = '#ff4444';
+      ctx.shadowColor = bombColor;
+      ctx.shadowBlur = 15;
+      for(let sp=0; sp<6; sp++){
+        ctx.rotate(Math.PI / 3);
+        ctx.fillRect(-2, -o.r - 5, 4, 10);
+      }
 
-    ctx.fillStyle = '#06101b';
-    ctx.font = '900 12px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(o.charge===1?'+':'−', o.x, o.y);
+      // Bola bom utama
+      ctx.beginPath();
+      ctx.arc(0, 0, o.r, 0, Math.PI*2);
+      ctx.fillStyle = '#1c070a';
+      ctx.fill();
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = bombColor;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Symbol di bom
+      ctx.fillStyle = bombColor;
+      ctx.font = '900 13px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(o.charge===1?'+':'−', 0, 0);
+
+    } else if(o.type === 'shield'){
+      // 🛡️ SHIELD POWER-UP (HIJAU EMERALD)
+      ctx.beginPath();
+      ctx.arc(o.x, o.y, o.r + 4, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(0,255,136,0.2)';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(o.x, o.y, o.r, 0, Math.PI*2);
+      ctx.fillStyle = '#00ff88';
+      ctx.shadowColor = '#00ff88';
+      ctx.shadowBlur = 20;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      ctx.font = '12px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🛡️', o.x, o.y);
+
+    } else if(o.type === 'magnet'){
+      // 🧲 SUPER MAGNET POWER-UP (KUNING EMAS)
+      ctx.beginPath();
+      ctx.arc(o.x, o.y, o.r + 4, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(255,230,0,0.2)';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(o.x, o.y, o.r, 0, Math.PI*2);
+      ctx.fillStyle = '#ffe600';
+      ctx.shadowColor = '#ffe600';
+      ctx.shadowBlur = 20;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      ctx.font = '12px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🧲', o.x, o.y);
+
+    } else if(o.type === 'freeze'){
+      // ❄️ FREEZE TIME POWER-UP (CYAN ES)
+      ctx.beginPath();
+      ctx.arc(o.x, o.y, o.r + 4, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(0,207,255,0.2)';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(o.x, o.y, o.r, 0, Math.PI*2);
+      ctx.fillStyle = '#00cfff';
+      ctx.shadowColor = '#00cfff';
+      ctx.shadowBlur = 20;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      ctx.font = '12px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('❄️', o.x, o.y);
+
+    } else {
+      // ORB BIASA
+      let c = o.charge===1 ? '#00eaff' : '#ff50d7';
+      let isRepelling = (!dying && flip === o.charge && o.repelPulse > 0.05);
+
+      ctx.beginPath();
+      ctx.arc(o.x, o.y, o.r + (isRepelling ? 12 : 7), 0, Math.PI*2);
+      ctx.fillStyle = isRepelling ? 'rgba(255,80,60,0.25)' : (c + '18');
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(o.x, o.y, o.r, 0, Math.PI*2);
+      ctx.fillStyle = c;
+      ctx.shadowColor = isRepelling ? '#ff5040' : c;
+      ctx.shadowBlur = isRepelling ? 24 : 16;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      ctx.fillStyle = '#06101b';
+      ctx.font = '900 12px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(o.charge===1?'+':'−', o.x, o.y);
+    }
+    ctx.restore();
   }
 
   // 4. Player Core
@@ -529,6 +748,18 @@ function draw(){
     });
     ctx.globalAlpha = 1;
 
+    // SHIELD BUBBLE (Jika Tameng Aktif)
+    if(shieldActive){
+      ctx.beginPath();
+      ctx.arc(player.x, player.y, player.r + 14, 0, Math.PI*2);
+      ctx.strokeStyle = '#00ff88';
+      ctx.lineWidth = 3;
+      ctx.shadowColor = '#00ff88';
+      ctx.shadowBlur = 16;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+
     // Pulsing aura ring
     let auraPulse = Math.sin(time*8)*4;
     ctx.beginPath();
@@ -539,10 +770,10 @@ function draw(){
     ctx.stroke();
     ctx.globalAlpha = 1;
 
-    // Body (Flash white on impact)
+    // Body
     ctx.beginPath();
     ctx.arc(player.x, player.y, player.r, 0, Math.PI*2);
-    ctx.fillStyle = (hitFlash > 0.1) ? '#ffffff' : '#ffffff';
+    ctx.fillStyle = '#ffffff';
     ctx.shadowColor = (hitFlash > 0.1) ? '#ffffaa' : pColor;
     ctx.shadowBlur = (hitFlash > 0.1) ? 35 : 24;
     ctx.fill();
@@ -555,7 +786,7 @@ function draw(){
     ctx.fill();
   }
 
-  // 5. Particles (Ledakan / Percikan)
+  // 5. Particles
   for(const p of particles){
     ctx.globalAlpha = Math.max(0, p.life/p.maxLife);
     ctx.fillStyle = p.c;
@@ -563,7 +794,7 @@ function draw(){
   }
   ctx.globalAlpha = 1;
 
-  // 6. SCREEN HIT FLASH OVERLAY
+  // 6. Hit Flash Overlay
   if(hitFlash > 0.05){
     ctx.fillStyle = `rgba(255, 255, 255, ${hitFlash * 0.35})`;
     ctx.fillRect(0, 0, w, h);
