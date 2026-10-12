@@ -12,7 +12,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 
 /* TOP HUD */
 .hud{position:fixed;top:0;left:0;right:0;padding:10px 18px;display:flex;justify-content:space-between;align-items:center;pointer-events:none;text-shadow:0 0 12px #00d9ff;font-weight:900;letter-spacing:.1em;z-index:5}
-.hud-left{display:flex;align-items:center;gap:12px}
+.hud-left{display:flex;align-items:center;gap:10px}
 .level-badge{background:linear-gradient(90deg,#ff00aa,#00f0ff);color:#03101c;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:900;box-shadow:0 0 12px rgba(0,240,255,0.6)}
 .hud span{color:#00eaff}
 .multi-badge{font-size:13px;color:#ffe600;text-shadow:0 0 10px #ffe600;transition:transform .15s}
@@ -41,19 +41,32 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 .pill-freeze{border-color:#00cfff;color:#00cfff;box-shadow:0 0 10px rgba(0,207,255,0.4)}
 .pill-hyper{border-color:#ff00aa;color:#fff;background:linear-gradient(90deg,rgba(255,0,170,0.8),rgba(255,230,0,0.8));box-shadow:0 0 15px rgba(255,0,170,0.8)}
 
+/* ACHIEVEMENT TOAST POPUP */
+.achieve-toast{position:fixed;bottom:54px;left:50%;transform:translateX(-50%) translateY(30px);background:rgba(10,20,35,0.92);border:2px solid #ffe600;box-shadow:0 0 25px rgba(255,230,0,0.6);border-radius:14px;padding:8px 18px;display:flex;align-items:center;gap:12px;z-index:9;opacity:0;pointer-events:none;transition:all .35s cubic-bezier(.175,.885,.32,1.275)}
+.achieve-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.achieve-icon{font-size:24px}
+.achieve-info{text-align:left}
+.achieve-title{font-size:10px;color:#ffe600;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.achieve-desc{font-size:11px;color:#f6fbff;font-weight:700}
+
 /* BOTTOM ON-SCREEN CONTROLS */
-.bottom-hints{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:16px;align-items:center;font-size:11px;font-weight:800;letter-spacing:.06em;pointer-events:none;z-index:5;text-shadow:0 0 8px #000;background:rgba(5,10,20,0.75);padding:6px 16px;border-radius:20px;border:1px solid rgba(255,255,255,0.12);white-space:nowrap}
+.bottom-hints{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;font-size:11px;font-weight:800;letter-spacing:.06em;pointer-events:none;z-index:5;text-shadow:0 0 8px #000;background:rgba(5,10,20,0.75);padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.12);white-space:nowrap}
 .key-badge{background:#1a2b42;color:#00eaff;padding:2px 7px;border-radius:6px;border:1px solid #00eaff;font-size:10px}
 
 /* OVERLAYS */
-.overlay{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse,rgba(9,22,43,.92),rgba(2,5,12,.97));padding:20px;text-align:center;z-index:10;overflow-y:auto}
+.overlay{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse,rgba(9,22,43,.94),rgba(2,5,12,.98));padding:20px;text-align:center;z-index:10;overflow-y:auto}
 .overlay.hidden{display:none}
-.panel{max-width:580px;background:rgba(10,20,35,0.85);border:1px solid rgba(0,234,255,0.25);border-radius:24px;padding:26px 22px;box-shadow:0 0 40px rgba(0,200,255,0.15)}
+.panel{max-width:580px;background:rgba(10,20,35,0.88);border:1px solid rgba(0,234,255,0.25);border-radius:24px;padding:24px 20px;box-shadow:0 0 40px rgba(0,200,255,0.15)}
 .eyebrow{font-size:11px;letter-spacing:.35em;color:#00f0ff}
-.panel h1{font-size:clamp(32px,8vw,56px);line-height:1;margin:10px 0;color:#f6fbff;text-shadow:0 0 28px #00cfff}
+.panel h1{font-size:clamp(32px,8vw,52px);line-height:1;margin:10px 0;color:#f6fbff;text-shadow:0 0 28px #00cfff}
+
+/* TABS DI START PANEL */
+.tab-row{display:flex;justify-content:center;gap:10px;margin:14px 0 16px}
+.tab-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#cbd5e1;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer;transition:all .15s}
+.tab-btn.active{background:#00e5ff;color:#03101c;border-color:#00e5ff;box-shadow:0 0 15px rgba(0,229,255,0.5)}
 
 /* RULES GRID */
-.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0;text-align:left}
+.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;text-align:left}
 .rule-card{padding:10px 12px;border-radius:12px;font-size:12px;line-height:1.4}
 .card-repel{background:rgba(255,80,60,0.12);border:1px solid #ff5040;color:#ff9e94}
 .card-attract{background:rgba(0,234,255,0.12);border:1px solid #00eaff;color:#9bf0ff}
@@ -62,7 +75,16 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 .card-title{font-weight:900;font-size:13px;margin-bottom:3px;display:flex;align-items:center;gap:6px}
 .rule-card b{color:#fff}
 
-.btn{border:0;border-radius:999px;padding:14px 34px;background:#00e5ff;color:#03101c;font-size:15px;font-weight:900;letter-spacing:.12em;cursor:pointer;box-shadow:0 0 28px #00c9ff88;transition:transform .1s,box-shadow .1s}
+/* ACHIEVEMENTS LIST CONTAINER */
+.achieve-list{display:flex;flex-direction:column;gap:8px;max-height:260px;overflow-y:auto;margin-bottom:16px;padding-right:4px;text-align:left}
+.achieve-item{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:10px;font-size:12px}
+.achieve-item.unlocked{border-color:#ffe600;background:rgba(255,230,0,0.08);box-shadow:0 0 10px rgba(255,230,0,0.2)}
+.achieve-badge{font-size:20px;line-height:1}
+.achieve-text h4{margin:0 0 2px;font-size:12px;color:#f6fbff}
+.achieve-item.unlocked .achieve-text h4{color:#ffe600}
+.achieve-text p{margin:0;font-size:11px;color:#94a3b8}
+
+.btn{border:0;border-radius:999px;padding:12px 32px;background:#00e5ff;color:#03101c;font-size:14px;font-weight:900;letter-spacing:.12em;cursor:pointer;box-shadow:0 0 28px #00c9ff88;transition:transform .1s,box-shadow .1s}
 .btn:hover{transform:scale(1.04);box-shadow:0 0 35px #00c9ff}
 .back{position:fixed;bottom:16px;left:20px;color:#9db2ca;text-decoration:none;font-size:12px;z-index:6;font-weight:700}
 </style>
@@ -108,10 +130,19 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
   <div class="status-pill pill-freeze" id="pillFreeze">❄️ SLOW TIME</div>
 </div>
 
+<!-- IN-GAME POPUP TOAST (ACHIEVEMENT UNLOCKED) -->
+<div class="achieve-toast" id="achieveToast">
+  <div class="achieve-icon" id="toastIcon">🏆</div>
+  <div class="achieve-info">
+    <div class="achieve-title">ACHIEVEMENT UNLOCKED!</div>
+    <div class="achieve-desc" id="toastDesc">First Blood</div>
+  </div>
+</div>
+
 <!-- BOTTOM CONTROL HINTS -->
 <div class="bottom-hints">
   <div>KEMUDI: <span class="key-badge">WASD</span> / <span class="key-badge">MOUSE</span> / <span class="key-badge">DRAG</span></div>
-  <div>FLIP WARNA: <span class="key-badge">SPASI</span> / <span class="key-badge">KLIK</span> / <span class="key-badge">TAP</span></div>
+  <div>FLIP: <span class="key-badge">SPASI</span> / <span class="key-badge">KLIK</span> / <span class="key-badge">TAP</span></div>
 </div>
 
 <a class="back" href="../index.html">← MINI ARCADE</a>
@@ -122,22 +153,41 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
     <div class="eyebrow">ARCADE ACTION SURVIVOR</div>
     <h1>POLARITY</h1>
     
-    <div class="rules-grid">
-      <div class="rule-card card-attract">
-        <div class="card-title" style="color:#00eaff">🔵 SEDOT ORB</div>
-        Warna Beda = Tarik! Kumpulkan orb untuk score dan isi <b>Overcharge Meter</b>.
+    <!-- TABS -->
+    <div class="tab-row">
+      <button class="tab-btn active" id="tabHow">CARA MAIN & POWERS</button>
+      <button class="tab-btn" id="tabAchieve">🏆 ACHIEVEMENTS (<span id="achieveCount">0/6</span>)</button>
+    </div>
+
+    <!-- TAB CONTENT: HOW & POWERS -->
+    <div id="contentHow">
+      <div class="rules-grid">
+        <div class="rule-card card-attract">
+          <div class="card-title" style="color:#00eaff">🔵 SEDOT ORB</div>
+          Warna Beda = Tarik! Kumpulkan orb untuk skor dan isi <b>Overcharge Meter</b>.
+        </div>
+        <div class="rule-card card-repel">
+          <div class="card-title" style="color:#ff5040">🔴 TOLAK / TENDANG</div>
+          Warna Sama = Tolak! Gunakan untuk <b>slingshot</b> &amp; <b>menendang bom</b> menjauh!
+        </div>
+        <div class="rule-card card-power">
+          <div class="card-title" style="color:#00ff88">⚡ 4 POWER ORBS</div>
+          🛡️ <b>Shield</b> (Anti Ledak)<br>
+          🧲 <b>Super Magnet</b> (Sedot Poin)<br>
+          ❄️ <b>Freeze Time</b> (Slow Motion)<br>
+          💥 <b>Nuke Bomb</b> (Ledakkan Semua Bahaya)
+        </div>
+        <div class="rule-card card-bomb">
+          <div class="card-title" style="color:#ffcc00">🔥 HYPER OVERCHARGE</div>
+          Penuhi bar di atas untuk aktifkan <b>MULTI-SCORE (2x s/d 5x)</b> selama 7 detik!
+        </div>
       </div>
-      <div class="rule-card card-repel">
-        <div class="card-title" style="color:#ff5040">🔴 TOLAK / TENDANG</div>
-        Warna Sama = Tolak! Gunakan untuk <b>slingshot</b> &amp; <b>menendang bom</b> menjauh!
-      </div>
-      <div class="rule-card card-bomb">
-        <div class="card-title" style="color:#ffcc00">💣 TANTANGAN LEVEL</div>
-        Tiap Level naik: bom makin cepat, orbit mengejar, dan rintangan makin padat!
-      </div>
-      <div class="rule-card card-power">
-        <div class="card-title" style="color:#00ff88">⚡ OVERCHARGE METER</div>
-        Penuhi bar di atas untuk aktifkan <b>HYPER MULTI-SCORE (2x - 5x)</b>!
+    </div>
+
+    <!-- TAB CONTENT: ACHIEVEMENTS -->
+    <div id="contentAchieve" style="display:none">
+      <div class="achieve-list" id="achieveList">
+        <!-- populated via js -->
       </div>
     </div>
 
@@ -151,6 +201,9 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
     <div class="eyebrow" style="color:#ff5040" id="deathReason">INTI MELEDAK!</div>
     <h1 style="color:#ff50d7">GAME OVER</h1>
     <p id="result" style="font-size:15px;color:#cbd5e1;line-height:1.8;margin:14px 0"></p>
+    <div style="margin-bottom:18px">
+      <button class="tab-btn active" id="btnViewAchieveGO">🏆 CEK ACHIEVEMENTS</button>
+    </div>
     <button class="btn" id="again">MAIN LAGI (ENTER)</button>
   </div>
 </div>
@@ -168,9 +221,89 @@ let flip=1,time=0,last=0,spawn=0,trail=[];
 
 // LEVEL & PROGRESSION
 let level=1;
-let overchargeEnergy=0;      // 0 .. 100
-let hyperTimer=0;            // countdown saat hyper aktif
+let overchargeEnergy=0;
+let hyperTimer=0;
 let currentMultiplier=1;
+
+// STATS UNTUK ACHIEVEMENT
+let stats={
+  totalAbsorbed: 0,
+  bombsRepelled: 0,
+  hypersActivated: 0,
+  nukesCollected: 0
+};
+
+// ACHIEVEMENTS DEFINITION & PERSISTENCE
+const ACHIEVEMENTS = [
+  {id:'first_absorb', icon:'🔵', title:'First Attraction', desc:'Sedot orb pertama kamu.'},
+  {id:'bomb_kicker',  icon:'⚽', title:'Bomb Kicker',      desc:'Tendang 5 bom menjauh dengan Repel.'},
+  {id:'level_3',      icon:'🚀', title:'Orb Pioneer',      desc:'Bertahan sampai Level 3.'},
+  {id:'hyper_drive',  icon:'⚡', title:'Overcharge Surge', desc:'Penuhi meteran & aktifkan Hyper Multiplier.'},
+  {id:'nuke_master',  icon:'💥', title:'Detonation Master', desc:'Ambil Nuke Orb dan bersihkan arena.'},
+  {id:'score_500',    icon:'👑', title:'Polarity Ace',     desc:'Capai total skor 500+ poin.'}
+];
+
+let unlockedAchieve = JSON.parse(localStorage.getItem('polarity_achievements') || '{}');
+
+function saveAchievement(id){
+  if(unlockedAchieve[id]) return;
+  unlockedAchieve[id] = Date.now();
+  localStorage.setItem('polarity_achievements', JSON.stringify(unlockedAchieve));
+  
+  const ach = ACHIEVEMENTS.find(a=>a.id===id);
+  if(ach){
+    showAchievementToast(ach.icon, ach.title);
+  }
+  renderAchievementsUI();
+}
+
+function showAchievementToast(icon, title){
+  $('toastIcon').textContent = icon;
+  $('toastDesc').textContent = title;
+  const t = $('achieveToast');
+  t.classList.add('show');
+  setTimeout(()=>{ t.classList.remove('show'); }, 3000);
+}
+
+function renderAchievementsUI(){
+  const count = Object.keys(unlockedAchieve).length;
+  $('achieveCount').textContent = `${count}/${ACHIEVEMENTS.length}`;
+  const list = $('achieveList');
+  list.innerHTML = '';
+  ACHIEVEMENTS.forEach(a=>{
+    const isDone = !!unlockedAchieve[a.id];
+    const div = document.createElement('div');
+    div.className = `achieve-item ${isDone?'unlocked':''}`;
+    div.innerHTML = `
+      <div class="achieve-badge">${isDone ? a.icon : '🔒'}</div>
+      <div class="achieve-text">
+        <h4>${a.title} ${isDone ? '✓' : ''}</h4>
+        <p>${a.desc}</p>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+}
+renderAchievementsUI();
+
+// TAB SWITCHING
+$('tabHow').onclick = ()=>{
+  $('tabHow').classList.add('active');
+  $('tabAchieve').classList.remove('active');
+  $('contentHow').style.display='block';
+  $('contentAchieve').style.display='none';
+};
+$('tabAchieve').onclick = ()=>{
+  $('tabAchieve').classList.add('active');
+  $('tabHow').classList.remove('active');
+  $('contentHow').style.display='none';
+  $('contentAchieve').style.display='block';
+};
+$('btnViewAchieveGO').onclick = ()=>{
+  $('end').classList.add('hidden');
+  $('start').classList.remove('hidden');
+  $('tabAchieve').click();
+};
 
 // POWER-UP TIMERS
 let shieldActive=false, magnetTimer=0, freezeTimer=0;
@@ -183,6 +316,7 @@ function reset(){
   score=0;time=0;spawn=0;flip=1;alive=true;dying=false;deathTimer=0;hitFlash=0;screenShake=0;
   level=1;overchargeEnergy=0;hyperTimer=0;currentMultiplier=1;
   shieldActive=false;magnetTimer=0;freezeTimer=0;
+  stats={totalAbsorbed:0, bombsRepelled:0, hypersActivated:0, nukesCollected:0};
   mouse.active=false;
   $('score').textContent='0000';
   $('sign').textContent='＋ CYAN';
@@ -243,7 +377,6 @@ $('play').onclick=reset;$('again').onclick=reset;
 function spawnOrb(){
   const edge = Math.floor(Math.random() * 4);
   let x, y, vx, vy;
-  // Per level: kecepatan orb dan pergerakan makin agresif
   let baseSpeed = 45 + (level - 1) * 12;
   if(edge === 0){
     x = -24; y = 90 + Math.random()*(h - 180);
@@ -259,7 +392,6 @@ function spawnOrb(){
     vx = (Math.random()-0.5)*(50 + level*6); vy = -(baseSpeed + Math.random()*50);
   }
 
-  // Peluang bom meningkat tiap level (Level 1: 20%, Level 5+: hingga 42%)
   let bombChance = Math.min(0.42, 0.18 + (level - 1) * 0.05);
   let roll = Math.random();
   let type = "normal";
@@ -268,10 +400,12 @@ function spawnOrb(){
     type = "bomb";
   } else if(roll < bombChance + 0.04){
     type = "shield";
-  } else if(roll < bombChance + 0.08){
+  } else if(roll < bombChance + 0.07){
     type = "magnet";
-  } else if(roll < bombChance + 0.12){
+  } else if(roll < bombChance + 0.10){
     type = "freeze";
+  } else if(roll < bombChance + 0.13){
+    type = "nuke"; // 💥 Nuke Power Orb Baru!
   }
 
   let r = 11 + Math.random()*4;
@@ -360,7 +494,7 @@ function loop(now){
   // 1. OVERCHARGE & HYPER MULTIPLIER MECHANIC
   if(hyperTimer > 0){
     hyperTimer -= dt;
-    currentMultiplier = Math.min(5, 2 + Math.floor(level / 2)); // 2x s/d 5x
+    currentMultiplier = Math.min(5, 2 + Math.floor(level / 2));
     overchargeEnergy = (hyperTimer / 7.0) * 100;
     $('meterFill').style.width = `${overchargeEnergy}%`;
     $('meterFill').classList.add('full');
@@ -386,7 +520,7 @@ function loop(now){
   hitFlash = Math.max(0, hitFlash - dt*5);
   screenShake = Math.max(0, screenShake - dt*30);
 
-  // 2. LEVEL PROGRESSION (Setiap 20 detik atau skor naik 250)
+  // 2. LEVEL PROGRESSION
   let targetLevel = 1 + Math.floor(time / 18);
   if(targetLevel > level){
     level = targetLevel;
@@ -394,9 +528,9 @@ function loop(now){
     shockwaves.push({x:player.x, y:player.y, r:10, maxR:180, c:'#ffe600', life:1.2});
     addFloatingText(`LEVEL UP! LV ${level}`, player.x, player.y - 28, '#ffe600');
     screenShake = 10;
+    if(level >= 3) saveAchievement('level_3');
   }
 
-  // Spawn interval makin cepat per level
   let spawnRate = Math.max(0.24, (1.0 - (level - 1)*0.08) - time*0.005);
   if(spawn <= 0){
     spawnOrb();
@@ -437,7 +571,7 @@ function loop(now){
 
       if(o.type === 'bomb'){
         if(sameCharge){
-          // REPEL BOMB: tendang bom keluar
+          // REPEL BOMB
           let fx = (dx/d) * forceMag * 2.2;
           let fy = (dy/d) * forceMag * 2.2;
           player.vx += fx * dt;
@@ -446,7 +580,7 @@ function loop(now){
           o.vy -= fy * 1.4 * dt;
           o.repelPulse = Math.max(o.repelPulse, (1 - d/220));
         } else {
-          // ATTRACT BOMB: bom mengejar makin cepat di level tinggi
+          // ATTRACT BOMB
           let seekSpeed = 1.2 + (level - 1)*0.18;
           let fx = (dx/d) * forceMag * seekSpeed;
           let fy = (dy/d) * forceMag * seekSpeed;
@@ -461,7 +595,6 @@ function loop(now){
           o.vx += fx * dt;
           o.vy += fy * dt;
         } else if(sameCharge){
-          // REPEL
           let fx = (dx/d) * forceMag * 1.6;
           let fy = (dy/d) * forceMag * 1.6;
           player.vx += fx * dt;
@@ -470,7 +603,6 @@ function loop(now){
           o.vy -= fy * 0.7 * dt;
           o.repelPulse = Math.max(o.repelPulse, (1 - d/220));
         } else {
-          // ATTRACT
           let fx = (dx/d) * forceMag * 0.85;
           let fy = (dy/d) * forceMag * 0.85;
           o.vx += fx * dt;
@@ -520,20 +652,47 @@ function loop(now){
         addFloatingText(`+${20*currentMultiplier} ❄️`, o.x, o.y - 15, '#00cfff');
         updateStatusPills();
         o.dead = true;
+      } else if(o.type === 'nuke'){
+        // 💥 NUKE POWER-UP: Ledakkan semua bom yang ada di arena menjadi skor!
+        score += 30 * currentMultiplier;
+        stats.nukesCollected++;
+        if(stats.nukesCollected >= 1) saveAchievement('nuke_master');
+
+        shockwaves.push({x:o.x, y:o.y, r:15, maxR:280, c:'#ff2200', life:1.6});
+        screenShake = 18;
+        hitFlash = 0.9;
+        addFloatingText(`💥 NUKE DETONATION! +${30*currentMultiplier}`, player.x, player.y - 25, '#ff4400');
+
+        // Musnahkan semua bom
+        orbs.forEach(other=>{
+          if(other.type === 'bomb'){
+            other.dead = true;
+            score += 15 * currentMultiplier;
+            for(let k=0;k<8;k++){
+              let a=Math.random()*Math.PI*2, sp=80+Math.random()*140;
+              particles.push({x:other.x,y:other.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:.35,maxLife:.35,c:'#ff9900',size:3});
+            }
+          }
+        });
+        o.dead = true;
       } else {
         if(!sameCharge || magnetTimer > 0){
           // ABSORB ORB & CHARGE OVERCHARGE BAR!
           let gained = 10 * currentMultiplier;
           score += gained;
+          stats.totalAbsorbed++;
+          saveAchievement('first_absorb');
+          if(score >= 500) saveAchievement('score_500');
+
           addFloatingText(`+${gained}`, o.x, o.y - 12, (currentMultiplier > 1)?'#ff00ea':'#00eaff');
 
-          // Isi Overcharge Meter jika tidak sedang Hyper
           if(hyperTimer <= 0){
             overchargeEnergy = Math.min(100, overchargeEnergy + 9);
             $('meterFill').style.width = `${overchargeEnergy}%`;
             if(overchargeEnergy >= 100){
-              // AKTIFKAN HYPER MODE!
-              hyperTimer = 7.0; // 7 detik Hyper Mode
+              hyperTimer = 7.0;
+              stats.hypersActivated++;
+              saveAchievement('hyper_drive');
               shockwaves.push({x:player.x, y:player.y, r:15, maxR:220, c:'#ff00ea', life:1.5});
               screenShake = 14;
               addFloatingText(`⚡ HYPER OVERCHARGE ${Math.min(5, 2 + Math.floor(level/2))}X!`, player.x, player.y - 32, '#ffe600');
@@ -556,6 +715,11 @@ function loop(now){
           hitFlash = 0.5;
           screenShake = 6;
           shockwaves.push({x:(player.x+o.x)/2, y:(player.y+o.y)/2, r:8, maxR:70, c:'#ffdd55', life:1});
+          
+          if(o.type === 'bomb'){
+            stats.bombsRepelled++;
+            if(stats.bombsRepelled >= 5) saveAchievement('bomb_kicker');
+          }
         }
       }
     }
@@ -778,6 +942,26 @@ function draw(){
       ctx.textBaseline = 'middle';
       ctx.fillText('❄️', o.x, o.y);
 
+    } else if(o.type === 'nuke'){
+      // 💥 NUKE ORB (ORANYE-MERAH MEMBARA)
+      ctx.beginPath();
+      ctx.arc(o.x, o.y, o.r + 5, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(255,68,0,0.25)';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(o.x, o.y, o.r, 0, Math.PI*2);
+      ctx.fillStyle = '#ff3300';
+      ctx.shadowColor = '#ff5500';
+      ctx.shadowBlur = 24;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      ctx.font = '12px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('💥', o.x, o.y);
+
     } else {
       let c = o.charge===1 ? '#00eaff' : '#ff50d7';
       let isRepelling = (!dying && flip === o.charge && o.repelPulse > 0.05);
@@ -808,7 +992,6 @@ function draw(){
   let pColor = flip===1 ? '#00eaff' : '#ff50d7';
 
   if(!dying){
-    // Trail
     trail.forEach((p,i)=>{
       ctx.globalAlpha = (i/trail.length)*0.35;
       ctx.beginPath();
@@ -818,7 +1001,6 @@ function draw(){
     });
     ctx.globalAlpha = 1;
 
-    // SHIELD BUBBLE
     if(shieldActive){
       ctx.beginPath();
       ctx.arc(player.x, player.y, player.r + 14, 0, Math.PI*2);
@@ -830,7 +1012,6 @@ function draw(){
       ctx.shadowBlur = 0;
     }
 
-    // Pulsing aura ring (Hyper Rainbow Glow jika aktif)
     let auraPulse = Math.sin(time*8)*4;
     ctx.beginPath();
     ctx.arc(player.x, player.y, player.r + 8 + auraPulse, 0, Math.PI*2);
@@ -840,7 +1021,6 @@ function draw(){
     ctx.stroke();
     ctx.globalAlpha = 1;
 
-    // Body
     ctx.beginPath();
     ctx.arc(player.x, player.y, player.r, 0, Math.PI*2);
     ctx.fillStyle = '#ffffff';
@@ -849,7 +1029,6 @@ function draw(){
     ctx.fill();
     ctx.shadowBlur = 0;
 
-    // Core Dot
     ctx.beginPath();
     ctx.arc(player.x, player.y, 6, 0, Math.PI*2);
     ctx.fillStyle = (hyperTimer > 0) ? '#ffe600' : pColor;
