@@ -58,7 +58,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
   <div><span id="score">0000</span> · BEST <b id="best">0000</b></div>
 </div>
 
-<!-- IN-GAME LIVE MECHANIC REMINDER (Always visible in-game) -->
+<!-- IN-GAME LIVE MECHANIC REMINDER -->
 <div class="guide-bar">
   <div class="guide-item badge-repel">
     <span class="badge-dot" style="background:#ff5040;box-shadow:0 0 8px #ff5040"></span>
@@ -87,20 +87,19 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
     <div class="eyebrow">ARCADE MOMENTUM PUZZLE</div>
     <h1>POLARITY</h1>
     
-    <!-- VISUAL RULE CARDS -->
     <div class="rules-grid">
       <div class="rule-card card-repel">
         <div class="card-title" style="color:#ff5040">🔴 WARNA SAMA</div>
-        <b>SALING TOLAK!</b> Gunakan dorongan garis merah untuk <b>nge-rem mendadak</b> atau <b>slingshot</b> nembus celah laser pink!
+        <b>SALING TOLAK!</b> Gunakan tolakan untuk <b>rem mendadak</b> atau <b>slingshot</b> nembus celah laser pink!
       </div>
       <div class="rule-card card-attract">
         <div class="card-title" style="color:#00eaff">🔵 WARNA BEDA</div>
-        <b>SALING TARIK!</b> Sedot orb masuk ke inti untuk dapat <b>+10 SCORE</b>. Hati-hati jangan sampai terseret nabrak laser!
+        <b>SALING TARIK!</b> Dekati orb beda warna untuk sedot dan dapat <b>+10 SCORE</b>.
       </div>
     </div>
 
     <div class="controls-box">
-      ⚠️ <b>TANTANGAN:</b> Laser pink makin cepat & celahnya makin sempit. Jangan nabrak laser atau dinding arena!
+      ⚠️ <b>TANTANGAN:</b> Gerbang laser terus bergerak dari kanan. Jangan AFK atau diam, celah laser selalu berpindah! Hindari benturan laser dan dinding arena.
     </div>
 
     <button class="btn" id="play">MULAI MAIN</button>
@@ -114,7 +113,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
     <h1 style="color:#ff50d7">GAME OVER</h1>
     <p id="result" style="font-size:15px;color:#cbd5e1;line-height:1.8;margin:16px 0"></p>
     <div class="controls-box" style="margin-bottom:20px">
-      💡 <b>TIPS:</b> Begitu celah laser pink muncul di depan, langsung <b>TEKAN SPASI / TAP</b> untuk ganti warna agar terpental pas di celah kosong!
+      💡 <b>TIPS:</b> Pantau posisi celah gerbang laser di depan, lalu gunakan <b>FLIP POLARITAS (SPASI / TAP)</b> untuk melontarkan diri pas ke celah yang aman!
     </div>
     <button class="btn" id="again">MAIN LAGI (ENTER)</button>
   </div>
@@ -127,13 +126,14 @@ function resize(){dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight
 addEventListener('resize',resize);resize();
 
 const $=id=>document.getElementById(id), keys={}, mouse={x:w/2,y:h/2,active:false}, player={x:w/2,y:h/2,vx:0,vy:0,r:14};
-let orbs=[],gates=[],particles=[],shockwaves=[],score=0,best=+(localStorage.getItem('polarity_best')||0),alive=false,flip=1,time=0,last=0,spawn=0,trail=[];
+let orbs=[],gates=[],particles=[],shockwaves=[],score=0,best=+(localStorage.getItem('polarity_best')||0),alive=false,flip=1,time=0,last=0,spawn=0,gateTimer=2.5,lastGateGapY=h*0.5,trail=[];
 $('best').textContent=String(best).padStart(4,'0');
 
 function reset(){
-  player.x=w*.25;player.y=h*.5;player.vx=80;player.vy=0;
+  player.x=w*.2;player.y=h*.5;player.vx=50;player.vy=0;
   orbs=[];gates=[];particles=[];shockwaves=[];trail=[];
-  score=0;time=0;spawn=0;flip=1;alive=true;
+  score=0;time=0;spawn=0;gateTimer=2.0;lastGateGapY=h*0.5;flip=1;alive=true;
+  mouse.active=false;
   $('score').textContent='0000';
   $('sign').textContent='＋ CYAN';
   $('sign').style.color='#00eaff';
@@ -174,22 +174,40 @@ addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
 $('play').onclick=reset;$('again').onclick=reset;
 
 function orb(){
-  let side=Math.random()<.5?1:-1;
+  // Orb muncul dari sisi kanan saja (bergerak ke kiri melawan pemain)
+  let yPos = 80 + Math.random()*(h-160);
   orbs.push({
-    x:side>0?w+30:-30,
-    y:80+Math.random()*(h-160),
-    vx:-side*(45+Math.random()*40),
-    vy:(Math.random()-.5)*60,
-    r:9+Math.random()*6,
-    charge:Math.random()<.5?1:-1,
-    phase:Math.random()*6,
-    repelPulse:0
+    x: w + 40,
+    y: yPos,
+    vx: -(65 + Math.random()*55 + time*1.2),
+    vy: (Math.random()-.5)*40,
+    r: 10 + Math.random()*5,
+    charge: Math.random()<.5?1:-1,
+    phase: Math.random()*6,
+    repelPulse: 0
   });
 }
 
-function gate(){
-  let gap=Math.max(140,h*.35-time*1.2);
-  gates.push({x:w+40,gapY:110+Math.random()*Math.max(30,h-220),gap,passed:false});
+function spawnGate(){
+  // Gap dipersempit dan posisinya dijamin JAUH dari posisi tengah awal agar pemain yang diam pasti tertabrak laser!
+  let gap = Math.max(105, h*0.28 - time*1.5);
+  let minY = 90 + gap/2;
+  let maxY = (h - 90) - gap/2;
+  let gapY;
+  // Pilih gap yang beda jauh dari posisi terakhir
+  if(lastGateGapY > h*0.5){
+    gapY = minY + Math.random()*(h*0.35);
+  } else {
+    gapY = (h - 90 - h*0.35) + Math.random()*(h*0.35);
+  }
+  lastGateGapY = gapY;
+
+  gates.push({
+    x: w + 50,
+    gapY: gapY,
+    gap: gap,
+    passed: false
+  });
 }
 
 function finish(){
@@ -205,11 +223,15 @@ function finish(){
 function loop(now){
   if(!alive)return;
   let dt=Math.min(.033,(now-last)/1000);
-  last=now;time+=dt;spawn-=dt;
+  last=now;time+=dt;spawn-=dt;gateTimer-=dt;
+
   if(spawn<=0){
     orb();
-    spawn=Math.max(.35,1.0-time*.009);
-    if(Math.floor(time)%8===0&&Math.floor(time)!==Math.floor(time-dt))gate();
+    spawn=Math.max(.45, 1.2 - time*0.012);
+  }
+  if(gateTimer<=0){
+    spawnGate();
+    gateTimer=Math.max(2.4, 4.8 - time*0.035);
   }
 
   // 1. Responsive direct steering
@@ -226,8 +248,11 @@ function loop(now){
       ay += (mdy/md) * Math.min(1.8, md*0.015);
     }
   }
-  player.vx += ax * 480 * dt;
-  player.vy += ay * 480 * dt;
+  player.vx += ax * 520 * dt;
+  player.vy += ay * 520 * dt;
+
+  // Sedikit gaya geser konstan ke kiri (arus laser menantang pemain agar tidak diam di tempat)
+  player.vx -= 18 * dt;
 
   // 2. Physics & Polarity Interplay
   for(const o of orbs){
@@ -249,7 +274,6 @@ function loop(now){
         o.vy -= fy * 0.7 * dt;
         o.repelPulse = Math.max(o.repelPulse, (1 - d/220));
 
-        // Partikel spark tolak jika dekat
         if(d < 120 && Math.random() < 0.25){
           let midX = (player.x + o.x)/2, midY = (player.y + o.y)/2;
           let pAng = Math.atan2(dy, dx) + (Math.random()-.5)*1.2;
@@ -280,7 +304,7 @@ function loop(now){
         }
         o.dead = true;
       } else {
-        let bounce = 160;
+        let bounce = 170;
         player.vx += (dx/d) * bounce;
         player.vy += (dy/d) * bounce;
         o.vx -= (dx/d) * bounce * 0.8;
@@ -294,14 +318,23 @@ function loop(now){
 
   // Gates logic
   for(const g of gates){
-    g.x -= Math.max(110, 150+time*1.2)*dt;
+    let gSpeed = Math.max(140, 185 + time*1.8);
+    g.x -= gSpeed * dt;
+
+    // Cek tabrakan laser (garis atas dan bawah celah)
+    let inXZone = Math.abs(g.x - player.x) < (player.r + 5);
+    let hitLaser = (player.y - player.r < (g.gapY - g.gap/2)) || (player.y + player.r > (g.gapY + g.gap/2));
+
+    if(inXZone && hitLaser){
+      finish();
+      return;
+    }
+
+    // Hanya jika lolos dengan aman melalui celah
     if(!g.passed && g.x < player.x){
       g.passed = true;
       score += 25;
-      shockwaves.push({x:player.x, y:player.y, r:15, maxR:90, c:'#00ff88', life:1});
-    }
-    if(Math.abs(g.x - player.x) < player.r + 10 && (player.y < g.gapY - g.gap/2 || player.y > g.gapY + g.gap/2)){
-      finish();
+      shockwaves.push({x:player.x, y:player.y, r:15, maxR:95, c:'#00ff88', life:1});
     }
   }
   gates = gates.filter(g=>g.x > -60);
@@ -341,7 +374,7 @@ function draw(){
   for(let x=0;x<w;x+=44){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}
   for(let y=0;y<h;y+=44){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
 
-  // 1. VISUAL REPEL & ATTRACT FIELD LINES (ANIMATE PENANDA)
+  // 1. VISUAL REPEL & ATTRACT FIELD LINES
   for(const o of orbs){
     let dx = player.x - o.x, dy = player.y - o.y;
     let d = Math.hypot(dx,dy) || 1;
@@ -372,7 +405,6 @@ function draw(){
         ctx.setLineDash([]);
         ctx.stroke();
 
-        // TEXT HINT DI ATAS ORB (REPEL)
         if(d < 160){
           ctx.fillStyle = `rgba(255, 120, 100, ${alpha})`;
           ctx.font = 'bold 10px system-ui';
@@ -394,7 +426,7 @@ function draw(){
     }
   }
 
-  // 2. Gates
+  // 2. Laser Gates
   for(const g of gates){
     ctx.fillStyle='#ff2bd6';
     ctx.shadowBlur=22;
