@@ -357,7 +357,16 @@ const I18N = {
     pillShield:'🛡️ SHIELD (1 HIT)',
     pillMagnet:'🧲 SUPER MAGNET',
     pillFreeze:'❄️ SLOW TIME',
-    music:'MUSIK', musicOn:'ON', musicOff:'OFF'
+    music:'MUSIK', musicOn:'ON', musicOff:'OFF',
+    cardAttractTitle:'🔵 SEDOT ORB',
+    cardAttractDesc:'Warna Beda = Tarik! Kumpulkan orb untuk skor dan isi <b>Overcharge Meter</b>.',
+    cardRepelTitle:'🔴 TOLAK / TENDANG',
+    cardRepelDesc:'Warna Sama = Tolak! Gunakan untuk <b>slingshot</b> &amp; <b>menendang bom</b> menjauh!',
+    cardPowerTitle:'⚡ 4 POWER ORBS',
+    cardPowerDesc:'🛡️ <b>Shield</b> (Anti Ledak)<br>🧲 <b>Super Magnet</b> (Sedot Poin)<br>❄️ <b>Freeze Time</b> (Slow Motion)<br>💥 <b>Nuke Bomb</b> (Ledakkan Semua Bahaya)',
+    cardBombTitle:'🔥 HYPER OVERCHARGE',
+    cardBombDesc:'Penuhi bar di atas untuk aktifkan <b>MULTI-SCORE (2x s/d 5x)</b> selama 7 detik!',
+    hintSteer:'KEMUDI', hintFlip:'FLIP', hintSpace:'SPASI', hintClick:'KLIK'
   },
   en:{
     how:'HOW TO PLAY &amp; POWERS', resume:'RESUME', quit:'QUIT',
@@ -373,7 +382,16 @@ const I18N = {
     pillShield:'🛡️ SHIELD (1 HIT)',
     pillMagnet:'🧲 SUPER MAGNET',
     pillFreeze:'❄️ SLOW TIME',
-    music:'MUSIC', musicOn:'ON', musicOff:'OFF'
+    music:'MUSIC', musicOn:'ON', musicOff:'OFF',
+    cardAttractTitle:'🔵 ABSORB ORBS',
+    cardAttractDesc:'Different Color = Attract! Gather orbs for score and fill the <b>Overcharge Meter</b>.',
+    cardRepelTitle:'🔴 REPEL / KICK',
+    cardRepelDesc:'Same Color = Repel! Use to <b>slingshot</b> &amp; <b>kick magnetic bombs</b> away!',
+    cardPowerTitle:'⚡ 4 POWER ORBS',
+    cardPowerDesc:'🛡️ <b>Shield</b> (1-Hit Protect)<br>🧲 <b>Super Magnet</b> (Pull All Orbs)<br>❄️ <b>Freeze Time</b> (Slow Motion)<br>💥 <b>Nuke Bomb</b> (Clear All Bombs)',
+    cardBombTitle:'🔥 HYPER OVERCHARGE',
+    cardBombDesc:'Fill the top meter to unleash <b>MULTI-SCORE (2x to 5x)</b> for 7 seconds!',
+    hintSteer:'STEER', hintFlip:'FLIP', hintSpace:'SPACE', hintClick:'CLICK'
   }
 };
 function t_(k){ return (I18N[LANG] && I18N[LANG][k]) || k; }
@@ -397,6 +415,38 @@ function applyLang(){
   const pf=document.getElementById('pillFreeze');  if(pf) pf.textContent = t_('pillFreeze');
   const tt=document.querySelector('.achieve-title'); if(tt) tt.textContent = t_('toastTitle');
   const mb=document.getElementById('btnMusic'); if(mb) mb.textContent = musicOn ? '🔊' : '🔇';
+
+  // Translate start screen rule cards & bottom hints
+  const ch = document.getElementById('contentHow');
+  if(ch){
+    ch.innerHTML = `
+      <div class="rules-grid">
+        <div class="rule-card card-attract">
+          <div class="card-title" style="color:#00eaff">${t_('cardAttractTitle')}</div>
+          ${t_('cardAttractDesc')}
+        </div>
+        <div class="rule-card card-repel">
+          <div class="card-title" style="color:#ff5040">${t_('cardRepelTitle')}</div>
+          ${t_('cardRepelDesc')}
+        </div>
+        <div class="rule-card card-power">
+          <div class="card-title" style="color:#00ff88">${t_('cardPowerTitle')}</div>
+          ${t_('cardPowerDesc')}
+        </div>
+        <div class="rule-card card-bomb">
+          <div class="card-title" style="color:#ffcc00">${t_('cardBombTitle')}</div>
+          ${t_('cardBombDesc')}
+        </div>
+      </div>
+    `;
+  }
+  const bh = document.querySelector('.bottom-hints');
+  if(bh){
+    bh.innerHTML = `
+      <div>${t_('hintSteer')}: <span class="key-badge">WASD</span> / <span class="key-badge">MOUSE</span> / <span class="key-badge">DRAG</span></div>
+      <div>${t_('hintFlip')}: <span class="key-badge">${t_('hintSpace')}</span> / <span class="key-badge">${t_('hintClick')}</span> / <span class="key-badge">TAP</span></div>
+    `;
+  }
 }
 $('langBtn').onclick = ()=>{ LANG = (LANG==='id')?'en':'id'; localStorage.setItem('polarity_lang', LANG); applyLang(); };
 
@@ -540,8 +590,11 @@ function pointer(e){
 
 addEventListener('mousemove',pointer);
 addEventListener('touchmove',e=>{pointer(e);e.preventDefault()},{passive:false});
-addEventListener('touchstart',e=>{if(e.target&&e.target.closest&&e.target.closest('.overlay,.panel,button,a'))return;pointer(e);if(!alive && !dying)reset();else flipPolarity();e.preventDefault()},{passive:false});
-addEventListener('mousedown',e=>{pointer(e);if(alive && !dying)flipPolarity();});
+addEventListener('touchstart',e=>{if(e.target&&e.target.closest&&e.target.closest('.overlay,.panel,button,a'))return;pointer(e);if(!alive && !dying)reset();else if(!paused)flipPolarity();e.preventDefault()},{passive:false});
+addEventListener('mousedown',e=>{if(e.target&&e.target.closest&&e.target.closest('.overlay,.panel,button,a'))return;pointer(e);if(alive && !dying && !paused)flipPolarity();});
+addEventListener('touchend', ()=>{ mouse.active = false; });
+addEventListener('touchcancel', ()=>{ mouse.active = false; });
+addEventListener('mouseup', ()=>{ mouse.active = false; });
 addEventListener('keydown',e=>{
   keys[e.key.toLowerCase()]=true;
   var k=e.key.toLowerCase();
@@ -633,6 +686,7 @@ function triggerDeath(reasonText){
 function showGameOverModal(){
   alive = false;
   dying = false;
+  stopMusic();
   best = Math.max(best, score);
   localStorage.setItem('polarity_best', best);
   $('best').textContent = String(best).padStart(4,'0');
@@ -772,6 +826,13 @@ function loop(now){
           o.vx -= fx * 1.4 * dt;
           o.vy -= fy * 1.4 * dt;
           o.repelPulse = Math.max(o.repelPulse, (1 - d/220));
+
+          // Track bomb kick for achievement
+          if(!o.repelledCounted && d < 130){
+            o.repelledCounted = true;
+            stats.bombsRepelled++;
+            if(stats.bombsRepelled >= 5) saveAchievement('bomb_kicker');
+          }
         } else {
           // ATTRACT BOMB
           let seekSpeed = 1.2 + (level - 1)*0.18;
@@ -909,10 +970,7 @@ function loop(now){
           screenShake = 6;
           shockwaves.push({x:(player.x+o.x)/2, y:(player.y+o.y)/2, r:8, maxR:70, c:'#ffdd55', life:1});
           
-          if(o.type === 'bomb'){
-            stats.bombsRepelled++;
-            if(stats.bombsRepelled >= 5) saveAchievement('bomb_kicker');
-          }
+          // Normal orb bounced
         }
       }
     }
