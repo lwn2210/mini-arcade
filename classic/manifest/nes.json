@@ -1,0 +1,37 @@
+{
+  "platform": "nes",
+  "platformName": "NES / Famicom",
+  "hosting": "romUrl values are same-repo relative paths today; remote URLs (e.g. Google Drive direct-download links) can be dropped in later with no code changes.",
+  "games": [
+    {
+      "id": "croom",
+      "title": "CONCENTRATION ROOM",
+      "icon": "\ud83c\udccf",
+      "desc": "Card-matching memory game by Damian Yerrick (pinobatch). Clean NROM homebrew, plays perfectly in the browser.",
+      "license": "GPL-3.0",
+      "color": "cyan",
+      "meta": "\u25b6 PLAY \u00b7 16KB PRG \u00b7 MAPPER 0",
+      "romUrl": "roms/croom.nes"
+    },
+    {
+      "id": "allpads",
+      "title": "ALLPADS",
+      "icon": "\ud83c\udfae",
+      "desc": "Multi-controller diagnostic ROM by Damian Yerrick. Watch your button presses light up on screen \u2014 great for testing controls.",
+      "license": "Zlib",
+      "color": "pink",
+      "meta": "\u25b6 PLAY \u00b7 32KB PRG \u00b7 MAPPER 0",
+      "romUrl": "roms/allpads.nes"
+    },
+    {
+      "id": "240pee",
+      "title": "240P TEST SUITE",
+      "icon": "\ud83d\udcfa",
+      "desc": "Artemio's 240p Test Suite, NES port by pinobatch. Pro-grade CRT/upscaler test patterns.",
+      "license": "GPL-2.0",
+      "color": "yellow",
+      "meta": "\u25b6 PLAY \u00b7 64KB PRG \u00b7 MAPPER 2",
+      "romUrl": "roms/240pee.nes"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLASSIC ZONE — PlayStation 2 (Experimental)</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../retro.css">
+<style>
+  .lab-note {
+    max-width: 860px; width: 100%; z-index: 1;
+    border: 2px dashed rgba(255,136,0,0.55); border-radius: 12px;
+    padding: 24px; background: rgba(255,136,0,0.05); line-height: 2.4;
+  }
+  .lab-note h3 { font-size: 10px; color: #ff8800; margin-bottom: 14px; text-shadow: 0 0 10px rgba(255,136,0,0.5); }
+  .lab-note p { font-size: 8px; color: #94a3b8; margin-bottom: 12px; }
+  .lab-note b { color: #ff8800; font-weight: normal; }
+  .lab-note a { color: #00f0ff; }
+  .badge {
+    display: inline-block; font-size: 7px; color: #ff8800;
+    border: 1px solid rgba(255,136,0,0.55); border-radius: 20px;
+    padding: 6px 12px; margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+  <a class="back-link" href="../index.html">◄ RETRO VAULT</a>
+  <div class="logo" style="color:#ff8800;text-shadow:0 0 14px rgba(255,136,0,0.8),4px 4px 0 #000;">PLAYSTATION <span style="color:#ffe600;text-shadow:0 0 14px rgba(255,230,0,0.8),4px 4px 0 #000;">2</span></div>
+  <div class="tagline">⚗ EXPERIMENTAL — IN-BROWSER PS2 EMULATION IS NOT PRACTICAL TODAY<br>THIS PAGE DOCUMENTS THE STATE OF PLAY · NO PS2 GAMES OR BIOS ARE HOSTED HERE, EVER</div>
+
+  <div class="empty-catalog" style="border-color:rgba(255,136,0,0.4);">
+    <div class="big">⚠️</div>
+    <h3>NO PS2 EMULATION AVAILABLE (YET)</h3>
+    <p>THE MAIN IN-BROWSER EMULATOR FRAMEWORK, <a href="https://emulatorjs.org/" target="_blank" rel="noopener">EMULATORJS</a>,
+    CURRENTLY HAS <b style="color:#ff8800;">NO PS2 CORE</b> AT ALL.<br>
+    THERE IS NOTHING WE CAN LEGITIMATELY EMBED TODAY THAT WILL RUN PS2 DISCS IN A BROWSER.</p>
+  </div>
+
+  <div class="lab-note">
+    <h3>🔬 LAB NOTES — WHY NOT?</h3>
+    <span class="badge">EXPERIMENTAL / INFO-ONLY</span>
+    <p><b>NO CORE EXISTS:</b> EMULATORJS (THE ENGINE BEHIND OUR PS1/PSP SECTIONS) LISTS NO PLAYSTATION 2 CORE IN ITS
+    OFFICIAL CORE DOCUMENTATION (emulatorjs.org/docs4devs/cores). ITS HEAVIEST SYSTEMS TODAY ARE PSP (ppsspp) AND PS1 (pcsx_rearmed).</p>
+    <p><b>WEBASSEMBLY IS NEARLY THERE… ALMOST:</b> A PS2 EMULATOR NEEDS A DYNAMIC-RECOMPILING MIPS-III/IV CORE RUNNING AT ~300MHz
+    HOST-CLOCK EQUIVALENT, PLUS VECTOR UNITS AND A 4MB EE RAM IMAGE. IN WASM, SINGLE-THREADED, THIS IS CURRENTLY ~10-30× TOO SLOW
+    ON PHONES AND OFTEN SLOW EVEN ON DESKTOPS. THE EMULATORJS AUTHORS THEMSELVES NOTE THAT EVEN GAMECUBE/WII (DOLPHIN) RUNS AT
+    "ONE FRAME EVERY 5 SECONDS" ON AN RTX 5090 — AND PS2 IS COMPARABLE IN DEMAND.</p>
+    <p><b>WHY THIS PAGE EXISTS:</b> SO THE VAULT'S PLATFORM COVERAGE IS HONEST. WHEN A PRACTICAL PS2 CORE SHIPS (E.G. IF PCSX2'S
+    WASM PORT OR AN EQUIVALENT LANDS IN EMULATORJS), THIS PAGE WILL BE UPGRADED TO A REAL BYO-ROM PLAYER OVERNIGHT — SAME
+    ARCHITECTURE AS OUR PS1/PSP PAGES.</p>
+    <p><b>WHAT YOU CAN DO TODAY:</b> PLAY PS2 GAMES WITH <a href="https://pcsx2.net/" target="_blank" rel="noopener">PCSX2</a>
+    (NATIVE APP, FREE &amp; OPEN SOURCE, ALL MAJOR DESKTOP OS). IT IS THE GOLD-STANDARD PS2 EMULATOR. YOU WILL STILL NEED TO
+    LEGALLY DUMP YOUR OWN GAMES + BIOS — SAME RULES AS OUR VAULT.</p>
+    <p><b>IN THE MEANTIME:</b> TRY OUR <a href="../ps1/index.html">PS1</a> AND <a href="../psp/index.html">PSP</a> SECTIONS —
+    THOSE REALLY DO RUN IN YOUR BROWSER. OR GO 8-BIT WITH <a href="../nes/index.html">NES</a>.</p>
+  </div>
+
+  <div class="footer">
+    NO PS2 ROMs, BIOS, OR EMULATORS ARE BUNDLED OR LINKED FOR DOWNLOAD HERE<br>
+    PART OF THE MINI-ARCADE RETRO VAULT · EXPERIMENTAL SECTION
+  </div>
+  <div class="crt"></div>
+</body>
+</html>

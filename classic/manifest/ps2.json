@@ -1,0 +1,6 @@
+{
+  "platform": "ps2",
+  "platformName": "PlayStation 2 (experimental)",
+  "hosting": "No emulator core and no games hosted. If a practical in-browser PS2 core ships, entries with romUrl can be added here with no code changes.",
+  "games": []
+}

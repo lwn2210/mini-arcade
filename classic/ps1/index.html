@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CLASSIC ZONE — PlayStation 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../retro.css">
+</head>
+<body>
+  <a class="back-link" href="../index.html">◄ RETRO VAULT</a>
+  <div class="logo">PLAYSTATION <span>1</span></div>
+  <div class="tagline">PSX EMULATION VIA EMULATORJS (PCSX_REARMED CORE) · BYO-ROM + BYO-BIOS ONLY<br>YOUR FILES STAY ON YOUR DEVICE · CORE STREAMED FROM CDN (NEEDS INTERNET)</div>
+
+  <div class="empty-catalog">
+    <div class="big">📀</div>
+    <h3>NO GAMES HOSTED HERE</h3>
+    <p>THIS VAULT NEVER BUNDLES PS1 DISC IMAGES OR BIOS FILES — THEY ARE SONY COPYRIGHT.<br>
+    LOAD YOUR OWN LEGALLY-DUMPED DISC IMAGE BELOW (.BIN/.CUE/.ISO/.CHD/.PBP/.IMG, MULTIFILE CUE+BINS AS .ZIP).<br>
+    FOR LEGAL FREE PS1 SOFTWARE, SEE <a href="https://downloads.psnstores.com/" target="_blank" rel="noopener">HOMEBREW SCENE ARCHIVES</a>.</p>
+  </div>
+
+  <div id="player">
+    <div class="player-head">
+      <div class="player-title">🎮 PSX PLAYER <small style="color:#64748b;font-size:7px;">pcsx_rearmed · EmulatorJS</small></div>
+    </div>
+    <div class="stage" id="stage">
+      <div id="game">LOAD A GAME + BIOS, THEN PRESS START</div>
+    </div>
+    <div class="files-row">
+      <div class="file-slot">
+        <label>💾 GAME IMAGE</label>
+        <label class="pick" for="romInput">⬆ PICK DISC FILE</label>
+        <input type="file" id="romInput" accept=".bin,.cue,.iso,.chd,.pbp,.img,.zip" hidden>
+        <div class="fname" id="romName">no file</div>
+      </div>
+      <div class="file-slot">
+        <label>🔒 BIOS (scph1001.bin)</label>
+        <label class="pick" for="biosInput">⬆ PICK BIOS FILE</label>
+        <input type="file" id="biosInput" accept=".bin,.rom" hidden>
+        <div class="fname" id="biosName">no file</div>
+      </div>
+    </div>
+    <div class="ctrl-bar">
+      <button class="btn" id="btnStart">▶ START</button>
+      <button class="btn fs" id="btnFull">⛶ FULLSCREEN</button>
+    </div>
+    <div class="status" id="status">BYO-ROM MODE — NOTHING IS UPLOADED, FILES ARE READ LOCALLY IN YOUR BROWSER</div>
+  </div>
+
+  <div class="note">
+    <b>HOW IT WORKS:</b> GAME + BIOS ARE READ WITH FILEREADER AND PASSED TO THE EMULATOR AS LOCAL BLOB URLs.
+    <b>BIOS:</b> PCSX_REARMED REQUIRES A PS1 BIOS (E.G. scph1001.bin) — YOU MUST PROVIDE YOUR OWN DUMP; WE WILL NEVER BUNDLE ONE.
+    <b>CONTROLS:</b> KEYBOARD + HTML5 GAMEPAD AUTO-DETECTED; ON MOBILE EMULATORJS SHOWS AN ON-SCREEN TOUCH GAMEPAD (D-PAD + △○×□).
+    <b>OFFLINE:</b> NES SECTION OF THE VAULT WORKS OFFLINE; THIS PAGE STREAMS ITS CORE FROM cdn.emulatorjs.org.
+  </div>
+
+  <div class="footer">
+    EMULATOR: <a href="https://emulatorjs.org/" target="_blank" rel="noopener">EmulatorJS</a> (GPL-3.0, CDN) · CORE: pcsx_rearmed (GPL-2.0)<br>
+    PART OF THE MINI-ARCADE RETRO VAULT
+  </div>
+  <div class="crt"></div>
+
+  <script>
+    window.RETRO_CONFIG = {
+      core: 'pcsx_rearmed',
+      exts: ['.bin', '.cue', '.iso', '.chd', '.pbp', '.img', '.zip'],
+      needsBios: true,
+      platform: 'PSX'
+    };
+  </script>
+  <script src="../retro.js"></script>
+</body>
+</html>

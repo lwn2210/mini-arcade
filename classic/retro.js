@@ -1,0 +1,138 @@
+/* Retro Vault — shared EmulatorJS player bootstrap (PS1/PSP pages).
+ * BYO-ROM/BYO-BIOS: files are read locally with FileReader and handed to
+ * EmulatorJS as blob: URLs. Nothing is uploaded anywhere.
+ * CDN note: the EmulatorJS loader + cores are fetched from
+ * https://cdn.emulatorjs.org — these pages need internet on first load.
+ */
+(function () {
+  'use strict';
+  var CFG = window.RETRO_CONFIG || {}; // { core, exts, needsBios, platform }
+  var core = CFG.core, needsBios = !!CFG.needsBios, platform = CFG.platform || 'EMU';
+
+  var statusEl = document.getElementById('status');
+  var romInput = document.getElementById('romInput');
+  var biosInput = document.getElementById('biosInput');
+  var romNameEl = document.getElementById('romName');
+  var biosNameEl = document.getElementById('biosName');
+  var btnFull = document.getElementById('btnFull');
+  var btnStart = document.getElementById('btnStart');
+  var stage = document.getElementById('stage');
+  var booted = false, romBlobUrl = null, biosBlobUrl = null;
+
+  function setStatus(msg, err) {
+    statusEl.textContent = msg;
+    statusEl.className = err ? 'status err' : 'status';
+  }
+
+  function pick(file, accept, cb) {
+    if (!file) return;
+    var ok = accept.some(function (ext) {
+      return file.name.toLowerCase().endsWith(ext);
+    });
+    if (!ok) {
+      setStatus('UNSUPPORTED FILE TYPE: ' + file.name + ' (expected ' + accept.join(', ') + ')', true);
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function () {
+      cb(URL.createObjectURL(new Blob([reader.result], { type: 'application/octet-stream' })), file.name);
+    };
+    reader.onerror = function () { setStatus('COULD NOT READ FILE: ' + file.name, true); };
+    reader.readAsArrayBuffer(file);
+  }
+
+  romInput.addEventListener('change', function () {
+    var f = romInput.files && romInput.files[0];
+    pick(f, CFG.exts, function (url, name) {
+      if (romBlobUrl) URL.revokeObjectURL(romBlobUrl);
+      romBlobUrl = url;
+      romNameEl.textContent = '✔ ' + name;
+      setStatus('ROM READY: ' + name + (needsBios ? (biosBlobUrl ? ' · BIOS READY' : ' · NOW PICK BIOS') : ' · PRESS START'));
+    });
+    romInput.value = '';
+  });
+  if (biosInput) biosInput.addEventListener('change', function () {
+    var f = biosInput.files && biosInput.files[0];
+    pick(f, ['.bin', '.rom'], function (url, name) {
+      if (biosBlobUrl) URL.revokeObjectURL(biosBlobUrl);
+      biosBlobUrl = url;
+      biosNameEl.textContent = '✔ ' + name;
+      setStatus('BIOS READY: ' + name + ' · NOW LOAD YOUR GAME');
+    });
+    biosInput.value = '';
+  });
+
+  function loadEmulatorJS(cb) {
+    if (window.EmulatorJS) return cb();
+    var s = document.createElement('script');
+    s.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+    s.onload = cb;
+    s.onerror = function () {
+      setStatus('COULD NOT LOAD EMULATORJS FROM CDN — CHECK INTERNET CONNECTION (NES SECTION WORKS OFFLINE)', true);
+    };
+    document.head.appendChild(s);
+  }
+
+  function boot() {
+    if (booted) return;
+    if (!romBlobUrl) { setStatus('LOAD A GAME FILE FIRST', true); return; }
+    if (needsBios && !biosBlobUrl) { setStatus('THIS PLATFORM NEEDS A BIOS FILE — LOAD IT FIRST (USER-PROVIDED, NEVER BUNDLED)', true); return; }
+    setStatus('BOOTING ' + platform + ' CORE FROM CDN… (first boot downloads ~10-40MB, be patient)');
+    loadEmulatorJS(function () {
+      window.EJS_player = '#game';
+      window.EJS_core = core;
+      window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+      window.EJS_gameUrl = romBlobUrl;
+      if (biosBlobUrl) window.EJS_biosUrl = biosBlobUrl;
+      window.EJS_startOnLoaded = true;
+      window.EJS_Buttons = {
+        playPause: null, restart: null, mute: null,
+        settingsMenu: null, fullscreen: null, saveState: null, loadState: null,
+        screenRecord: null, gamepad: null, cheat: null, volume: null,
+        saveSavFiles: null, loadSavFiles: null, quickSave: null, quickLoad: null,
+        screenshot: null, cacheManager: null, exitEmulation: null
+      };
+      // EmulatorJS ships its own touch controls + fullscreen; we also keep our
+      // own fullscreen button working on the stage element below.
+      booted = true;
+      try {
+        new EmulatorJS('#game'); // eslint-disable-line no-new
+      } catch (e) {
+        setStatus('EMULATOR FAILED TO START: ' + (e && e.message ? e.message : e), true);
+      }
+    });
+  }
+  btnStart.addEventListener('click', boot);
+
+  // Fullscreen API on our stage (canvas + EmulatorJS UI live inside #game)
+  function isFullscreen() {
+    return !!(document.fullscreenElement || document.webkitFullscreenElement) || stage.classList.contains('fs-fallback');
+  }
+  function updateFsBtn() {
+    btnFull.textContent = isFullscreen() ? '✕ EXIT FULLSCREEN' : '⛶ FULLSCREEN';
+  }
+  function enterFullscreen() {
+    var fn = stage.requestFullscreen || stage.webkitRequestFullscreen;
+    if (fn) {
+      var p = fn.call(stage);
+      if (p && p.catch) p.catch(function () { stage.classList.add('fs-fallback'); updateFsBtn(); });
+    } else {
+      stage.classList.add('fs-fallback'); // iOS iPhone fallback: fill viewport
+    }
+    updateFsBtn();
+  }
+  function exitFullscreen() {
+    stage.classList.remove('fs-fallback');
+    if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
+    else if (document.webkitFullscreenElement && document.webkitExitFullscreen) document.webkitExitFullscreen();
+    updateFsBtn();
+  }
+  btnFull.addEventListener('click', function () {
+    if (isFullscreen()) exitFullscreen(); else enterFullscreen();
+  });
+  document.addEventListener('fullscreenchange', updateFsBtn);
+  document.addEventListener('webkitfullscreenchange', updateFsBtn);
+  document.addEventListener('touchmove', function (e) {
+    if (isFullscreen() && e.target.closest && e.target.closest('#stage')) e.preventDefault();
+  }, { passive: false });
+})();
