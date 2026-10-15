@@ -32,6 +32,96 @@
       "color": "yellow",
       "meta": "\u25b6 PLAY \u00b7 64KB PRG \u00b7 MAPPER 2",
       "romUrl": "roms/240pee.nes"
+    },
+    {
+      "id": "thwaite",
+      "title": "THWAITE",
+      "icon": "\ud83d\ude81",
+      "desc": "Small-town anti-ballistic missile defense by pinobatch. Protect your town's buildings from incoming warheads \u2014 a beloved Missile Command-style homebrew.",
+      "license": "GPL-3.0",
+      "color": "green",
+      "meta": "\u25b6 PLAY \u00b7 16KB PRG \u00b7 MAPPER 0",
+      "romUrl": "roms/thwaite.nes"
+    },
+    {
+      "id": "robotfindskitten",
+      "title": "ROBOT FINDS KITTEN",
+      "icon": "\ud83e\udd16",
+      "desc": "Pinobatch's NES port of the classic zen-like 'robotfindskitten' for 2 players. Interact with objects until you find the kitten.",
+      "license": "Zlib",
+      "color": "cyan",
+      "meta": "\u25b6 PLAY \u00b7 32KB PRG \u00b7 MAPPER 0",
+      "romUrl": "roms/robotfindskitten.nes"
+    },
+    {
+      "id": "rhde",
+      "title": "RHDE: FURNITURE FIGHT",
+      "icon": "\ud83e\ude91",
+      "desc": "Home-decorating real-time strategy by pinobatch. Compete to have the most furniture in your room when the timer runs out.",
+      "license": "Permissive (see ATTRIBUTION)",
+      "color": "pink",
+      "meta": "\u25b6 PLAY \u00b7 32KB PRG \u00b7 MAPPER 0",
+      "romUrl": "roms/rhde.nes"
+    },
+    {
+      "id": "ruder",
+      "title": "ZAP RUDER",
+      "icon": "\ud83c\udf89",
+      "desc": "Zapper test ROM with a 2-player air hockey simulator by pinobatch. Also works without a Zapper as a plain hockey game.",
+      "license": "Permissive (see ATTRIBUTION)",
+      "color": "yellow",
+      "meta": "\u25b6 PLAY \u00b7 16KB PRG \u00b7 MAPPER 0",
+      "romUrl": "roms/ruder.nes"
+    },
+    {
+      "id": "stallar",
+      "title": "STALLAR",
+      "icon": "\ud83d\ude80",
+      "desc": "Ludum Dare 50 space game by Wendel Scardua. Fly, land and explore in this compact homebrew adventure.",
+      "license": "MIT",
+      "color": "green",
+      "meta": "\u25b6 PLAY \u00b7 64KB PRG \u00b7 MAPPER 4",
+      "romUrl": "roms/stallar.nes"
+    },
+    {
+      "id": "file-fixers",
+      "title": "FILE FIXERS",
+      "icon": "\ud83d\udcbb",
+      "desc": "Computer-themed puzzle RPG by Wendel Scardua. Fix corrupted files in a playful retro-IT world.",
+      "license": "MIT",
+      "color": "cyan",
+      "meta": "\u25b6 PLAY \u00b7 64KB PRG \u00b7 MAPPER 4",
+      "romUrl": "roms/file-fixers.nes"
+    },
+    {
+      "id": "signos",
+      "title": "SIGNOS",
+      "icon": "\ud83e\uddfe",
+      "desc": "Puzzle game by Wendel Scardua, made for Ludum Dare 59. Public-domain dedication (Unlicense).",
+      "license": "Unlicense",
+      "color": "pink",
+      "meta": "\u25b6 PLAY \u00b7 64KB PRG \u00b7 MAPPER 4",
+      "romUrl": "roms/signos.nes"
+    },
+    {
+      "id": "table-tennis",
+      "title": "8-BIT TABLE TENNIS",
+      "icon": "\ud83c\udfd3",
+      "desc": "Two-player homebrew table tennis by Michael Billington. Classic Pong-style action with NES charm.",
+      "license": "MIT",
+      "color": "yellow",
+      "meta": "\u25b6 PLAY \u00b7 32KB PRG \u00b7 MAPPER 0",
+      "romUrl": "roms/table_tennis.nes"
+    },
+    {
+      "id": "jeznes",
+      "title": "JEZNES",
+      "icon": "\ud83d\udd25",
+      "desc": "JezzBall-style puzzle action by boingoing. Trap the bouncing atoms by building walls \u2014 an NES take on a classic.",
+      "license": "MIT",
+      "color": "green",
+      "meta": "\u25b6 PLAY \u00b7 32KB PRG \u00b7 MAPPER 0",
+      "romUrl": "roms/jeznes.nes"
     }
   ]
 }

@@ -370,12 +370,43 @@
         });
     }
 
-    // catalog cards
-    document.querySelectorAll('.card[data-rom]').forEach(function (card) {
+    // catalog cards — data-driven from ../manifest/nes.json
+    var catalogEl = document.getElementById('catalog');
+    function bindCard(card) {
       card.addEventListener('click', function () {
         fetchAndPlay(card.getAttribute('data-rom'), card.querySelector('h2').textContent);
       });
-    });
+    }
+    document.querySelectorAll('.card[data-rom]').forEach(bindCard);
+    fetch('../manifest/nes.json')
+      .then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function (mf) {
+        (mf.games || []).forEach(function (g) {
+          var a = document.createElement('a');
+          a.className = 'card ' + (g.color || 'cyan');
+          a.setAttribute('data-rom', g.romUrl);
+          a.setAttribute('data-id', g.id);
+          var icon = document.createElement('span');
+          icon.className = 'icon';
+          icon.textContent = g.icon || '🎮';
+          var h2 = document.createElement('h2');
+          h2.textContent = g.title;
+          var p = document.createElement('p');
+          p.textContent = g.desc || '';
+          var hs = document.createElement('div');
+          hs.className = 'hs';
+          hs.textContent = g.meta || ('▶ PLAY · ' + (g.license || ''));
+          a.appendChild(icon); a.appendChild(h2); a.appendChild(p); a.appendChild(hs);
+          catalogEl.insertBefore(a, document.getElementById('byoCard'));
+          bindCard(a);
+        });
+      })
+      .catch(function (e) {
+        setStatus('COULD NOT LOAD CATALOG: ' + (e && e.message ? e.message : e), true);
+      });
 
     // BYO-ROM (FileReader, fully client-side)
     document.getElementById('byoCard').addEventListener('click', function () { romFile.click(); });
