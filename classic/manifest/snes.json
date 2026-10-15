@@ -1,6 +1,27 @@
 {
   "platform": "snes",
   "platformName": "Super Nintendo / Super Famicom",
-  "hosting": "Empty by policy: no SNES ROM in this repo has a verifiable source + license, so none are shipped. See ATTRIBUTION.md. The page runs BYO-ROM only.",
-  "games": []
+  "hosting": "romUrl values are same-repo relative paths (relative to classic/snes/index.html). ROM sources and licenses are documented in ATTRIBUTION.md.",
+  "games": [
+    {
+      "id": "gothicvania-cemetery",
+      "title": "GOTHICVANIA CEMETERY",
+      "icon": "\ud83e\udea6",
+      "desc": "A Gothic-flavored SNES homebrew game from donth77, published as version 1.0.0. Explore the cemetery in this atmospheric 16-bit adventure.",
+      "license": "MIT",
+      "color": "pink",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 HOMEBREW",
+      "romUrl": "roms/gothicvania.sfc"
+    },
+    {
+      "id": "bs-demo-mpack",
+      "title": "BS DEMO MPACK",
+      "icon": "\ud83d\udce1",
+      "desc": "BS Demo Mpack by Krokodyl, an SNES homebrew demo build. Play the author-published binary in your browser.",
+      "license": "MIT",
+      "color": "cyan",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 HOMEBREW",
+      "romUrl": "roms/bs-demo.sfc"
+    }
+  ]
 }

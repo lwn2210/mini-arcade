@@ -23,6 +23,8 @@ games and NO BIOS — strictly bring-your-own, loaded client-side.
 | `gba/roms/gba-niccc.gba` | STNICCC 2000 GBA port | GValiente | **Zlib** (SPDX: Zlib, per GitHub repo license) | https://github.com/GValiente/gba-niccc — release asset `gba-niccc.zip` (tag 1.1.0); SHA-256 `b2c51dc64bf5703a8d1f493381401b65fae6654fa8138f10d511e440fc5857e8` of the zip's `gba-niccc.gba` matches the vendored file |
 | `genesis/roms/battle4tris.md` | Battle 4Tris | monteslu (Brian Taylor) | **MIT** (SPDX: MIT, per GitHub repo license) | https://github.com/monteslu/retro-homebrew-games — release asset `battle-4tris.bin` (tag build-27); SHA-256 `4c41fc7e03f393e3844818283082746624b23ddc121c3dd6c4b9f45eb4c6a8b0` matches the vendored `.md` file |
 | `genesis/roms/kleleatoms.md` | KłełeAtoms (Mega Drive port) | Nightwolf-47 | **MIT** (SPDX: MIT, per GitHub repo license) | https://github.com/Nightwolf-47/KleleAtoms-MD — release asset `kleleatoms-md-121.bin` (tag v1.2.1); SHA-256 `d0660df5af9d39696272b0c6774f25f296ee38e86eacf8b52645eab3ea8b003a` matches the vendored `.md` file |
+| `snes/roms/gothicvania.sfc` | Gothicvania Cemetery v1.0.0 | donth77 | **MIT** (SPDX: MIT, per GitHub repo license) | https://github.com/donth77/snes-homebrew — release asset `gothicvania.sfc` (tag v1.0.0); SHA-256 `11d32045c69839309490676fe2dd46e3385806f79c8dad279c2d1f4ffa6027df` matches the vendored file; SNES header at `0x7FC0` reads `GOTHICVANIA CEMETERY` |
+| `snes/roms/bs-demo.sfc` | BS Demo Mpack | Krokodyl | **MIT** (SPDX: MIT, per GitHub repo license) | https://github.com/Krokodyl/bsdemo-mpack — upstream binary `bs-demo-mpack.sfc` on `master`; SHA-256 `a5901a85f9039f67b4479b6ecb44539f8a6cdf25badb19cb316296e92ccefdcf` matches the vendored file; SNES header at `0x7FC0` reads `BS-DEMO-MPACK` |
 
 ## License evidence
 
@@ -64,16 +66,12 @@ newlib, AGBabi, gba-link-connection, gbt-player, etc.).
 
 ## SNES status — no games shipped
 
-Two SNES ROMs were found in the working tree from an earlier task
-(`bs-demo.sfc`, internal header `BS-DEMO-MPACK`, SHA-256
-`a5901a85f9039f67b4479b6ecb44539f8a6cdf25badb19cb316296e92ccefdcf`;
-`gothicvania.sfc`, internal header `GOTHICVANIA CEMETERY`, SHA-256
-`11d32045c69839309490676fe2dd46e3385806f79c8dad279c2d1f4ffa6027df`).
-No source repository, release asset, author, or license could be found for
-either file after searching DuckDuckGo, Brave, Bing, GitHub code/repo search,
-grep.app, searchcode, and Sourcegraph. **Unverifiable license = excluded by
-policy: both files were deleted**, and the SNES page ships as BYO-ROM-only
-with an empty manifest (`manifest/snes.json` → `games: []`).
+Two SNES ROMs were initially excluded while provenance was unresolved. A
+follow-up forensic verification located the upstream sources, confirmed MIT
+licenses, and compared the files byte-for-byte against upstream. Both are now
+included in the manifest and catalog; see the ROM table above. Headers at
+`0x7FC0` additionally identify the binaries as `BS-DEMO-MPACK` and
+`GOTHICVANIA CEMETERY`.
 
 ## Skipped / not vendored
 
