@@ -1,0 +1,17 @@
+{
+  "platform": "gb",
+  "platformName": "Game Boy / Game Boy Color",
+  "hosting": "romUrl values are same-repo relative paths (relative to classic/gb/index.html); remote URLs can be dropped in later with no code changes.",
+  "games": [
+    {
+      "id": "libbet",
+      "title": "LIBBET AND THE MAGIC FLOOR",
+      "icon": "\ud83e\udcdc",
+      "desc": "Puzzle-platformer by Damian Yerrick (pinobatch). Libbet rolls under a floor of carpet tiles and pops up to find her way through the dungeon — built with the same engine tech as his NES hits.",
+      "license": "Zlib",
+      "color": "cyan",
+      "meta": "\u25b6 PLAY \u00b7 ZLIB \u00b7 32KB ROM \u00b7 DMG",
+      "romUrl": "roms/libbet.gb"
+    }
+  ]
+}

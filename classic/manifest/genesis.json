@@ -22,6 +22,46 @@
       "color": "green",
       "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 256KB ROM",
       "romUrl": "roms/kleleatoms.md"
+    },
+    {
+      "id": "md-pong",
+      "title": "PONG",
+      "icon": "\ud83c\udfd3",
+      "desc": "Paddle classic from monteslu's retro-homebrew-games collection — the same MIT-licensed Genesis set as Battle 4Tris.",
+      "license": "MIT",
+      "color": "cyan",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 128KB ROM",
+      "romUrl": "roms/pong.md"
+    },
+    {
+      "id": "md-snake",
+      "title": "SNAKE",
+      "icon": "\ud83d\udc0d",
+      "desc": "Snake for the Mega Drive from monteslu's MIT-licensed homebrew set. Eat, grow, don't bite yourself.",
+      "license": "MIT",
+      "color": "yellow",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 128KB ROM",
+      "romUrl": "roms/snake.md"
+    },
+    {
+      "id": "md-space-shooter",
+      "title": "SPACE SHOOTER",
+      "icon": "\ud83d\ude80",
+      "desc": "Vertical shoot-'em-up from monteslu's MIT-licensed Genesis homebrew collection. Blast waves of invaders.",
+      "license": "MIT",
+      "color": "green",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 128KB ROM",
+      "romUrl": "roms/space_shooter.md"
+    },
+    {
+      "id": "md-tank-battle",
+      "title": "TANK BATTLE",
+      "icon": "\ud83d\udee1",
+      "desc": "Tank duel from monteslu's MIT-licensed retro-homebrew-games set — maneuver, shoot, survive.",
+      "license": "MIT",
+      "color": "pink",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 128KB ROM",
+      "romUrl": "roms/tank_battle.md"
     }
   ]
 }

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CLASSIC ZONE — Game Boy</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../retro.css">
+</head>
+<body>
+  <a class="back-link" href="../index.html">◄ RETRO VAULT</a>
+  <div class="logo">GAME <span>BOY</span></div>
+  <div class="tagline">DMG EMULATION VIA EMULATORJS (GAMBATTE CORE) · HOMEBREW CATALOG + BYO-ROM, NO BIOS NEEDED<br>YOUR FILES STAY ON YOUR DEVICE · CORE STREAMED FROM CDN (NEEDS INTERNET)</div>
+
+  <div class="empty-catalog" id="emptyCatalog">
+    <div class="big">🎮</div>
+    <h3>NO GAMES HOSTED HERE</h3>
+    <p>THE CATALOG COULD NOT LOAD — BUT YOU CAN STILL BRING YOUR OWN LEGALLY-OBTAINED .GB FILE BELOW.<br>
+    GAME BOY NEEDS NO BIOS — JUST THE GAME FILE. NOTHING IS EVER UPLOADED.</p>
+  </div>
+
+  <div class="grid" id="catalog"></div>
+
+  <div id="player">
+    <div class="player-head">
+      <div class="player-title">🎮 GAME BOY PLAYER <small style="color:#64748b;font-size:7px;">gambatte · EmulatorJS</small></div>
+    </div>
+    <div class="stage" id="stage">
+      <div id="game">PICK A GAME ABOVE, OR LOAD YOUR OWN — THEN PRESS START</div>
+    </div>
+    <div class="files-row">
+      <div class="file-slot">
+        <label>💾 YOUR CARTRIDGE</label>
+        <label class="pick" for="romInput">⬆ PICK ROM FILE</label>
+        <input type="file" id="romInput" accept=".gb,.gbc" hidden>
+        <div class="fname" id="romName">no file</div>
+      </div>
+    </div>
+    <div class="ctrl-bar">
+      <button class="btn" id="btnStart">▶ START</button>
+      <button class="btn fs" id="btnFull">⛶ FULLSCREEN</button>
+    </div>
+    <div class="status" id="status">PICK A GAME FROM THE CATALOG OR LOAD YOUR OWN — NOTHING IS UPLOADED</div>
+  </div>
+
+  <div class="note">
+    <b>HOW IT WORKS:</b> HOSTED HOMEBREW ROMs ARE FETCHED FROM THIS SITE'S OWN /roms/ PATHS; YOUR OWN FILES ARE READ WITH FILEREADER AND PASSED TO THE EMULATOR AS LOCAL BLOB URLs — NEVER UPLOADED.
+    <b>NO BIOS REQUIRED</b> — GAMBATTE RUNS .GB/.GBC DUMPS WITHOUT A BIOS FILE.
+    <b>CONTROLS:</b> KEYBOARD + HTML5 GAMEPAD AUTO-DETECTED; ON MOBILE EMULATORJS SHOWS AN ON-SCREEN TOUCH GAMEPAD.
+    <b>OFFLINE:</b> NES SECTION OF THE VAULT WORKS OFFLINE; THIS PAGE STREAMS ITS CORE FROM cdn.emulatorjs.org.
+  </div>
+
+  <div class="footer">
+    EMULATOR: <a href="https://emulatorjs.org/" target="_blank" rel="noopener">EmulatorJS</a> (GPL-3.0, CDN) · CORE: gambatte (GPL-2.0)<br>
+    ROM LICENSES: SEE <a href="../ATTRIBUTION.md">ATTRIBUTION.md</a> · PART OF THE MINI-ARCADE RETRO VAULT
+  </div>
+  <div class="crt"></div>
+
+  <script>
+    window.RETRO_CONFIG = {
+      core: 'gb',
+      exts: ['.gb', '.gbc'],
+      needsBios: false,
+      platform: 'Game Boy',
+      manifest: '../manifest/gb.json'
+    };
+  </script>
+  <script src="../retro.js"></script>
+</body>
+</html>
