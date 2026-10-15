@@ -22,6 +22,26 @@
       "color": "pink",
       "meta": "\u25b6 PLAY \u00b7 ZLIB \u00b7 DEMO",
       "romUrl": "roms/gba-niccc.gba"
+    },
+    {
+      "id": "google-dino-advance",
+      "title": "GOOGLE DINO ADVANCE",
+      "icon": "\ud83e\udda7",
+      "desc": "The Chrome offline dino runner, rebuilt for the GBA by Ethan Fritz (fritzem). Full arcade mode with jumping, crouching and day/night cycles.",
+      "license": "MIT",
+      "color": "cyan",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 106KB ROM",
+      "romUrl": "roms/google-dino-advance.gba"
+    },
+    {
+      "id": "piugba",
+      "title": "PIUGBA",
+      "icon": "\ud83d\udc83",
+      "desc": "Pump It Up arcade simulator for the GBA by Rodrigo Alfonso (afska) — step to music with pad charts, a mini rhythm-game in your pocket.",
+      "license": "MIT",
+      "color": "yellow",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 624KB ROM",
+      "romUrl": "roms/piugba.gba"
     }
   ]
 }

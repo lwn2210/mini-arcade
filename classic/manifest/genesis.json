@@ -62,6 +62,26 @@
       "color": "pink",
       "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 128KB ROM",
       "romUrl": "roms/tank_battle.md"
+    },
+    {
+      "id": "minesweeper-md",
+      "title": "MINESWEEPER MD",
+      "icon": "\ud83d\udca3",
+      "desc": "Minesweeper for the Sega Mega Drive by Nightwolf-47, built with SGDK. Classic flag-and-clear grid puzzling on a 16-bit grid.",
+      "license": "MIT",
+      "color": "green",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 128KB ROM",
+      "romUrl": "roms/minesweeper.md"
+    },
+    {
+      "id": "gemrush",
+      "title": "GEM RUSH",
+      "icon": "\ud83d\udc8e",
+      "desc": "A pseudo-3D bonus stage for the Mega Drive by haroldo-ok, built with SGDK: a runner crosses a freely-rotatable textured ground plane collecting gems before the clock runs out. All-original code and assets.",
+      "license": "MIT",
+      "color": "pink",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 256KB ROM",
+      "romUrl": "roms/gemrush.md"
     }
   ]
 }

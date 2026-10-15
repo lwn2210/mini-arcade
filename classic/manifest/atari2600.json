@@ -1,0 +1,37 @@
+{
+  "platform": "atari2600",
+  "platformName": "Atari 2600 / VCS",
+  "hosting": "romUrl values are same-repo relative paths (relative to classic/atari2600/index.html); remote URLs can be dropped in later with no code changes.",
+  "games": [
+    {
+      "id": "atari2600-pong",
+      "title": "PONG",
+      "icon": "\ud83c\udfd3",
+      "desc": "Pong for the Atari 2600 by Alessandro Miertschink (miertink), written from scratch in 6502 assembly against the bare TIA/RIOT hardware. Two-player paddle classic.",
+      "license": "MIT",
+      "color": "cyan",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 4KB ROM",
+      "romUrl": "roms/pong.bin"
+    },
+    {
+      "id": "atari2600-cyloid",
+      "title": "CYLOID",
+      "icon": "\ud83d\udee1",
+      "desc": "A tank shooter for the Atari 2600 by Keith Adler, hand-written in 6502 assembly. A tight 4KB cart of armored duel action.",
+      "license": "MIT",
+      "color": "green",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 4KB ROM",
+      "romUrl": "roms/cyloid.bin"
+    },
+    {
+      "id": "atari2600-pipes",
+      "title": "PIPES-2600",
+      "icon": "\ud83d\udde9",
+      "desc": "Atari 2600 homebrew by Alexandre Luiz Brisighello Filho (albf), inspired by Pipe Mania and built with batari Basic. Rotate pipes to keep the flow going.",
+      "license": "MIT",
+      "color": "yellow",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 8KB ROM",
+      "romUrl": "roms/pipes.bin"
+    }
+  ]
+}

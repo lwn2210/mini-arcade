@@ -1,9 +1,10 @@
 # CLASSIC ZONE — Retro Vault: Attribution & Licenses
 
 Multi-platform emulator section. **NES** ships vendored, freely-licensed
-homebrew ROMs (16 games). **SNES** ships 2, **GBA** 2, **Game Boy** 1, and
-**Genesis** 6 verified freely-licensed homebrew ROMs each. **PS1/PSP/PS2**
-ship NO games and NO BIOS — strictly bring-your-own, loaded client-side.
+homebrew ROMs (16 games). **Genesis** ships 8, **Game Boy** 5, **GBA** 4,
+**SNES** 2, and **Atari 2600** 3 verified freely-licensed homebrew ROMs each.
+**PS1/PSP/PS2** ship NO games and NO BIOS — strictly bring-your-own, loaded
+client-side.
 
 | ROM file | Title | Author | License | Source |
 |---|---|---|---|---|
@@ -24,14 +25,25 @@ ship NO games and NO BIOS — strictly bring-your-own, loaded client-side.
 | `nes/roms/pong.nes` | Pong v1.2 (NTSC) | zorchenhimer | **BSD-2-Clause** (SPDX: BSD-2-Clause, per GitHub repo license) | https://github.com/zorchenhimer/nes-pong — release asset `pong_ntsc.nes` (tag v1.2); SHA-256 `0dbabcc71da34722fe1ecacf46f2187a040bf1a547416da4407a04b3e5f7a87e`; iNES header `NES\x1a` + mapper 0 verified 2026-10-16 |
 | `nes/roms/opennes_snake.nes` | openNES-Snake v1.0.9 | Sebastian Dine | **Zlib** (SPDX: Zlib, per GitHub repo license) | https://github.com/sebastiandine/openNES-Snake — release asset `openNES-Snake-1.0.9.nes` (tag v1.0.9); SHA-256 `71792a9b4e4db52fb60df4633400301fac8f244f802b88d336b58e079c75acc7`; iNES header `NES\x1a` + mapper 0 verified 2026-10-16 |
 | `gb/roms/libbet.gb` | Libbet and the Magic Floor v0.08 | Damian Yerrick (pinobatch) | **Zlib** (SPDX: Zlib, per GitHub repo license) | https://github.com/pinobatch/libbet — release asset `libbet.gb` (tag v0.08); SHA-256 `3607412031c8287cf878299ce96e581e85b852dde703806343b95576fa3ff1a9`; Game Boy header verified 2026-10-16 |
+| `gb/roms/snake.gb` | Snake (Game Boy) v2.0 | Christian Reinbacher (reini1305) | **MIT** (repo `LICENSE`: "MIT License — Copyright (c) 2022 Christian Reinbacher") | https://github.com/reini1305/gb_snake — release asset `snake.gb` (tag 2.0); SHA-256 `94f66ec5063b33bea89ed80ed05334e1655bcc71114d2c9a33a953aa368bb049`; Game Boy Nintendo logo nibble at `0x104` (`CE ED 66 66 CC 0D …`) verified 2026-10-16 |
+| `gb/roms/gb2048.gb` | 2048 — Game Boy Edition | Wyatt Ferguson (wyattferguson) | **MIT** (repo `LICENSE`: "MIT License — Copyright (c) 2025 Wyatt Ferguson") | https://github.com/wyattferguson/2048-gb — committed binary `2048.gb` on `master`; SHA-256 `46f9ab6a5e9acb81c76e9c2c6526db1ed4e03b4fb6f36c23fb786e31f9659fc5`; Game Boy logo nibble at `0x104` verified 2026-10-16 |
+| `gb/roms/flappyboy.gb` | FlappyBoy | Felipe Alfonso (bitnenfer) | **MIT** (repo `LICENSE` is the MIT license text, "Copyright (C) 2014 Felipe Alfonso") | https://github.com/bitnenfer/FlappyBoy — committed binary `build/gameboy/flappyboy.gb` on `master`; SHA-256 `ecd2c65dccacfe0484f8395854dcf0b7ab4290dcd9c2da67735c51cd19c65a7e`; Game Boy logo nibble at `0x104` verified 2026-10-16 |
+| `gb/roms/gb240p.gb` | 240p Test Suite (Game Boy port) | Damian Yerrick (pinobatch), port of Artemio Urbina's 240p Test Suite | **GPL-2.0** (SPDX: GPL-2.0, same GitHub repo license as the NES `240pee` port) | https://github.com/pinobatch/240p-test-mini — release asset `gb240p.gb` (tag v0.23); SHA-256 `733eb6e7ec0719752ddd5fcda4e715c2f2e20f4ac4bc971c4bd1d49272f9bb04`; Game Boy logo nibble at `0x104` verified 2026-10-16 |
 | `gba/roms/flappybird-gba.gba` | Flappy Bird GBA | Tim Ullrich (tullrich) | **MIT** (SPDX: MIT, per GitHub repo license) | https://github.com/tullrich/flappybird-gba — raw file `bin/FlappyBird.gba` on default branch; SHA-256 `7c6c2db112c4b76c6b1e755c8242ec2e5c8c2250ffa07cb42bfc60a38e503e20` matches the vendored file byte-for-byte |
 | `gba/roms/gba-niccc.gba` | STNICCC 2000 GBA port | GValiente | **Zlib** (SPDX: Zlib, per GitHub repo license) | https://github.com/GValiente/gba-niccc — release asset `gba-niccc.zip` (tag 1.1.0); SHA-256 `b2c51dc64bf5703a8d1f493381401b65fae6654fa8138f10d511e440fc5857e8` of the zip's `gba-niccc.gba` matches the vendored file |
+| `gba/roms/google-dino-advance.gba` | Google Dino Advance 1.1 | Ethan Fritz (fritzem) | **MIT** (repo `LICENSE`: "MIT License — Copyright (c) 2021 Ethan Fritz"; the release zip also bundles Chromium/Chrome redistribution notices under `licenses/`) | https://github.com/fritzem/Google-Dino-GBA — release asset `Google-Dino-Advance.1.1.zip` (tag 1.1), file `Google-Dino-Advance.gba` inside; SHA-256 `d08239bea3044af0b0224cb5436221fec59e1ea3ba811ed0ec17212683a2cb81`; GBA header (`24 FF AE 51 69 9A A2 21` compressed-MDBIOS magic at `0x4`) verified 2026-10-16 |
+| `gba/roms/piugba.gba` | piuGBA v1.11.6 (arcade build) | Rodrigo Alfonso (afska) | **MIT** (repo `LICENSE`: "MIT License — Copyright (c) 2020-2026 Rodrigo Alfonso") | https://github.com/afska/piugba — release asset `piugba.arcade.prod.gba` (tag v1.11.6); SHA-256 `ac4f38f20d6076954139538255c5d06f7a6a0bd332a357a60dc5b58efe553a5b`; GBA header (`24 FF AE 51 …` at `0x4`) verified 2026-10-16. Note: engine only — user song packs are imported separately by the author's own importer tool; no third-party music data is embedded in this ROM |
 | `genesis/roms/battle4tris.md` | Battle 4Tris | monteslu (Brian Taylor) | **MIT** (SPDX: MIT, per GitHub repo license) | https://github.com/monteslu/retro-homebrew-games — release asset `battle-4tris.bin` (tag build-27); SHA-256 `4c41fc7e03f393e3844818283082746624b23ddc121c3dd6c4b9f45eb4c6a8b0` matches the vendored `.md` file |
 | `genesis/roms/kleleatoms.md` | KłełeAtoms (Mega Drive port) | Nightwolf-47 | **MIT** (SPDX: MIT, per GitHub repo license) | https://github.com/Nightwolf-47/KleleAtoms-MD — release asset `kleleatoms-md-121.bin` (tag v1.2.1); SHA-256 `d0660df5af9d39696272b0c6774f25f296ee38e86eacf8b52645eab3ea8b003a` matches the vendored `.md` file |
 | `genesis/roms/pong.md` | Pong (Mega Drive) | monteslu (Brian Taylor) | **MIT** (SPDX: MIT, per GitHub repo LICENSE) | https://github.com/monteslu/retro-homebrew-games — release asset `pong.bin` (tag build-27); SHA-256 `4f077c764972b23c6f2ea6056ebc3b8bf1da972d95f400259de676f787f1061d`; MD header `0xE1000000` ROM layout verified 2026-10-16 |
 | `genesis/roms/snake.md` | Snake (Mega Drive) | monteslu (Brian Taylor) | **MIT** (SPDX: MIT, per GitHub repo LICENSE) | https://github.com/monteslu/retro-homebrew-games — release asset `snake.bin` (tag build-27); SHA-256 `3169306a1396a0cf6c1f4d08f4ed55caa0e5e70627a6e0be689df027b31a5738`; MD header verified 2026-10-16 |
 | `genesis/roms/space_shooter.md` | Space Shooter (Mega Drive) | monteslu (Brian Taylor) | **MIT** (SPDX: MIT, per GitHub repo LICENSE) | https://github.com/monteslu/retro-homebrew-games — release asset `space-shooter.bin` (tag build-27); SHA-256 `de2fafcbcb669260ed383e1e8ee48493d5df4ee03b57b01b44cb790fd7339515`; MD header verified 2026-10-16 |
 | `genesis/roms/tank_battle.md` | Tank Battle (Mega Drive) | monteslu (Brian Taylor) | **MIT** (SPDX: MIT, per GitHub repo LICENSE) | https://github.com/monteslu/retro-homebrew-games — release asset `tank-battle.bin` (tag build-27); SHA-256 `0cdb580a87c88e6f81248253f8a2a549d41ded5632344c656b8b5ff8e06caff6`; MD header verified 2026-10-16 |
+| `genesis/roms/minesweeper.md` | Minesweeper MD v1.1.1 | Nightwolf-47 | **MIT** (repo `LICENSE`: "MIT License") | https://github.com/Nightwolf-47/Minesweeper-MD — release asset `minesweeper-md-111.bin` (tag v1.1.1); SHA-256 `8bef8734a3cbeaa9aa8988082e0afedfe3d67d530dd3b362861ead8ed3c52cf6`; MD header `SEGA MEGA` at `0x100` and `0xE1000000` layout word at `0x0` verified 2026-10-16 |
+| `genesis/roms/gemrush.md` | Gem Rush v0.0.1 | haroldo-ok | **MIT** (repo `LICENSE`: "MIT License"; README states all code and assets are original) | https://github.com/haroldo-ok/gemrush-genesis — release asset `gemrush.0.0.1.bin.zip` (tag v0.0.1), file `gemrush.0.0.1.bin` inside; SHA-256 `f947e05e64792b6098a31dc7b7ecf60c213183b843b504e21e256c4653ac5fb5`; MD header `SEGA MEGA` at `0x100` verified 2026-10-16 |
+| `atari2600/roms/pong.bin` | Pong (Atari 2600) v1.0.0 | Alessandro Miertschink (miertink) | **MIT** (repo `LICENSE`: "MIT License — Copyright (c) 2026 Alessandro Miertschink") | https://github.com/miertink/atari-pong — release asset `pong-atari2600.bin` (tag v1.0.0); SHA-256 `1d0a3c775cdebcc161b7db10e6f6c0701126d11bd8ebb91fe9a7fdd17e571ea2`; 4KB raw 6502 cart image (no header; code entry `SEI/CLD` pattern at `0x0`) verified 2026-10-16 |
+| `atari2600/roms/cyloid.bin` | Cyloid | Keith Adler (keithadler) | **MIT** (repo `LICENSE`: "MIT License — Copyright (c) 2026 Keith Adler") | https://github.com/keithadler/cyloid — committed binary `cyloid.rom` on `master`; SHA-256 `1f000378288dedd61cbb4970f53d66cbd82406bad5f48127db683d2c3954e12a`; 4KB raw 6502 cart image verified 2026-10-16 |
+| `atari2600/roms/pipes.bin` | Pipes-2600 | Alexandre Luiz Brisighello Filho (albf) | **MIT** (repo `LICENSE`: "The MIT License (MIT) — Copyright (c) 2014 Alexandre Luiz Brisighello Filho (albf)") | https://github.com/albf/pipes-2600 — committed binary `pipe2600.bin` on `master`; SHA-256 `5313fe8d2733d7d8e0ce5b53c4708552b8fb4daffe25fb5fb841cee350e7ff60`; 8KB raw 6502 cart image verified 2026-10-16 |
 | `snes/roms/gothicvania.sfc` | Gothicvania Cemetery v1.0.0 | donth77 | **MIT** (SPDX: MIT, per GitHub repo license) | https://github.com/donth77/snes-homebrew — release asset `gothicvania.sfc` (tag v1.0.0); SHA-256 `11d32045c69839309490676fe2dd46e3385806f79c8dad279c2d1f4ffa6027df` matches the vendored file; SNES header at `0x7FC0` reads `GOTHICVANIA CEMETERY` |
 | `snes/roms/bs-demo.sfc` | BS Demo Mpack | Krokodyl | **MIT** (SPDX: MIT, per GitHub repo license) | https://github.com/Krokodyl/bsdemo-mpack — upstream binary `bs-demo-mpack.sfc` on `master`; SHA-256 `a5901a85f9039f67b4479b6ecb44539f8a6cdf25badb19cb316296e92ccefdcf` matches the vendored file; SNES header at `0x7FC0` reads `BS-DEMO-MPACK` |
 
@@ -107,19 +119,21 @@ included in the manifest and catalog; see the ROM table above. Headers at
   Source: https://github.com/bfirsh/jsnes / https://www.npmjs.com/package/jsnes
   Copyright (c) Ben Firshel and contributors. MIT license text:
   https://github.com/bfirsh/jsnes/blob/master/LICENSE
-- **EmulatorJS** (PS1/PSP/SNES/GB/GBA/Genesis pages) — NOT vendored; loaded at runtime from
+- **EmulatorJS** (PS1/PSP/SNES/GB/GBA/Genesis/Atari 2600 pages) — NOT vendored; loaded at runtime from
   https://cdn.emulatorjs.org (stable channel). Frontend license: GPL-3.0
   (frontend only, not a derivative of this site's code). Cores used:
   pcsx_rearmed (PS1), ppsspp (PSP), snes9x (SNES), gambatte (Game Boy, GPL-2.0),
-  mgba (GBA, MPL-2.0), and
-  genesis_plus_gx (Genesis, MIT). Core IDs confirmed against the official
-  EmulatorJS docs on 2026-10-15: `EJS_core = 'snes'` (→ snes9x),
-  `'gba'` (→ mgba), `'segaMD'` (→ genesis_plus_gx) —
+  mgba (GBA, MPL-2.0),
+  genesis_plus_gx (Genesis, MIT), and
+  stella2014 (Atari 2600, GPL-2.0). Core IDs confirmed against the official
+  EmulatorJS docs: `EJS_core = 'snes'` (→ snes9x),
+  `'gba'` (→ mgba), `'segaMD'` (→ genesis_plus_gx), `'gb'` (→ gambatte),
+  and `'atari2600'` (→ stella2014) —
   https://emulatorjs.org/docs/systems/snes, .../nintendo-game-boy-advance,
-  .../sega-mega-drive, and https://emulatorjs.org/docs4devs/cores.
+  .../sega-mega-drive, .../atari-2600, and https://emulatorjs.org/docs4devs/cores.
   The CDN serves build reports for exactly those core names
-  (`cdn.emulatorjs.org/stable/data/cores/reports/{snes9x,mgba,genesis_plus_gx}.json`
-  → HTTP 200). Online-only for those pages.
+  (`cdn.emulatorjs.org/stable/data/cores/reports/{snes9x,mgba,genesis_plus_gx,stella2014,gambatte}.json`
+  → HTTP 200; verified 2026-10-15/16). Online-only for those pages.
 - **PS2**: no emulator, core, ROM, or BIOS is bundled or linked — the PS2
   page is documentation-only until a practical in-browser PS2 core exists.
 

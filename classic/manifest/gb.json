@@ -12,6 +12,46 @@
       "color": "cyan",
       "meta": "\u25b6 PLAY \u00b7 ZLIB \u00b7 32KB ROM \u00b7 DMG",
       "romUrl": "roms/libbet.gb"
+    },
+    {
+      "id": "gb-snake",
+      "title": "SNAKE",
+      "icon": "\ud83d\udc0d",
+      "desc": "Snake for the Game Boy and Game Boy Color by Christian Reinbacher (reini1305), built with GBDK. Eat, grow, and try not to bite yourself across timed rounds.",
+      "license": "MIT",
+      "color": "green",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 32KB ROM",
+      "romUrl": "roms/snake.gb"
+    },
+    {
+      "id": "gb2048",
+      "title": "2048",
+      "icon": "\ud83c\udccf",
+      "desc": "A working port of the 2048 tile-sliding puzzle for the classic Game Boy by Wyatt Ferguson. Slide with the D-pad; SELECT resets the board.",
+      "license": "MIT",
+      "color": "yellow",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 32KB ROM",
+      "romUrl": "roms/gb2048.gb"
+    },
+    {
+      "id": "flappyboy",
+      "title": "FLAPPYBOY",
+      "icon": "\ud83d\udc26",
+      "desc": "Flappy Bird for the Game Boy by Felipe Alfonso (bitnenfer), written in C with GBDK. Tap through the pipes on real DMG hardware graphics.",
+      "license": "MIT",
+      "color": "pink",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 32KB ROM",
+      "romUrl": "roms/flappyboy.gb"
+    },
+    {
+      "id": "gb240p",
+      "title": "240P TEST SUITE (GB)",
+      "icon": "\ud83d\udcfa",
+      "desc": "Artemio's 240p Test Suite, Game Boy port by pinobatch (same project as the NES 240pee). Pro-grade CRT/upscaler test patterns in your pocket.",
+      "license": "GPL-2.0",
+      "color": "cyan",
+      "meta": "\u25b6 PLAY \u00b7 GPL-2.0 \u00b7 32KB ROM",
+      "romUrl": "roms/gb240p.gb"
     }
   ]
 }
