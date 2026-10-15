@@ -1,8 +1,8 @@
 # CLASSIC ZONE — Retro Vault: Attribution & Licenses
 
 Multi-platform emulator section. **NES** ships vendored, freely-licensed
-homebrew ROMs. **GBA** and **Genesis** ship 2 freely-licensed homebrew ROMs
-each. **SNES** ships NO games (see SNES status below). **PS1/PSP/PS2** ship NO
+homebrew ROMs. **SNES**, **GBA**, and **Genesis** ship 2 verified
+freely-licensed homebrew ROMs each. **PS1/PSP/PS2** ship NO
 games and NO BIOS — strictly bring-your-own, loaded client-side.
 
 | ROM file | Title | Author | License | Source |
@@ -64,7 +64,7 @@ files — all four match byte-for-byte (hashes in the table above).
 15 third-party libraries linked into the GBA ROMs (Butano, libtonc, maxmod,
 newlib, AGBabi, gba-link-connection, gbt-player, etc.).
 
-## SNES status — no games shipped
+## SNES — 2 games shipped after forensic verification
 
 Two SNES ROMs were initially excluded while provenance was unresolved. A
 follow-up forensic verification located the upstream sources, confirmed MIT
