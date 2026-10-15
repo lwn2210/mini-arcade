@@ -1,0 +1,27 @@
+{
+  "platform": "genesis",
+  "platformName": "Sega Genesis / Mega Drive",
+  "hosting": "romUrl values are same-repo relative paths (relative to classic/genesis/index.html); remote URLs can be dropped in later with no code changes.",
+  "games": [
+    {
+      "id": "battle4tris",
+      "title": "BATTLE 4TRIS",
+      "icon": "\ud83c\udfaf",
+      "desc": "Block-stacking puzzle battle from monteslu's retro-homebrew-games collection — a Tetris-style classic rebuilt for Sega Genesis. One of 6 free games in the set.",
+      "license": "MIT",
+      "color": "yellow",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 128KB ROM",
+      "romUrl": "roms/battle4tris.md"
+    },
+    {
+      "id": "kleleatoms",
+      "title": "KLELEATOMS",
+      "icon": "\u26a1",
+      "desc": "Megadrive port of K\u0142e\u0142eAtoms built with SGDK by Nightwolf-47. Chain-matching atom puzzle action in a clean 16-bit presentation.",
+      "license": "MIT",
+      "color": "green",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 256KB ROM",
+      "romUrl": "roms/kleleatoms.md"
+    }
+  ]
+}

@@ -104,6 +104,53 @@
   }
   btnStart.addEventListener('click', boot);
 
+  // ---- data-driven catalog (manifest JSON) for pages with vendored games ----
+  var catalogEl = document.getElementById('catalog');
+  var emptyEl = document.getElementById('emptyCatalog');
+  function bootUrl(url, name) {
+    if (booted) { setStatus('A GAME IS ALREADY RUNNING — RELOAD THE PAGE TO SWITCH CARTS', true); return; }
+    if (romBlobUrl) URL.revokeObjectURL(romBlobUrl);
+    romBlobUrl = url;
+    romNameEl.textContent = '✔ ' + name;
+    setStatus('ROM READY: ' + name + ' · BOOTING…');
+    boot();
+  }
+  if (catalogEl && CFG.manifest) {
+    fetch(CFG.manifest)
+      .then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function (mf) {
+        var games = mf.games || [];
+        if (!games.length) return; // keep empty-state visible
+        if (emptyEl) emptyEl.style.display = 'none';
+        games.forEach(function (g) {
+          var a = document.createElement('a');
+          a.className = 'card ' + (g.color || 'cyan');
+          var icon = document.createElement('span');
+          icon.className = 'icon';
+          icon.textContent = g.icon || '🎮';
+          var h2 = document.createElement('h2');
+          h2.textContent = g.title;
+          var p = document.createElement('p');
+          p.textContent = g.desc || '';
+          var hs = document.createElement('div');
+          hs.className = 'hs';
+          hs.textContent = g.meta || ('▶ PLAY · ' + (g.license || ''));
+          a.appendChild(icon); a.appendChild(h2); a.appendChild(p); a.appendChild(hs);
+          a.addEventListener('click', function (ev) {
+            ev.preventDefault();
+            bootUrl(g.romUrl, g.title);
+          });
+          catalogEl.appendChild(a);
+        });
+      })
+      .catch(function (e) {
+        setStatus('COULD NOT LOAD CATALOG: ' + (e && e.message ? e.message : e), true);
+      });
+  }
+
   // Fullscreen API on our stage (canvas + EmulatorJS UI live inside #game)
   function isFullscreen() {
     return !!(document.fullscreenElement || document.webkitFullscreenElement) || stage.classList.contains('fs-fallback');

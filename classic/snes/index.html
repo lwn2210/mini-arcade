@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CLASSIC ZONE — Super Nintendo (SNES)</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../retro.css">
+</head>
+<body>
+  <a class="back-link" href="../index.html">◄ RETRO VAULT</a>
+  <div class="logo">SUPER NINTENDO <span>SNES</span></div>
+  <div class="tagline">SNES EMULATION VIA EMULATORJS (SNES9X CORE) · BYO-ROM ONLY, NO BIOS NEEDED<br>YOUR FILES STAY ON YOUR DEVICE · CORE STREAMED FROM CDN (NEEDS INTERNET)</div>
+
+  <div class="empty-catalog" id="emptyCatalog">
+    <div class="big">🎮</div>
+    <h3>NO GAMES HOSTED HERE</h3>
+    <p>THIS VAULT BUNDLES NO SNES ROMs — NOTHING HERE HAS A VERIFIABLE LICENSE YET, SO BY POLICY NOTHING IS SHIPPED.<br>
+    LOAD YOUR OWN LEGALLY-DUMPED CART BELOW (.SFC/.SMC). SNES NEEDS NO BIOS — JUST THE GAME FILE.<br>
+    FOR LEGAL FREE SNES SOFTWARE, SEE THE HOMEbrew SCENE ARCHIVES (E.G. SNES LABS / ASSEMBERIA).</p>
+  </div>
+
+  <div id="player">
+    <div class="player-head">
+      <div class="player-title">🎮 SNES PLAYER <small style="color:#64748b;font-size:7px;">snes9x · EmulatorJS</small></div>
+    </div>
+    <div class="stage" id="stage">
+      <div id="game">LOAD A GAME, THEN PRESS START</div>
+    </div>
+    <div class="files-row">
+      <div class="file-slot">
+        <label>💾 CART IMAGE</label>
+        <label class="pick" for="romInput">⬆ PICK ROM FILE</label>
+        <input type="file" id="romInput" accept=".sfc,.smc" hidden>
+        <div class="fname" id="romName">no file</div>
+      </div>
+    </div>
+    <div class="ctrl-bar">
+      <button class="btn" id="btnStart">▶ START</button>
+      <button class="btn fs" id="btnFull">⛶ FULLSCREEN</button>
+    </div>
+    <div class="status" id="status">BYO-ROM MODE — NOTHING IS UPLOADED, FILES ARE READ LOCALLY IN YOUR BROWSER</div>
+  </div>
+
+  <div class="note">
+    <b>HOW IT WORKS:</b> YOUR CART IS READ WITH FILEREADER AND PASSED TO THE EMULATOR AS A LOCAL BLOB URL — NEVER UPLOADED.
+    <b>NO BIOS REQUIRED</b> — SNES9X RUNS .SFC/.SMC DUMPS WITHOUT ANY BIOS FILE (BS-X / Sufami BIOS ONLY NEEDED FOR OBSCURE TITLES).
+    <b>CONTROLS:</b> KEYBOARD + HTML5 GAMEPAD AUTO-DETECTED; ON MOBILE EMULATORJS SHOWS AN ON-SCREEN TOUCH GAMEPAD (D-PAD + ABXY).
+    <b>OFFLINE:</b> NES SECTION OF THE VAULT WORKS OFFLINE; THIS PAGE STREAMS ITS CORE FROM cdn.emulatorjs.org.
+  </div>
+
+  <div class="footer">
+    EMULATOR: <a href="https://emulatorjs.org/" target="_blank" rel="noopener">EmulatorJS</a> (GPL-3.0, CDN) · CORE: snes9x (non-commercial, see upstream)<br>
+    ROM LICENSES: SEE <a href="../ATTRIBUTION.md">ATTRIBUTION.md</a> · PART OF THE MINI-ARCADE RETRO VAULT
+  </div>
+  <div class="crt"></div>
+
+  <script>
+    window.RETRO_CONFIG = {
+      core: 'snes',
+      exts: ['.sfc', '.smc'],
+      needsBios: false,
+      platform: 'SNES',
+      manifest: '../manifest/snes.json'
+    };
+  </script>
+  <script src="../retro.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "platform": "gba",
+  "platformName": "Game Boy Advance",
+  "hosting": "romUrl values are same-repo relative paths (relative to classic/gba/index.html); remote URLs can be dropped in later with no code changes.",
+  "games": [
+    {
+      "id": "flappybird-gba",
+      "title": "FLAPPY BIRD GBA",
+      "icon": "\ud83d\udc26",
+      "desc": "A full Flappy Bird clone written for the Game Boy Advance by tullrich as a GBA dev exercise. Tap-friendly, runs great on mGBA in the browser.",
+      "license": "MIT",
+      "color": "cyan",
+      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 53KB ROM",
+      "romUrl": "roms/flappybird-gba.gba"
+    },
+    {
+      "id": "gba-niccc",
+      "title": "STNICCC 2000 GBA PORT",
+      "icon": "\u2728",
+      "desc": "Game Boy Advance port of the classic Atari ST demo STNICCC 2000 by Oxygene, ported by GValiente. A 60fps palette-cycling demo party piece.",
+      "license": "Zlib",
+      "color": "pink",
+      "meta": "\u25b6 PLAY \u00b7 ZLIB \u00b7 DEMO",
+      "romUrl": "roms/gba-niccc.gba"
+    }
+  ]
+}

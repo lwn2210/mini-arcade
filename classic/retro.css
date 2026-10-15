@@ -47,6 +47,31 @@ body::before {
   font-size: 8px; color: #94a3b8; margin: 12px 0 24px;
   text-align: center; line-height: 1.8; z-index: 1;
 }
+/* game catalog cards (manifest-driven) */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px; width: 100%; max-width: 860px; z-index: 1;
+}
+a.card {
+  display: block; text-decoration: none; color: inherit;
+  background: #0a0e18; border: 2px solid rgba(0,240,255,0.35);
+  border-radius: 12px; padding: 18px; cursor: pointer;
+  transition: transform .15s, border-color .15s, box-shadow .15s;
+}
+a.card:hover { transform: translateY(-4px); }
+a.card .icon { font-size: 28px; }
+a.card h2 { font-size: 12px; margin: 12px 0 10px; letter-spacing: 1px; }
+a.card p { font-size: 8px; color: #94a3b8; line-height: 1.9; }
+a.card .hs { font-size: 7px; margin-top: 12px; color: #ffe600; }
+a.card.cyan:hover { border-color: #00f0ff; box-shadow: 0 0 22px rgba(0,240,255,0.35); }
+a.card.cyan h2 { color: #00f0ff; }
+a.card.pink:hover { border-color: #ff00aa; box-shadow: 0 0 22px rgba(255,0,170,0.35); }
+a.card.pink h2 { color: #ff00aa; }
+a.card.yellow:hover { border-color: #ffe600; box-shadow: 0 0 22px rgba(255,230,0,0.35); }
+a.card.yellow h2 { color: #ffe600; }
+a.card.green:hover { border-color: #00ff88; box-shadow: 0 0 22px rgba(0,255,136,0.35); }
+a.card.green h2 { color: #00ff88; }
 /* empty-state catalog */
 .empty-catalog {
   width: 100%; max-width: 860px; z-index: 1;
