@@ -22,6 +22,26 @@
       "color": "cyan",
       "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 HOMEBREW",
       "romUrl": "roms/bs-demo.sfc"
+    },
+    {
+      "id": "pocket-bugs",
+      "title": "POCKET BUGS",
+      "icon": "🐞",
+      "desc": "Flagship showcase game from SNES Studio by Eoin Jordan — a garden-bug battler where kids catch bugs in matchboxes and battle in backyard tournaments. Built from CC0/CC-BY OpenGameArt assets.",
+      "license": "MIT",
+      "color": "green",
+      "meta": "▶ PLAY · MIT + CC ASSETS · SNES STUDIO",
+      "romUrl": "roms/pocket-bugs.sfc"
+    },
+    {
+      "id": "poachermon",
+      "title": "POACHERMON",
+      "icon": "🔍",
+      "desc": "An original monster-catching sample game from SNES Studio by Eoin Jordan — explore, encounter and collect critters. Original art from CC-licensed OpenGameArt sources (no Nintendo assets).",
+      "license": "MIT",
+      "color": "yellow",
+      "meta": "▶ PLAY · MIT + CC ASSETS · SNES STUDIO",
+      "romUrl": "roms/poachermon.sfc"
     }
   ]
 }

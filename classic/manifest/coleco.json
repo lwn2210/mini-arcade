@@ -1,0 +1,27 @@
+{
+  "platform": "coleco",
+  "platformName": "ColecoVision",
+  "hosting": "romUrl values are same-repo relative paths (relative to classic/coleco/index.html). ROM sources and licenses are documented in ATTRIBUTION.md. NOTE: the gearcoleco core requires a ColecoVision BIOS, which the user must provide — none is ever bundled here.",
+  "games": [
+    {
+      "id": "coleco-240p-test-suite",
+      "title": "240P TEST SUITE CV",
+      "icon": "📐",
+      "desc": "Oscar Toledo G. (nanochess) port of Artemio Urbina's 240p Test Suite for ColecoVision — the classic CRT/lag calibration toolkit (PLUGE, color bars, grid, sharpness, monoscope and more), written in assembly.",
+      "license": "GPL-2.0",
+      "color": "cyan",
+      "meta": "▶ PLAY · GPL-2.0 · 32KB ROM",
+      "romUrl": "roms/240p-test-suite.rom"
+    },
+    {
+      "id": "coleco-retropipe",
+      "title": "RETROPIPE",
+      "icon": "🚰",
+      "desc": "A Pipe Dream clone for TMS9918A-powered computers by Troy Schrapel (visrealm), built with CVBasic. Lay pipe fast, keep the flooz flowing — ColecoVision release v0.2.0.",
+      "license": "MIT",
+      "color": "yellow",
+      "meta": "▶ PLAY · MIT · 16KB ROM",
+      "romUrl": "roms/retropipe.rom"
+    }
+  ]
+}

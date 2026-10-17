@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CLASSIC ZONE — ColecoVision</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../retro.css">
+</head>
+<body>
+  <a class="back-link" href="../index.html">◄ RETRO VAULT</a>
+  <div class="logo">COLECO<span>VISION</span></div>
+  <div class="tagline">1982 Z80 CONSOLE EMULATION VIA EMULATORJS (GEARCOLECO CORE) · HOMEBREW CATALOG + BYO-ROM<br>BIOS PROVIDED BY YOU, NEVER BUNDLED · YOUR FILES STAY ON YOUR DEVICE · CORE STREAMED FROM CDN (NEEDS INTERNET)</div>
+
+  <div class="empty-catalog" id="emptyCatalog">
+    <div class="big">🎮</div>
+    <h3>NO GAMES HOSTED HERE</h3>
+    <p>THE CATALOG COULD NOT LOAD — BUT YOU CAN STILL BRING YOUR OWN LEGALLY-OBTAINED .ROM/.COL FILE BELOW.</p>
+  </div>
+
+  <div class="grid" id="catalog"></div>
+
+  <div id="player">
+    <div class="player-head">
+      <div class="player-title">🎮 COLECOVISION PLAYER <small style="color:#64748b;font-size:7px;">gearcoleco · EmulatorJS</small></div>
+    </div>
+    <div class="stage" id="stage">
+      <div id="game">PICK A GAME ABOVE (OR LOAD YOUR OWN), PICK THE BIOS ONCE, THEN PRESS START</div>
+    </div>
+    <div class="files-row">
+      <div class="file-slot">
+        <label>💾 GAME CARTRIDGE</label>
+        <label class="pick" for="romInput">⬆ PICK ROM FILE</label>
+        <input type="file" id="romInput" accept=".rom,.col,.bin" hidden>
+        <div class="fname" id="romName">no file</div>
+      </div>
+      <div class="file-slot">
+        <label>🔒 BIOS (colecovision.rom)</label>
+        <label class="pick" for="biosInput">⬆ PICK BIOS FILE</label>
+        <input type="file" id="biosInput" accept=".rom,.bin" hidden>
+        <div class="fname" id="biosName">no file</div>
+      </div>
+    </div>
+    <div class="ctrl-bar">
+      <button class="btn" id="btnStart">▶ START</button>
+      <button class="btn fs" id="btnFull">⛶ FULLSCREEN</button>
+    </div>
+    <div class="status" id="status">HOMEBREW + BYO-ROM · THE GEARCOLECO CORE REQUIRES A COLECOVISION BIOS DUMP — LOAD YOURS ONCE, IT IS NEVER UPLOADED OR BUNDLED</div>
+  </div>
+
+  <div class="note">
+    <b>HOW IT WORKS:</b> HOSTED HOMEBREW ROMs ARE FETCHED FROM THIS SITE'S OWN /roms/ PATHS; YOUR OWN FILES ARE READ WITH FILEREADER AND PASSED TO THE EMULATOR AS LOCAL BLOB URLs — NEVER UPLOADED.
+    <b>BIOS:</b> GEARCOLECO NEEDS THE COLECOVISION BIOS (colecovision.rom, MD5 2c66f5911e5b42b8ebe113403548eee7) — YOU MUST PROVIDE YOUR OWN DUMP; WE WILL NEVER BUNDLE ONE.
+    <b>CONTROLS:</b> KEYBOARD + HTML5 GAMEPAD AUTO-DETECTED; ON MOBILE EMULATORJS SHOWS AN ON-SCREEN TOUCH GAMEPAD (D-PAD + 2 BUTTONS + KEYPAD).
+    <b>OFFLINE:</b> NES SECTION OF THE VAULT WORKS OFFLINE; THIS PAGE STREAMS ITS CORE FROM cdn.emulatorjs.org.
+  </div>
+
+  <div class="footer">
+    EMULATOR: <a href="https://emulatorjs.org/" target="_blank" rel="noopener">EmulatorJS</a> (GPL-3.0, CDN) · CORE: gearcoleco (GPL-3.0)<br>
+    ROM LICENSES: SEE <a href="../ATTRIBUTION.md">ATTRIBUTION.md</a> · PART OF THE MINI-ARCADE RETRO VAULT
+  </div>
+  <div class="crt"></div>
+
+  <script>
+    window.RETRO_CONFIG = {
+      core: 'coleco',
+      exts: ['.rom', '.col', '.bin'],
+      needsBios: true,
+      platform: 'ColecoVision',
+      manifest: '../manifest/coleco.json'
+    };
+  </script>
+  <script src="../retro.js"></script>
+</body>
+</html>

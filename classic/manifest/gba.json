@@ -42,6 +42,46 @@
       "color": "yellow",
       "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 624KB ROM",
       "romUrl": "roms/piugba.gba"
+    },
+    {
+      "id": "gematrix",
+      "title": "GEMATRIX",
+      "icon": "💠",
+      "desc": "Gem-matching puzzle game for the GBA by Issung, a GBAJam 2024 entry built with the Butano engine. Match gems, chain combos, beat your score.",
+      "license": "GPL-3.0",
+      "color": "pink",
+      "meta": "▶ PLAY · GPL-3.0 · GBAJAM 2024",
+      "romUrl": "roms/gematrix.gba"
+    },
+    {
+      "id": "cascade7",
+      "title": "CASCADE7",
+      "icon": "🔮",
+      "desc": "A Drop7-inspired open-source puzzle game for the GBA by Mick Schroeder. Discs fall into columns — clear them when their count matches the row length.",
+      "license": "MIT",
+      "color": "yellow",
+      "meta": "▶ PLAY · MIT · 220KB ROM",
+      "romUrl": "roms/cascade7.gba"
+    },
+    {
+      "id": "flappybird-advance",
+      "title": "FLAPPY BIRD ADVANCE",
+      "icon": "🐤",
+      "desc": "Another port of Flappy Bird to the GBA by johedan20012, built with the Butano engine. Ships its full license bundle (Butano, devkitARM, asset licenses) with the ROM.",
+      "license": "MIT",
+      "color": "cyan",
+      "meta": "▶ PLAY · MIT · BUTANO ENGINE",
+      "romUrl": "roms/flappybird-advance.gba"
+    },
+    {
+      "id": "dustline",
+      "title": "DUSTLINE",
+      "icon": "🛣",
+      "desc": "Original GBA driving-and-combat RPG prototype by abhuva, built with Butano. Cruise a wasteland, fight scavengers — an ambitious open 2MB cart.",
+      "license": "CC-BY-SA-4.0",
+      "color": "green",
+      "meta": "▶ PLAY · CC-BY-SA-4.0 · 2MB ROM",
+      "romUrl": "roms/dustline.gba"
     }
   ]
 }

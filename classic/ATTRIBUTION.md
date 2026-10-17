@@ -1,10 +1,12 @@
 # CLASSIC ZONE — Retro Vault: Attribution & Licenses
 
 Multi-platform emulator section. **NES** ships vendored, freely-licensed
-homebrew ROMs (16 games). **Genesis** ships 8, **Game Boy** 5, **GBA** 4,
-**SNES** 2, and **Atari 2600** 3 verified freely-licensed homebrew ROMs each.
+homebrew ROMs (16 games). **Genesis** ships 8, **Game Boy** 5, **GBA** 8,
+**SNES** 4, **Atari 2600** 3, **ColecoVision** 2, and **Sega Master System** 1
+verified freely-licensed homebrew ROMs each.
 **PS1/PSP/PS2** ship NO games and NO BIOS — strictly bring-your-own, loaded
-client-side.
+client-side. The ColecoVision page hosts homebrew ROMs but requires a
+user-provided ColecoVision BIOS (never bundled).
 
 | ROM file | Title | Author | License | Source |
 |---|---|---|---|---|
@@ -46,6 +48,15 @@ client-side.
 | `atari2600/roms/pipes.bin` | Pipes-2600 | Alexandre Luiz Brisighello Filho (albf) | **MIT** (repo `LICENSE`: "The MIT License (MIT) — Copyright (c) 2014 Alexandre Luiz Brisighello Filho (albf)") | https://github.com/albf/pipes-2600 — committed binary `pipe2600.bin` on `master`; SHA-256 `5313fe8d2733d7d8e0ce5b53c4708552b8fb4daffe25fb5fb841cee350e7ff60`; 8KB raw 6502 cart image verified 2026-10-16 |
 | `snes/roms/gothicvania.sfc` | Gothicvania Cemetery v1.0.0 | donth77 | **MIT** (SPDX: MIT, per GitHub repo license) | https://github.com/donth77/snes-homebrew — release asset `gothicvania.sfc` (tag v1.0.0); SHA-256 `11d32045c69839309490676fe2dd46e3385806f79c8dad279c2d1f4ffa6027df` matches the vendored file; SNES header at `0x7FC0` reads `GOTHICVANIA CEMETERY` |
 | `snes/roms/bs-demo.sfc` | BS Demo Mpack | Krokodyl | **MIT** (SPDX: MIT, per GitHub repo license) | https://github.com/Krokodyl/bsdemo-mpack — upstream binary `bs-demo-mpack.sfc` on `master`; SHA-256 `a5901a85f9039f67b4479b6ecb44539f8a6cdf25badb19cb316296e92ccefdcf` matches the vendored file; SNES header at `0x7FC0` reads `BS-DEMO-MPACK` |
+| `snes/roms/pocket-bugs.sfc` | Pocket Bugs | Eoin Jordan (snes-studio) | **MIT** (repo `LICENSE`: "MIT License — Copyright (c) 2026 Eoin Jordan"); bundled art is CC-BY/CC-BY-SA/CC0 from OpenGameArt, sources documented in the repo's `docs/ASSET_SOURCES.md` | https://github.com/eoinjordan/snes-studio — committed binary `web/public/roms/pocket-bugs.sfc` on `main`; SHA-256 `f1e3c67382b2de3a4dc25fffe0f026085977b0ab4169d9b5181b93674a69efad`; SNES header at `0x7FC0` reads `POCKET BUGS` verified 2026-10-17 |
+| `snes/roms/poachermon.sfc` | Poachermon | Eoin Jordan (snes-studio) | **MIT** (repo `LICENSE`: "MIT License — Copyright (c) 2026 Eoin Jordan"); original monster-catching game, art from CC-licensed OpenGameArt sources (no Nintendo assets) | https://github.com/eoinjordan/snes-studio — committed binary `web/public/roms/poachermon.sfc` on `main`; SHA-256 `67a4109d6aad21a59c3f9f267966e838fa04d24a7a04e2359f5052b3548dfa3c`; SNES header at `0x7FC0` reads `POACHERMON` verified 2026-10-17 |
+| `gba/roms/gematrix.gba` | Gematrix V1 | Issung | **GPL-3.0** (SPDX: GPL-3.0, per GitHub repo license) | https://github.com/Issung/Gematrix — release asset `GematrixV1.gba` (tag v1); SHA-256 `e075fc685b9d534e0fa44893b26990492de25750fa10bf32c3fbe81c54dd46c8`; GBA header (`24 FF AE 51 …` at `0x4`), title `GEMATRIXV1`, verified 2026-10-17 |
+| `gba/roms/cascade7.gba` | CASCADE7 | Mick Schroeder | **MIT** (repo `LICENSE`: "MIT License — Copyright (c) 2025 Mick Schroeder, LLC."); Drop7-inspired original puzzle game | https://github.com/mick-schroeder/gba-cascade7 — release asset `CASCADE7.gba` (tag v1.0.0); SHA-256 `24311677e8c24cf1e34f854ec75d706f2f08c0798f4bd8a781a600e439dcf291`; GBA header + title `CASCADE7` verified 2026-10-17 |
+| `gba/roms/flappybird-advance.gba` | Flappy Bird Advance | johedan20012 | **MIT** (repo `LICENSE`: "MIT License — Copyright (c) 2024 johedan20012"); release zip also bundles Butano/devkitARM/asset license texts | https://github.com/johedan20012/FlappyBirdAdvance — release asset `FlappyBirdAdvance.zip` (tag Release), file `FlappyBirdAdvance.gba` inside; SHA-256 `eeae75ef329b4cd6b2f4655f11ee93c9a82795eb82186eadca830fae169fd4d1`; GBA header + title `FLAPPYBIRDAD` verified 2026-10-17 |
+| `gba/roms/dustline.gba` | Dustline | abhuva | **CC-BY-SA-4.0** (SPDX: CC-BY-SA-4.0, per GitHub repo license) | https://github.com/abhuva/dustline — committed binary `dist/dustline.gba` on `main`; SHA-256 `aa469f5c077db3e9c042c5c55fce8bf60799b5c16d055405e6598a38ecc4df28`; GBA header + title `DUSTLINE` verified 2026-10-17 |
+| `coleco/roms/240p-test-suite.rom` | 240p Test Suite (ColecoVision port) | Oscar Toledo G. (nanochess), port of Artemio Urbina's 240p Test Suite | **GPL-2.0** (SPDX: GPL-2.0, per GitHub repo license; README carries the full GPLv2 notice) | https://github.com/nanochess/240pTestSuite_colecovision — committed binary `suitecv.rom` on `master`; SHA-256 `7108eb36c6365ca8d46019f6008a47d4c99768351c89463a7ed837ec23b20a2d`; ColecoVision cart signature (`55 AA` at `0x0`), 32KB size, verified 2026-10-17 |
+| `coleco/roms/retropipe.rom` | RetroPIPE v0.2.0 (ColecoVision) | Troy Schrapel (visrealm) | **MIT** (repo `LICENSE`: "MIT License — Copyright (c) 2025 Troy Schrapel") | https://github.com/visrealm/retropipe — release asset `retropipe_v0-2-0_cv.rom` (tag v0.2); SHA-256 `94d38da05124a356132066cd27ca3ca044a99c1630ff3b54f0d5c779110c58e4`; ColecoVision cart signature (`55 AA` at `0x0`), 16KB size, verified 2026-10-17 |
+| `sms/roms/2048.sms` | 2048 — Sega Master System | Julien Verneuil (grz0zrg) | **BSD-3-Clause** (SPDX: BSD-3-Clause, per GitHub repo license; repo `LICENSE` is the BSD 3-clause text) | https://github.com/grz0zrg/2048-SMS — committed binary `2048.sms` on `master`; SHA-256 `c5495b24af0c66748d6ad6fd8f9d9de5f20cbe5dd8d71b70fb3a14dee4143c4e`; SMS header `TMR SEGA` at `0x7FF0` (export region `L`) verified 2026-10-17 |
 
 ## License evidence
 
@@ -85,7 +96,7 @@ files — all four match byte-for-byte (hashes in the table above).
 15 third-party libraries linked into the GBA ROMs (Butano, libtonc, maxmod,
 newlib, AGBabi, gba-link-connection, gbt-player, etc.).
 
-## SNES — 2 games shipped after forensic verification
+## SNES — 4 games shipped after forensic verification
 
 Two SNES ROMs were initially excluded while provenance was unresolved. A
 follow-up forensic verification located the upstream sources, confirmed MIT
@@ -105,6 +116,7 @@ included in the manifest and catalog; see the ROM table above. Headers at
   redistributable.
 - `pinobatch/miroh` (Ludum Dare NES game) — skipped: license NOASSERTION,
   no readable LICENSE file at the default branch tip, license unclear.
+- Loop-3 candidates rejected after review (2026-10-17): `jeremyelkayam/trogba` (MIT code, but stars Trogdor — Homestar Runner character IP); `hackmods/morris-bridge-gba` (MIT, but Thomas & Friends characters — "fan-made parody", not verifiably redistributable); `tony-cruise/colecovision-games-source` (GPL, but disassemblies of commercial ColecoVision games — Donkey Kong, Q*Bert, etc.); `retrobrews/colecovision-games` (no license); `sverx/SMSTestSuite` (no license file); `haroldo-ok` original SMS titles (MIT code, but no prebuilt ROM binaries published); `wyattferguson/gameoflife-gb`, `stack-pusher` (no GB ROM binaries / Pyxel game, not a GB ROM); `dkrutskikh/dizzy-kwik-snax-redux` (BSD-3, but no downloadable release asset).
 - `pinobatch/MegaMountainNES`, `pinobatch/fizzbuzz-nes`, and other repos
   without published prebuilt `.nes` release assets — skipped: no author-built
   binary available to vendor.
@@ -119,21 +131,26 @@ included in the manifest and catalog; see the ROM table above. Headers at
   Source: https://github.com/bfirsh/jsnes / https://www.npmjs.com/package/jsnes
   Copyright (c) Ben Firshel and contributors. MIT license text:
   https://github.com/bfirsh/jsnes/blob/master/LICENSE
-- **EmulatorJS** (PS1/PSP/SNES/GB/GBA/Genesis/Atari 2600 pages) — NOT vendored; loaded at runtime from
+- **EmulatorJS** (PS1/PSP/SNES/GB/GBA/Genesis/Atari 2600/ColecoVision/Master System pages) — NOT vendored; loaded at runtime from
   https://cdn.emulatorjs.org (stable channel). Frontend license: GPL-3.0
   (frontend only, not a derivative of this site's code). Cores used:
   pcsx_rearmed (PS1), ppsspp (PSP), snes9x (SNES), gambatte (Game Boy, GPL-2.0),
   mgba (GBA, MPL-2.0),
-  genesis_plus_gx (Genesis, MIT), and
-  stella2014 (Atari 2600, GPL-2.0). Core IDs confirmed against the official
+  genesis_plus_gx (Genesis, MIT),
+  stella2014 (Atari 2600, GPL-2.0),
+  gearcoleco (ColecoVision, GPL-3.0), and
+  smsplus (Master System, GPL-2.0). Core IDs confirmed against the official
   EmulatorJS docs: `EJS_core = 'snes'` (→ snes9x),
   `'gba'` (→ mgba), `'segaMD'` (→ genesis_plus_gx), `'gb'` (→ gambatte),
-  and `'atari2600'` (→ stella2014) —
+  `'atari2600'` (→ stella2014), `'coleco'` (→ gearcoleco), and `'segaMS'`
+  (→ smsplus) —
   https://emulatorjs.org/docs/systems/snes, .../nintendo-game-boy-advance,
-  .../sega-mega-drive, .../atari-2600, and https://emulatorjs.org/docs4devs/cores.
+  .../sega-mega-drive, .../atari-2600, .../colecovision, .../sega-master-system,
+  and https://emulatorjs.org/docs4devs/cores.
   The CDN serves build reports for exactly those core names
-  (`cdn.emulatorjs.org/stable/data/cores/reports/{snes9x,mgba,genesis_plus_gx,stella2014,gambatte}.json`
-  → HTTP 200; verified 2026-10-15/16). Online-only for those pages.
+  (`cdn.emulatorjs.org/stable/data/cores/reports/{snes9x,mgba,genesis_plus_gx,stella2014,gambatte,gearcoleco,smsplus}.json`
+  → HTTP 200; gearcoleco and smsplus verified 2026-10-17, the rest 2026-10-15/16).
+  Online-only for those pages.
 - **PS2**: no emulator, core, ROM, or BIOS is bundled or linked — the PS2
   page is documentation-only until a practical in-browser PS2 core exists.
 

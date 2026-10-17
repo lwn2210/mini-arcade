@@ -1,0 +1,17 @@
+{
+  "platform": "sms",
+  "platformName": "Sega Master System",
+  "hosting": "romUrl values are same-repo relative paths (relative to classic/sms/index.html). ROM sources and licenses are documented in ATTRIBUTION.md.",
+  "games": [
+    {
+      "id": "sms-2048",
+      "title": "2048 SMS",
+      "icon": "🔢",
+      "desc": "The classic 2048 tile-sliding puzzle for the Sega Master System by Julien Verneuil (grz0zrg), written in Z80 assembly with devkitSMS. Slide, merge, chase the 2048 tile.",
+      "license": "BSD-3-Clause",
+      "color": "yellow",
+      "meta": "▶ PLAY · BSD-3-CLAUSE · 32KB ROM",
+      "romUrl": "roms/2048.sms"
+    }
+  ]
+}
