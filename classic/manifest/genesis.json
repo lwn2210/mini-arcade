@@ -6,82 +6,82 @@
     {
       "id": "battle4tris",
       "title": "BATTLE 4TRIS",
-      "icon": "\ud83c\udfaf",
+      "icon": "🎯",
       "desc": "Block-stacking puzzle battle from monteslu's retro-homebrew-games collection — a Tetris-style classic rebuilt for Sega Genesis. One of 6 free games in the set.",
       "license": "MIT",
       "color": "yellow",
-      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 128KB ROM",
-      "romUrl": "roms/battle4tris.md"
+      "meta": "▶ PLAY · MIT · 128KB ROM",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1CoC4M8ZeKyBHh6iCrhtj-We-R8rh9JAP"
     },
     {
       "id": "kleleatoms",
       "title": "KLELEATOMS",
-      "icon": "\u26a1",
-      "desc": "Megadrive port of K\u0142e\u0142eAtoms built with SGDK by Nightwolf-47. Chain-matching atom puzzle action in a clean 16-bit presentation.",
+      "icon": "⚡",
+      "desc": "Megadrive port of KłełeAtoms built with SGDK by Nightwolf-47. Chain-matching atom puzzle action in a clean 16-bit presentation.",
       "license": "MIT",
       "color": "green",
-      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 256KB ROM",
-      "romUrl": "roms/kleleatoms.md"
+      "meta": "▶ PLAY · MIT · 256KB ROM",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1UcQg9NzSkVasBDN3vyz4YjyR3S1NCLmf"
     },
     {
       "id": "md-pong",
       "title": "PONG",
-      "icon": "\ud83c\udfd3",
+      "icon": "🏓",
       "desc": "Paddle classic from monteslu's retro-homebrew-games collection — the same MIT-licensed Genesis set as Battle 4Tris.",
       "license": "MIT",
       "color": "cyan",
-      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 128KB ROM",
-      "romUrl": "roms/pong.md"
+      "meta": "▶ PLAY · MIT · 128KB ROM",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1nX4CPvkr5VVXn_X8eBAIP04nXDMuagdG"
     },
     {
       "id": "md-snake",
       "title": "SNAKE",
-      "icon": "\ud83d\udc0d",
+      "icon": "🐍",
       "desc": "Snake for the Mega Drive from monteslu's MIT-licensed homebrew set. Eat, grow, don't bite yourself.",
       "license": "MIT",
       "color": "yellow",
-      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 128KB ROM",
-      "romUrl": "roms/snake.md"
+      "meta": "▶ PLAY · MIT · 128KB ROM",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1UZaH3NyotKxXW5AktyQJqTPoamfsW4o_"
     },
     {
       "id": "md-space-shooter",
       "title": "SPACE SHOOTER",
-      "icon": "\ud83d\ude80",
+      "icon": "🚀",
       "desc": "Vertical shoot-'em-up from monteslu's MIT-licensed Genesis homebrew collection. Blast waves of invaders.",
       "license": "MIT",
       "color": "green",
-      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 128KB ROM",
-      "romUrl": "roms/space_shooter.md"
+      "meta": "▶ PLAY · MIT · 128KB ROM",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1zUmBH21hzM694B3O13gVDy7FOMdCxZMx"
     },
     {
       "id": "md-tank-battle",
       "title": "TANK BATTLE",
-      "icon": "\ud83d\udee1",
+      "icon": "🛡",
       "desc": "Tank duel from monteslu's MIT-licensed retro-homebrew-games set — maneuver, shoot, survive.",
       "license": "MIT",
       "color": "pink",
-      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 128KB ROM",
-      "romUrl": "roms/tank_battle.md"
+      "meta": "▶ PLAY · MIT · 128KB ROM",
+      "romUrl": "https://drive.google.com/uc?export=download&id=174zLCLVQ_RGUu4FyfhTrzf9m11-U4h3S"
     },
     {
       "id": "minesweeper-md",
       "title": "MINESWEEPER MD",
-      "icon": "\ud83d\udca3",
+      "icon": "💣",
       "desc": "Minesweeper for the Sega Mega Drive by Nightwolf-47, built with SGDK. Classic flag-and-clear grid puzzling on a 16-bit grid.",
       "license": "MIT",
       "color": "green",
-      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 128KB ROM",
-      "romUrl": "roms/minesweeper.md"
+      "meta": "▶ PLAY · MIT · 128KB ROM",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1CNKps8sEGTEuzyeIiZtVFtumrAdmOc6r"
     },
     {
       "id": "gemrush",
       "title": "GEM RUSH",
-      "icon": "\ud83d\udc8e",
+      "icon": "💎",
       "desc": "A pseudo-3D bonus stage for the Mega Drive by haroldo-ok, built with SGDK: a runner crosses a freely-rotatable textured ground plane collecting gems before the clock runs out. All-original code and assets.",
       "license": "MIT",
       "color": "pink",
-      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 256KB ROM",
-      "romUrl": "roms/gemrush.md"
+      "meta": "▶ PLAY · MIT · 256KB ROM",
+      "romUrl": "https://drive.google.com/uc?export=download&id=18Umu_zKoNDx7Gz8CrWCLS-FBEPJqFlsk"
     }
   ]
 }

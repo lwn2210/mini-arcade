@@ -6,52 +6,52 @@
     {
       "id": "libbet",
       "title": "LIBBET AND THE MAGIC FLOOR",
-      "icon": "\ud83e\udcdc",
+      "icon": "🣜",
       "desc": "Puzzle-platformer by Damian Yerrick (pinobatch). Libbet rolls under a floor of carpet tiles and pops up to find her way through the dungeon — built with the same engine tech as his NES hits.",
       "license": "Zlib",
       "color": "cyan",
-      "meta": "\u25b6 PLAY \u00b7 ZLIB \u00b7 32KB ROM \u00b7 DMG",
-      "romUrl": "roms/libbet.gb"
+      "meta": "▶ PLAY · ZLIB · 32KB ROM · DMG",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1SohHES8L1ynW0h1SzXmwfx6FLxbUhhTQ"
     },
     {
       "id": "gb-snake",
       "title": "SNAKE",
-      "icon": "\ud83d\udc0d",
+      "icon": "🐍",
       "desc": "Snake for the Game Boy and Game Boy Color by Christian Reinbacher (reini1305), built with GBDK. Eat, grow, and try not to bite yourself across timed rounds.",
       "license": "MIT",
       "color": "green",
-      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 32KB ROM",
-      "romUrl": "roms/snake.gb"
+      "meta": "▶ PLAY · MIT · 32KB ROM",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1-QArq1JLaUv9E4M6kDzqRbwMD3Bcc-lH"
     },
     {
       "id": "gb2048",
       "title": "2048",
-      "icon": "\ud83c\udccf",
+      "icon": "🃏",
       "desc": "A working port of the 2048 tile-sliding puzzle for the classic Game Boy by Wyatt Ferguson. Slide with the D-pad; SELECT resets the board.",
       "license": "MIT",
       "color": "yellow",
-      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 32KB ROM",
-      "romUrl": "roms/gb2048.gb"
+      "meta": "▶ PLAY · MIT · 32KB ROM",
+      "romUrl": "https://drive.google.com/uc?export=download&id=18hOgxW4sEqId09NU7q_Y1aAGQF_CJVuZ"
     },
     {
       "id": "flappyboy",
       "title": "FLAPPYBOY",
-      "icon": "\ud83d\udc26",
+      "icon": "🐦",
       "desc": "Flappy Bird for the Game Boy by Felipe Alfonso (bitnenfer), written in C with GBDK. Tap through the pipes on real DMG hardware graphics.",
       "license": "MIT",
       "color": "pink",
-      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 32KB ROM",
-      "romUrl": "roms/flappyboy.gb"
+      "meta": "▶ PLAY · MIT · 32KB ROM",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1UjFX4dNXLvyaGSBGWKKZug0i10uOVHDi"
     },
     {
       "id": "gb240p",
       "title": "240P TEST SUITE (GB)",
-      "icon": "\ud83d\udcfa",
+      "icon": "📺",
       "desc": "Artemio's 240p Test Suite, Game Boy port by pinobatch (same project as the NES 240pee). Pro-grade CRT/upscaler test patterns in your pocket.",
       "license": "GPL-2.0",
       "color": "cyan",
-      "meta": "\u25b6 PLAY \u00b7 GPL-2.0 \u00b7 32KB ROM",
-      "romUrl": "roms/gb240p.gb"
+      "meta": "▶ PLAY · GPL-2.0 · 32KB ROM",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1pBnyCAV8MHvyanaQb9I9S2JRSwT-00GV"
     }
   ]
 }

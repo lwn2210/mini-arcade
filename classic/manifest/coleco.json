@@ -11,7 +11,7 @@
       "license": "GPL-2.0",
       "color": "cyan",
       "meta": "▶ PLAY · GPL-2.0 · 32KB ROM",
-      "romUrl": "roms/240p-test-suite.rom"
+      "romUrl": "https://drive.google.com/uc?export=download&id=1mwwakFVHExNe6m0fhRW3l7vkSSDMN-tb"
     },
     {
       "id": "coleco-retropipe",
@@ -21,7 +21,7 @@
       "license": "MIT",
       "color": "yellow",
       "meta": "▶ PLAY · MIT · 16KB ROM",
-      "romUrl": "roms/retropipe.rom"
+      "romUrl": "https://drive.google.com/uc?export=download&id=1RU-2vhj5EQCwRKpnKz7dz7UNyE3_8Kc3"
     }
   ]
 }

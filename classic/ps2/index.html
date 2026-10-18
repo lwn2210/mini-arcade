@@ -31,7 +31,8 @@
   .lab-button { font: inherit; font-size: 8px; color: #050508; background: #ff8800; border: 0; padding: 12px 16px; cursor: pointer; }
   .lab-button:hover { background: #ffe600; box-shadow: 0 0 18px rgba(255,230,0,.4); }
   .lab-button:disabled { cursor: wait; opacity: .7; }
-  .sim-status { color: #ffe600 !important; min-height: 28px; }
+  .player-frame { width: 100%; height: 720px; border: 2px solid rgba(0,240,255,.45); background: #05070b; }
+  @media (max-width: 700px) { .player-frame { height: 620px; } }
 </style>
 </head>
 <body>
@@ -39,67 +40,31 @@
   <div class="logo" style="color:#ff8800;text-shadow:0 0 14px rgba(255,136,0,0.8),4px 4px 0 #000;">PLAYSTATION <span style="color:#ffe600;text-shadow:0 0 14px rgba(255,230,0,0.8),4px 4px 0 #000;">2</span></div>
   <div class="tagline">⚗ EXPERIMENTAL — IN-BROWSER PS2 EMULATION IS NOT PRACTICAL TODAY<br>THIS PAGE DOCUMENTS THE STATE OF PLAY · NO PS2 GAMES OR BIOS ARE HOSTED HERE, EVER</div>
 
-  <div class="empty-catalog" style="border-color:rgba(255,136,0,0.4);">
-    <div class="big">⚠️</div>
-    <h3>NO PS2 EMULATION AVAILABLE (YET)</h3>
-    <p>THE MAIN IN-BROWSER EMULATOR FRAMEWORK, <a href="https://emulatorjs.org/" target="_blank" rel="noopener">EMULATORJS</a>,
-    CURRENTLY HAS <b style="color:#ff8800;">NO PS2 CORE</b> AT ALL.<br>
-    THERE IS NOTHING WE CAN LEGITIMATELY EMBED TODAY THAT WILL RUN PS2 DISCS IN A BROWSER.</p>
-  </div>
+  <section class="lab-note" style="border-style:solid;border-color:rgba(0,240,255,.45);">
+    <h3>PS2 WEB PLAYER — PLAY!.JS</h3>
+    <span class="badge" style="color:#00f0ff;border-color:rgba(0,240,255,.55);">REAL PS2 EMULATOR / EXPERIMENTAL</span>
+    <p>PS2 emulator WebAssembly yang berjalan langsung di browser. Tidak perlu BIOS. Pilih game PS2 dari perangkat lu untuk mulai.</p>
+    <p><b>SUPPORTED:</b> ISO · CSO · CHD · ISZ · BIN · ELF · Chrome/Edge desktop terbaru direkomendasikan.</p>
+    <a class="lab-button" href="https://playjs.purei.org/" target="_blank" rel="noopener">▶ OPEN PS2 PLAYER</a>
+    <p class="sim-status">Game commercial tidak dibundel di vault. Player resmi akan meminta file game milik lu secara lokal; file tidak di-upload ke sini.</p>
+    <iframe class="player-frame" src="https://playjs.purei.org/" title="Play!.js PS2 emulator" allow="autoplay; fullscreen; gamepad" loading="lazy"></iframe>
+  </section>
 
-  <div class="lab-note">
-    <h3>🔬 PS2 LAB — BOOT SEQUENCE SIMULATOR</h3>
-    <span class="badge">CONCEPT DEMO / NOT AN EMULATOR</span>
-    <p>Ini simulator presentasi untuk menguji alur boot, telemetry, dan kesiapan perangkat. Tidak menjalankan game PS2 dan tidak memuat ROM/BIOS.</p>
-    <div class="sim-grid" aria-live="polite">
-      <div><span>EE / IOP CHECK</span><b id="eeState">STANDBY</b></div>
-      <div><span>VU PIPELINE</span><b id="vuState">STANDBY</b></div>
-      <div><span>GS FRAME TARGET</span><b id="gsState">-- FPS</b></div>
-      <div><span>THERMAL HEADROOM</span><b id="tempState">-- °C</b></div>
+  <section class="lab-note" style="border-style:solid;border-color:rgba(255,136,0,.45);">
+    <h3>PS2 HOMEbrew CATALOG</h3>
+    <span class="badge">LEGAL DEMO / MIT</span>
+    <p>Demo dan game homebrew PS2 yang source dan lisensinya publik. Tombol di bawah membuka build resmi untuk dicoba di Play!.js.</p>
+    <div class="sim-grid">
+      <div><span>DUNGEON GAME</span><b>PS2 HOMEbrew DEMO</b></div>
+      <div><span>ROTATING CUBES</span><b>PS2 GRAPHICS DEMO</b></div>
     </div>
-    <div class="sim-meter"><i id="simBar"></i></div>
-    <button class="lab-button" id="bootSim" type="button">▶ RUN BOOT BENCHMARK</button>
-    <p id="simStatus" class="sim-status">READY · SELECT RUN TO START THE SAFE CONCEPT DEMO</p>
-    <p><b>REAL PS2 PLAY:</b> gunakan <a href="https://pcsx2.net/" target="_blank" rel="noopener">PCSX2</a> di desktop dengan game dan BIOS hasil dump legal milik sendiri.</p>
-  </div>
+    <p>Build ELF berasal dari <a href="https://github.com/glampert/ps2-homebrew" target="_blank" rel="noopener">glampert/ps2-homebrew</a> (MIT). Play!.js menerima ELF, tetapi browser player tetap experimental.</p>
+    <a class="lab-button" href="https://playjs.purei.org/" target="_blank" rel="noopener">▶ LOAD HOMEbrew ELF</a>
+  </section>
 
   <div class="note">
-    <b>STATUS:</b> EmulatorJS belum menyediakan core PS2. Halaman ini sengaja memisahkan simulasi UI dari emulasi nyata agar ekspektasinya jelas.
+    <b>PS1:</b> halaman PS1 sudah memakai PCSX-ReARMed dan siap memainkan file .bin/.cue/.chd/.iso + BIOS lokal. Katalog komersial tidak dibundel; game homebrew legal akan ditambahkan setelah build disc dan lisensinya diverifikasi.
   </div>
-
-  <div class="footer">NO PS2 ROMs, BIOS, OR EMULATORS ARE BUNDLED HERE<br>PART OF THE MINI-ARCADE RETRO VAULT</div>
-  <div class="crt"></div>
-  <script>
-      const fields = [
-        ['eeState', ['SCANNING', 'READY']],
-        ['vuState', ['WARMING', 'READY']],
-        ['gsState', ['24 FPS', '30 FPS']],
-        ['tempState', ['61 °C', '58 °C']]
-      ];
-    const button = document.getElementById('bootSim');
-    const bar = document.getElementById('simBar');
-    const status = document.getElementById('simStatus');
-    button.addEventListener('click', () => {
-      button.disabled = true;
-      bar.style.width = '8%';
-      status.textContent = 'RUNNING · CHECKING EMULATION PIPELINE...';
-      fields.forEach(([id, values]) => { document.getElementById(id).textContent = values[0]; });
-      let progress = 8;
-      const timer = setInterval(() => {
-        progress += 8;
-        bar.style.width = `${Math.min(progress, 100)}%`;
-        if (progress >= 48) fields[1][0] && (document.getElementById('vuState').textContent = 'READY');
-        if (progress >= 72) document.getElementById('eeState').textContent = 'READY';
-        if (progress >= 100) {
-          clearInterval(timer);
-          document.getElementById('gsState').textContent = '30 FPS';
-          document.getElementById('tempState').textContent = '58 °C';
-          status.textContent = 'COMPLETE · CONCEPT PIPELINE READY · NO GAME WAS EXECUTED';
-          button.disabled = false;
-          button.textContent = '↻ RUN AGAIN';
-        }
-      }, 90);
-    });
-  </script>
+  <div class="footer">PS2 PLAY!.JS · EXPERIMENTAL WEB EMULATION · NO COMMERCIAL GAMES BUNDLED<br>PART OF THE MINI-ARCADE RETRO VAULT</div>
 </body>
 </html>

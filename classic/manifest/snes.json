@@ -6,22 +6,22 @@
     {
       "id": "gothicvania-cemetery",
       "title": "GOTHICVANIA CEMETERY",
-      "icon": "\ud83e\udea6",
+      "icon": "🪦",
       "desc": "A Gothic-flavored SNES homebrew game from donth77, published as version 1.0.0. Explore the cemetery in this atmospheric 16-bit adventure.",
       "license": "MIT",
       "color": "pink",
-      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 HOMEBREW",
-      "romUrl": "roms/gothicvania.sfc"
+      "meta": "▶ PLAY · MIT · HOMEBREW",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1hrIAaZin6zrceqR2CNmdhh85ZSNP0wKx"
     },
     {
       "id": "bs-demo-mpack",
       "title": "BS DEMO MPACK",
-      "icon": "\ud83d\udce1",
+      "icon": "📡",
       "desc": "BS Demo Mpack by Krokodyl, an SNES homebrew demo build. Play the author-published binary in your browser.",
       "license": "MIT",
       "color": "cyan",
-      "meta": "\u25b6 PLAY \u00b7 MIT \u00b7 HOMEBREW",
-      "romUrl": "roms/bs-demo.sfc"
+      "meta": "▶ PLAY · MIT · HOMEBREW",
+      "romUrl": "https://drive.google.com/uc?export=download&id=12ZQ1aJJ4VXbPPplLYlp48HjxrqI2Awwd"
     },
     {
       "id": "pocket-bugs",
@@ -31,7 +31,7 @@
       "license": "MIT",
       "color": "green",
       "meta": "▶ PLAY · MIT + CC ASSETS · SNES STUDIO",
-      "romUrl": "roms/pocket-bugs.sfc"
+      "romUrl": "https://drive.google.com/uc?export=download&id=113XfmZNS25rsvHE4ZwnHO4cvSNYkw_IE"
     },
     {
       "id": "poachermon",
@@ -41,7 +41,7 @@
       "license": "MIT",
       "color": "yellow",
       "meta": "▶ PLAY · MIT + CC ASSETS · SNES STUDIO",
-      "romUrl": "roms/poachermon.sfc"
+      "romUrl": "https://drive.google.com/uc?export=download&id=1CQnZyAetThbMQIlvuRNQdl7Lt7GNPgy6"
     }
   ]
 }

@@ -6,162 +6,162 @@
     {
       "id": "croom",
       "title": "CONCENTRATION ROOM",
-      "icon": "\ud83c\udccf",
+      "icon": "🃏",
       "desc": "Card-matching memory game by Damian Yerrick (pinobatch). Clean NROM homebrew, plays perfectly in the browser.",
       "license": "GPL-3.0",
       "color": "cyan",
-      "meta": "\u25b6 PLAY \u00b7 16KB PRG \u00b7 MAPPER 0",
-      "romUrl": "roms/croom.nes"
+      "meta": "▶ PLAY · 16KB PRG · MAPPER 0",
+      "romUrl": "https://drive.google.com/uc?export=download&id=13h89Q2bl7FwTAAeysOcvwQ4_kFf5IcOy"
     },
     {
       "id": "allpads",
       "title": "ALLPADS",
-      "icon": "\ud83c\udfae",
-      "desc": "Multi-controller diagnostic ROM by Damian Yerrick. Watch your button presses light up on screen \u2014 great for testing controls.",
+      "icon": "🎮",
+      "desc": "Multi-controller diagnostic ROM by Damian Yerrick. Watch your button presses light up on screen — great for testing controls.",
       "license": "Zlib",
       "color": "pink",
-      "meta": "\u25b6 PLAY \u00b7 32KB PRG \u00b7 MAPPER 0",
-      "romUrl": "roms/allpads.nes"
+      "meta": "▶ PLAY · 32KB PRG · MAPPER 0",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1jNWefv910QP9-GCUGSgda8v0pi5tPf8E"
     },
     {
       "id": "240pee",
       "title": "240P TEST SUITE",
-      "icon": "\ud83d\udcfa",
+      "icon": "📺",
       "desc": "Artemio's 240p Test Suite, NES port by pinobatch. Pro-grade CRT/upscaler test patterns.",
       "license": "GPL-2.0",
       "color": "yellow",
-      "meta": "\u25b6 PLAY \u00b7 64KB PRG \u00b7 MAPPER 2",
-      "romUrl": "roms/240pee.nes"
+      "meta": "▶ PLAY · 64KB PRG · MAPPER 2",
+      "romUrl": "https://drive.google.com/uc?export=download&id=152zya7Sq8pRmFMx6SqqjSFa3EYxe72G6"
     },
     {
       "id": "thwaite",
       "title": "THWAITE",
-      "icon": "\ud83d\ude81",
-      "desc": "Small-town anti-ballistic missile defense by pinobatch. Protect your town's buildings from incoming warheads \u2014 a beloved Missile Command-style homebrew.",
+      "icon": "🚁",
+      "desc": "Small-town anti-ballistic missile defense by pinobatch. Protect your town's buildings from incoming warheads — a beloved Missile Command-style homebrew.",
       "license": "GPL-3.0",
       "color": "green",
-      "meta": "\u25b6 PLAY \u00b7 16KB PRG \u00b7 MAPPER 0",
-      "romUrl": "roms/thwaite.nes"
+      "meta": "▶ PLAY · 16KB PRG · MAPPER 0",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1C5sub2tbWjyacvVvZvDhM_s1lNGCZnfc"
     },
     {
       "id": "robotfindskitten",
       "title": "ROBOT FINDS KITTEN",
-      "icon": "\ud83e\udd16",
+      "icon": "🤖",
       "desc": "Pinobatch's NES port of the classic zen-like 'robotfindskitten' for 2 players. Interact with objects until you find the kitten.",
       "license": "Zlib",
       "color": "cyan",
-      "meta": "\u25b6 PLAY \u00b7 32KB PRG \u00b7 MAPPER 0",
-      "romUrl": "roms/robotfindskitten.nes"
+      "meta": "▶ PLAY · 32KB PRG · MAPPER 0",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1oSN9R71Ek5HMtEHHeTVle1xShmfg_LcZ"
     },
     {
       "id": "rhde",
       "title": "RHDE: FURNITURE FIGHT",
-      "icon": "\ud83e\ude91",
+      "icon": "🪑",
       "desc": "Home-decorating real-time strategy by pinobatch. Compete to have the most furniture in your room when the timer runs out.",
       "license": "Permissive (see ATTRIBUTION)",
       "color": "pink",
-      "meta": "\u25b6 PLAY \u00b7 32KB PRG \u00b7 MAPPER 0",
-      "romUrl": "roms/rhde.nes"
+      "meta": "▶ PLAY · 32KB PRG · MAPPER 0",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1_oGVNYBPRyjozf3_d8ydSyaRYuZVT04B"
     },
     {
       "id": "ruder",
       "title": "ZAP RUDER",
-      "icon": "\ud83c\udf89",
+      "icon": "🎉",
       "desc": "Zapper test ROM with a 2-player air hockey simulator by pinobatch. Also works without a Zapper as a plain hockey game.",
       "license": "Permissive (see ATTRIBUTION)",
       "color": "yellow",
-      "meta": "\u25b6 PLAY \u00b7 16KB PRG \u00b7 MAPPER 0",
-      "romUrl": "roms/ruder.nes"
+      "meta": "▶ PLAY · 16KB PRG · MAPPER 0",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1sFQs0CXCDJeU4xDUBqPMpm3rqtzu83FN"
     },
     {
       "id": "stallar",
       "title": "STALLAR",
-      "icon": "\ud83d\ude80",
+      "icon": "🚀",
       "desc": "Ludum Dare 50 space game by Wendel Scardua. Fly, land and explore in this compact homebrew adventure.",
       "license": "MIT",
       "color": "green",
-      "meta": "\u25b6 PLAY \u00b7 64KB PRG \u00b7 MAPPER 4",
-      "romUrl": "roms/stallar.nes"
+      "meta": "▶ PLAY · 64KB PRG · MAPPER 4",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1qFBVdR3FOrIDJNykikc5KcrAn77TO2RO"
     },
     {
       "id": "file-fixers",
       "title": "FILE FIXERS",
-      "icon": "\ud83d\udcbb",
+      "icon": "💻",
       "desc": "Computer-themed puzzle RPG by Wendel Scardua. Fix corrupted files in a playful retro-IT world.",
       "license": "MIT",
       "color": "cyan",
-      "meta": "\u25b6 PLAY \u00b7 64KB PRG \u00b7 MAPPER 4",
-      "romUrl": "roms/file-fixers.nes"
+      "meta": "▶ PLAY · 64KB PRG · MAPPER 4",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1E8fATCUt7q-qCgJk3sFFNX1KNA3hLS9j"
     },
     {
       "id": "signos",
       "title": "SIGNOS",
-      "icon": "\ud83e\uddfe",
+      "icon": "🧾",
       "desc": "Puzzle game by Wendel Scardua, made for Ludum Dare 59. Public-domain dedication (Unlicense).",
       "license": "Unlicense",
       "color": "pink",
-      "meta": "\u25b6 PLAY \u00b7 64KB PRG \u00b7 MAPPER 4",
-      "romUrl": "roms/signos.nes"
+      "meta": "▶ PLAY · 64KB PRG · MAPPER 4",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1i_T-JJMhKHdmDfJPPF_IXEyZPmxVSQPO"
     },
     {
       "id": "table-tennis",
       "title": "8-BIT TABLE TENNIS",
-      "icon": "\ud83c\udfd3",
+      "icon": "🏓",
       "desc": "Two-player homebrew table tennis by Michael Billington. Classic Pong-style action with NES charm.",
       "license": "MIT",
       "color": "yellow",
-      "meta": "\u25b6 PLAY \u00b7 32KB PRG \u00b7 MAPPER 0",
-      "romUrl": "roms/table_tennis.nes"
+      "meta": "▶ PLAY · 32KB PRG · MAPPER 0",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1msHuTwKnrhHbZR4XbndDLxnR9IFsZLEJ"
     },
     {
       "id": "jeznes",
       "title": "JEZNES",
-      "icon": "\ud83d\udd25",
-      "desc": "JezzBall-style puzzle action by boingoing. Trap the bouncing atoms by building walls \u2014 an NES take on a classic.",
+      "icon": "🔥",
+      "desc": "JezzBall-style puzzle action by boingoing. Trap the bouncing atoms by building walls — an NES take on a classic.",
       "license": "MIT",
       "color": "green",
-      "meta": "\u25b6 PLAY \u00b7 32KB PRG \u00b7 MAPPER 0",
-      "romUrl": "roms/jeznes.nes"
+      "meta": "▶ PLAY · 32KB PRG · MAPPER 0",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1j8M7CCPbuW3IVWMtVEtODN_WCm2BUCnO"
     },
     {
       "id": "ghosts-and-graves",
       "title": "GHOSTS 'N GRAVES",
-      "icon": "\ud83d\udc7b",
+      "icon": "👻",
       "desc": "Spooky platformer by Anthony Bongers. Climb, dodge ghosts and clear 40 screens across 5 levels — a full-featured homebrew adventure, public-domain dedicated (Unlicense).",
       "license": "Unlicense",
       "color": "pink",
-      "meta": "\u25b6 PLAY \u00b7 32KB PRG \u00b7 MAPPER 3",
-      "romUrl": "roms/ghosts_and_graves.nes"
+      "meta": "▶ PLAY · 32KB PRG · MAPPER 3",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1aKJU515Hm9WhP_CAYSr8Kc33QZ7G-lfp"
     },
     {
       "id": "nova",
       "title": "NOVA THE SQUIRREL",
-      "icon": "\ud83d\udc3f",
+      "icon": "🐿",
       "desc": "Full platformer by Nova Squirrel: 14 levels, a rabbit partner, multiple power-ups and rabbit-eared hats. GPL-3.0 with source available on GitHub.",
       "license": "GPL-3.0",
       "color": "green",
-      "meta": "\u25b6 PLAY \u00b7 256KB PRG \u00b7 MAPPER 1",
-      "romUrl": "roms/nova.nes"
+      "meta": "▶ PLAY · 256KB PRG · MAPPER 1",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1r9hpQhmolqCuBzCQwOxbwXpSDLw3lO15"
     },
     {
       "id": "pong-nes",
       "title": "PONG",
-      "icon": "\ud83c\udfd3",
+      "icon": "🏓",
       "desc": "Clean NES Pong implementation by zorchenhimer (NTSC). Two-player paddle classic, BSD-licensed homebrew.",
       "license": "BSD-2-Clause",
       "color": "yellow",
-      "meta": "\u25b6 PLAY \u00b7 16KB PRG \u00b7 MAPPER 0",
-      "romUrl": "roms/pong.nes"
+      "meta": "▶ PLAY · 16KB PRG · MAPPER 0",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1z6ZKt0pdITkBxjv2FvWOkJrmmfgI7fIf"
     },
     {
       "id": "opennes-snake",
       "title": "OPENNES SNAKE",
-      "icon": "\ud83d\udc0d",
+      "icon": "🐍",
       "desc": "Snake on the NES by Sebastian Dine (openNES project). Zlib-licensed, grows and wraps its way to classic high-score chasing.",
       "license": "Zlib",
       "color": "cyan",
-      "meta": "\u25b6 PLAY \u00b7 16KB PRG \u00b7 MAPPER 0",
-      "romUrl": "roms/opennes_snake.nes"
+      "meta": "▶ PLAY · 16KB PRG · MAPPER 0",
+      "romUrl": "https://drive.google.com/uc?export=download&id=1FFlgpJZg_-ta2qafBUXw7Bul6vM-r0Rf"
     }
   ]
 }
