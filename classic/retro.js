@@ -107,13 +107,25 @@
   // ---- data-driven catalog (manifest JSON) for pages with vendored games ----
   var catalogEl = document.getElementById('catalog');
   var emptyEl = document.getElementById('emptyCatalog');
-  function bootUrl(url, name) {
+  function bootUrl(url, name, biosUrl) {
     if (booted) { setStatus('A GAME IS ALREADY RUNNING — RELOAD THE PAGE TO SWITCH CARTS', true); return; }
     if (romBlobUrl) URL.revokeObjectURL(romBlobUrl);
     romBlobUrl = url;
     romNameEl.textContent = '✔ ' + name;
-    setStatus('ROM READY: ' + name + ' · BOOTING…');
-    boot();
+    if (!biosUrl) { setStatus('ROM READY: ' + name + ' · BOOTING…'); boot(); return; }
+    setStatus('LOADING ' + name + ' · PREPARING BIOS…');
+    fetch(biosUrl).then(function (r) {
+      if (!r.ok) throw new Error('BIOS HTTP ' + r.status);
+      return r.blob();
+    }).then(function (blob) {
+      if (biosBlobUrl) URL.revokeObjectURL(biosBlobUrl);
+      biosBlobUrl = URL.createObjectURL(blob);
+      biosNameEl.textContent = '✔ bundled OpenBIOS';
+      setStatus('ROM + BIOS READY · BOOTING ' + name + '…');
+      boot();
+    }).catch(function (e) {
+      setStatus('COULD NOT LOAD BUNDLED BIOS: ' + (e && e.message ? e.message : e), true);
+    });
   }
   if (catalogEl && CFG.manifest) {
     fetch(CFG.manifest)
@@ -141,7 +153,7 @@
           a.appendChild(icon); a.appendChild(h2); a.appendChild(p); a.appendChild(hs);
           a.addEventListener('click', function (ev) {
             ev.preventDefault();
-            bootUrl(g.romUrl, g.title);
+            bootUrl(g.romUrl, g.title, g.biosUrl);
           });
           catalogEl.appendChild(a);
         });

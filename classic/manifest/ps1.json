@@ -1,6 +1,17 @@
 {
   "platform": "ps1",
   "platformName": "PlayStation 1",
-  "hosting": "No games hosted. Remote ROM hosting (e.g. Google Drive direct-download links) may be added later by filling romUrl fields with legally-distributable titles only \u2014 no code changes needed.",
-  "games": []
+  "hosting": "A freely redistributable PS1 homebrew technical demo is bundled. Commercial games and BIOS files are not included.",
+  "games": [
+    {
+      "title": "Doom Intro Demo",
+      "icon": "🔥",
+      "color": "orange",
+      "desc": "A PS1 homebrew technical demo recreating the classic Doom title-screen fire effect.",
+      "meta": "▶ PLAY · MPL-2.0 · 20MB CHD",
+      "license": "MPL-2.0",
+      "romUrl": "../ps1/roms/DOOMINTRO.CHD",
+      "biosUrl": "../ps1/roms/openbios.bin"
+    }
+  ]
 }

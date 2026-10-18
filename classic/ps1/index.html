@@ -10,15 +10,15 @@
 <body>
   <a class="back-link" href="../index.html">◄ RETRO VAULT</a>
   <div class="logo">PLAYSTATION <span>1</span></div>
-  <div class="tagline">PSX EMULATION VIA EMULATORJS (PCSX_REARMED CORE) · BYO-ROM + BYO-BIOS ONLY<br>YOUR FILES STAY ON YOUR DEVICE · CORE STREAMED FROM CDN (NEEDS INTERNET)</div>
+  <div class="tagline">PSX EMULATION VIA EMULATORJS (PCSX_REARMED CORE) · HOMEBREW CATALOG + BYO-ROM<br>YOUR FILES STAY ON YOUR DEVICE · CORE STREAMED FROM CDN (NEEDS INTERNET)</div>
 
-  <div class="empty-catalog">
+  <div class="empty-catalog" id="emptyCatalog" style="display:none;">
     <div class="big">📀</div>
     <h3>NO GAMES HOSTED HERE</h3>
-    <p>THIS VAULT NEVER BUNDLES PS1 DISC IMAGES OR BIOS FILES — THEY ARE SONY COPYRIGHT.<br>
-    LOAD YOUR OWN LEGALLY-DUMPED DISC IMAGE BELOW (.BIN/.CUE/.ISO/.CHD/.PBP/.IMG, MULTIFILE CUE+BINS AS .ZIP).<br>
-    FOR LEGAL FREE PS1 SOFTWARE, SEE <a href="https://downloads.psnstores.com/" target="_blank" rel="noopener">HOMEBREW SCENE ARCHIVES</a>.</p>
+    <p>LOAD YOUR OWN LEGALLY-DUMPED DISC IMAGE BELOW.</p>
   </div>
+
+  <div id="catalog" class="catalog-grid"></div>
 
   <div id="player">
     <div class="player-head">
@@ -66,7 +66,7 @@
       core: 'pcsx_rearmed',
       exts: ['.bin', '.cue', '.iso', '.chd', '.pbp', '.img', '.zip'],
       needsBios: true,
-      platform: 'PSX'
+      manifest: '../manifest/ps1.json',
     };
   </script>
   <script src="../retro.js"></script>
