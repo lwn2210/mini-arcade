@@ -62,44 +62,41 @@
     biosInput.value = '';
   });
 
-  function loadEmulatorJS(cb) {
-    if (window.EmulatorJS) return cb();
-    var s = document.createElement('script');
-    s.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
-    s.onload = cb;
-    s.onerror = function () {
-      setStatus('COULD NOT LOAD EMULATORJS FROM CDN — CHECK INTERNET CONNECTION (NES SECTION WORKS OFFLINE)', true);
-    };
-    document.head.appendChild(s);
+  function loadEmulatorJS() {
+    if (window.EJS_emulator) return Promise.resolve();
+    if (window.EJS_loaderPromise) return window.EJS_loaderPromise;
+    window.EJS_loaderPromise = new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+      s.onload = resolve;
+      s.onerror = function () { reject(new Error('EmulatorJS loader CDN did not load')); };
+      document.head.appendChild(s);
+    });
+    return window.EJS_loaderPromise;
   }
 
   function boot() {
     if (booted) return;
     if (!romBlobUrl) { setStatus('LOAD A GAME FILE FIRST', true); return; }
     if (needsBios && !biosBlobUrl) { setStatus('THIS PLATFORM NEEDS A BIOS FILE — LOAD IT FIRST (USER-PROVIDED, NEVER BUNDLED)', true); return; }
-    setStatus('BOOTING ' + platform + ' CORE FROM CDN… (first boot downloads ~10-40MB, be patient)');
-    loadEmulatorJS(function () {
-      window.EJS_player = '#game';
-      window.EJS_core = core;
-      window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
-      window.EJS_gameUrl = romBlobUrl;
-      if (biosBlobUrl) window.EJS_biosUrl = biosBlobUrl;
-      window.EJS_startOnLoaded = true;
-      window.EJS_Buttons = {
-        playPause: null, restart: null, mute: null,
-        settingsMenu: null, fullscreen: null, saveState: null, loadState: null,
-        screenRecord: null, gamepad: null, cheat: null, volume: null,
-        saveSavFiles: null, loadSavFiles: null, quickSave: null, quickLoad: null,
-        screenshot: null, cacheManager: null, exitEmulation: null
-      };
-      // EmulatorJS ships its own touch controls + fullscreen; we also keep our
-      // own fullscreen button working on the stage element below.
-      booted = true;
-      try {
-        new EmulatorJS('#game'); // eslint-disable-line no-new
-      } catch (e) {
-        setStatus('EMULATOR FAILED TO START: ' + (e && e.message ? e.message : e), true);
-      }
+    setStatus('BOOTING ' + platform + ' CORE FROM CDN… (first boot downloads core files)');
+    window.EJS_player = '#game';
+    window.EJS_core = core;
+    window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+    window.EJS_gameUrl = romBlobUrl;
+    if (biosBlobUrl) window.EJS_biosUrl = biosBlobUrl;
+    window.EJS_startOnLoaded = true;
+    window.EJS_Buttons = {
+      playPause: null, restart: null, mute: null,
+      settingsMenu: null, fullscreen: null, saveState: null, loadState: null,
+      screenRecord: null, gamepad: null, cheat: null, volume: null,
+      saveSavFiles: null, loadSavFiles: null, quickSave: null, quickLoad: null,
+      screenshot: null, cacheManager: null, exitEmulation: null
+    };
+    booted = true;
+    loadEmulatorJS().catch(function (e) {
+      booted = false;
+      setStatus('EMULATOR FAILED TO START: ' + e.message, true);
     });
   }
   btnStart.addEventListener('click', boot);
