@@ -1,16 +1,16 @@
 {
   "platform": "ps1",
   "platformName": "PlayStation 1",
-  "hosting": "A freely redistributable PS1 homebrew technical demo is bundled. Commercial games and BIOS files are not included.",
+  "hosting": "A freely redistributable PS1 homebrew racing game is bundled. Commercial games and BIOS files are not included.",
   "games": [
     {
-      "title": "Doom Intro Demo",
-      "icon": "🔥",
-      "color": "orange",
-      "desc": "A PS1 homebrew technical demo recreating the classic Doom title-screen fire effect.",
-      "meta": "▶ PLAY · MPL-2.0 · 20MB CHD",
+      "title": "Wipefaux",
+      "icon": "🏎️",
+      "color": "cyan",
+      "desc": "A playable PS1 homebrew anti-gravity racing game inspired by WipEout. Steer, accelerate, and race through the demo track.",
+      "meta": "▶ PLAY · MPL-2.0 ENGINE · 18MB CHD",
       "license": "MPL-2.0",
-      "romUrl": "../ps1/roms/DOOMINTRO.CHD",
+      "romUrl": "../ps1/roms/WIPEFAUX.CHD",
       "biosUrl": "../ps1/roms/openbios.bin"
     }
   ]
