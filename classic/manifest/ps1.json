@@ -1,14 +1,13 @@
 {
   "platform": "ps1",
   "platformName": "PlayStation 1",
-  "hosting": "A freely redistributable PS1 homebrew racing game is bundled. Commercial games and BIOS files are not included.",
+  "hosting": "The catalog links to the creator-hosted Wipefaux browser player. No disc image or BIOS is bundled.",
   "games": [
     {
       "title": "Wipefaux",
-      "fileName": "WIPEFAUX.CHD",
       "icon": "🏎️",
       "color": "cyan",
-      "desc": "PS1 homebrew racing game. Play it in the creator-hosted web player embedded below.",
+      "desc": "Play the creator-hosted PS1 racing game below. Click START GAME inside the player.",
       "meta": "▶ PLAY · CREATOR-HOSTED PLAYER · MPL-2.0 ENGINE",
       "license": "MPL-2.0",
       "playerUrl": "https://luksamuk.codes/static/psx/?game=wipefaux"

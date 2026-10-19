@@ -10,27 +10,22 @@
   .catalog-section { width: 100%; max-width: 1100px; margin: 8px 0 22px; }
   .section-kicker { color: #00f0ff; font-size: 10px; letter-spacing: .08em; margin: 0 0 10px; }
   .catalog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
-  .catalog-grid .card { min-height: 150px; cursor: pointer; }
+  .catalog-grid .card { min-height: 150px; cursor: pointer; width: 100%; text-align: left; font: inherit; }
   .catalog-grid .card:hover { transform: translateY(-2px); }
-  .official-player, .byo-section { width: 100%; max-width: 1100px; margin: 0 0 22px; }
+  .official-player { width: 100%; max-width: 1100px; margin: 0 0 22px; }
   .official-player iframe { display: block; width: 100%; height: min(78vh, 760px); min-height: 560px; border: 1px solid rgba(0,240,255,.35); background: #080910; }
-  .byo-section { border-top: 1px solid rgba(148,163,184,.25); padding-top: 22px; }
+  .official-player .status { margin-top: 10px; }
 </style>
 </head>
 <body>
   <a class="back-link" href="../index.html">◄ RETRO VAULT</a>
   <div class="logo">PLAYSTATION <span>1</span></div>
-  <div class="tagline">PS1 HOMEBREW CATALOG · WIPEFAUX PLAYER BY LUKSAMUK<br>YOUR OWN DISC IMAGES ARE SUPPORTED BELOW · INTERNET REQUIRED FOR PLAYER/CORE</div>
-
-  <div class="empty-catalog" id="emptyCatalog" style="display:none;">
-    <div class="big">📀</div>
-    <h3>NO GAMES HOSTED HERE</h3>
-    <p>LOAD YOUR OWN LEGALLY-DUMPED DISC IMAGE BELOW.</p>
-  </div>
+  <div class="tagline">PS1 HOMEBREW CATALOG · WIPEFAUX PLAYER BY LUKSAMUK<br>FRESH GAME LOAD · INTERNET REQUIRED</div>
 
   <section class="catalog-section" aria-label="PS1 game catalog">
     <div class="section-kicker">PS1 GAME CATALOG</div>
     <div id="catalog" class="catalog-grid"></div>
+    <div class="status" id="catalogStatus">LOADING CATALOG…</div>
   </section>
 
   <section class="official-player" id="officialPlayer" aria-label="Official Wipefaux player">
@@ -38,62 +33,43 @@
       <div class="player-title">🏎 WIPEFAUX · OFFICIAL WEB PLAYER <small style="color:#64748b;font-size:7px;">BY LUKSAMUK</small></div>
     </div>
     <iframe id="wipefauxFrame" title="Official Wipefaux PS1 homebrew player" src="https://luksamuk.codes/static/psx/?game=wipefaux" loading="lazy" allow="fullscreen; gamepad" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-    <div class="status">Player and game build by Lucas S. Vieira (luksamuk). Click START GAME inside the player. Controls are shown in-game.</div>
+    <div class="status">Player/game by Lucas S. Vieira (luksamuk). Click <b>START GAME</b> to enter the track. In-game <b>START: RESET</b> resets the run. Controls are shown in-game.</div>
   </section>
-
-  <section class="byo-section" aria-label="Bring your own PlayStation game">
-    <div class="section-kicker">PLAY YOUR OWN DISC IMAGE</div>
-  </section>
-  <div id="player">
-    <div class="player-head">
-      <div class="player-title">🎮 PSX BYO-ROM PLAYER <small style="color:#64748b;font-size:7px;">EmulatorJS</small></div>
-    </div>
-    <div class="stage" id="stage">
-      <div id="game">PICK YOUR OWN LEGAL DISC IMAGE + BIOS, THEN PRESS START</div>
-    </div>
-    <div class="files-row">
-      <div class="file-slot">
-        <label>💾 YOUR GAME IMAGE</label>
-        <label class="pick" for="romInput">⬆ PICK DISC FILE</label>
-        <input type="file" id="romInput" accept=".bin,.cue,.iso,.chd,.pbp,.img,.zip" hidden>
-        <div class="fname" id="romName">no file</div>
-      </div>
-      <div class="file-slot">
-        <label>🔒 YOUR BIOS FILE</label>
-        <label class="pick" for="biosInput">⬆ PICK BIOS FILE</label>
-        <input type="file" id="biosInput" accept=".bin,.rom" hidden>
-        <div class="fname" id="biosName">no file</div>
-      </div>
-    </div>
-    <div class="ctrl-bar">
-      <button class="btn" id="btnStart">▶ START</button>
-      <button class="btn fs" id="btnFull">⛶ FULLSCREEN</button>
-    </div>
-    <div class="status" id="status">BYO-ROM MODE — FILES STAY IN YOUR BROWSER</div>
-  </div>
 
   <div class="note">
-    <b>HOW IT WORKS:</b> THE WIPEFAUX PLAYER IS HOSTED BY ITS CREATOR AND RUNS INSIDE THIS PAGE. THE BYO-ROM PLAYER READS YOUR FILES LOCALLY IN YOUR BROWSER.
     <b>LICENSES:</b> <a href="https://luksamuk.codes/pages/psx-homebrew.html" target="_blank" rel="noopener">Wipefaux homebrew source</a> · <a href="https://github.com/EmulatorJS/EmulatorJS/blob/main/LICENSE" target="_blank" rel="noopener">EmulatorJS GPL-3.0</a>.
-    <b>CONTROLS:</b> Wipefaux displays its own controls at boot: D-pad tilts/steers, X thrusts, Start resets; L1/R1 changes ship. Click START GAME inside the player first.
-    <b>BIOS:</b> Wipefaux player uses its creator's OpenBIOS build. Bring-your-own games may require a BIOS you are entitled to use.
-    <b>OFFLINE:</b> THE PLAYER AND EMULATOR CORE REQUIRE INTERNET.
+    <b>CONTROLS:</b> D-pad tilts, X thrusts, Start resets; L1/R1 changes ship. Click inside the player to focus controls.
+    <b>OFFLINE:</b> THE CREATOR-HOSTED PLAYER AND EMULATOR CORE REQUIRE INTERNET.
   </div>
-
-  <div class="footer">
-    EMULATOR: <a href="https://emulatorjs.org/" target="_blank" rel="noopener">EmulatorJS</a> (GPL-3.0, CDN) · CORE: pcsx_rearmed (GPL-2.0)<br>
-    PART OF THE MINI-ARCADE RETRO VAULT
-  </div>
-  <div class="crt"></div>
 
   <script>
-    window.RETRO_CONFIG = {
-      core: 'psx',
-      exts: ['.bin', '.cue', '.iso', '.chd', '.pbp', '.img', '.zip'],
-      needsBios: true,
-      manifest: '../manifest/ps1.json',
-    };
+    (async function () {
+      const root = document.getElementById('catalog');
+      const status = document.getElementById('catalogStatus');
+      try {
+        const response = await fetch('../manifest/ps1.json');
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const manifest = await response.json();
+        for (const game of manifest.games || []) {
+          const card = document.createElement('button');
+          card.type = 'button';
+          card.className = 'card ' + (game.color || 'cyan');
+          card.innerHTML = '<span class="icon"></span><h2></h2><p></p><div class="hs"></div>';
+          card.querySelector('.icon').textContent = game.icon || '🎮';
+          card.querySelector('h2').textContent = game.title;
+          card.querySelector('p').textContent = game.desc || '';
+          card.querySelector('.hs').textContent = game.meta || 'PLAY';
+          card.addEventListener('click', function () {
+            document.getElementById('officialPlayer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.getElementById('wipefauxFrame').focus();
+          });
+          root.appendChild(card);
+        }
+        if (status) status.remove();
+      } catch (error) {
+        if (status) status.textContent = 'CATALOG FAILED TO LOAD: ' + error.message;
+      }
+    })();
   </script>
-  <script src="../retro.js"></script>
 </body>
 </html>
