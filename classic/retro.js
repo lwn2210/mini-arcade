@@ -107,22 +107,28 @@
   var emptyEl = document.getElementById('emptyCatalog');
   function bootUrl(url, name, biosUrl) {
     if (booted) { setStatus('A GAME IS ALREADY RUNNING — RELOAD THE PAGE TO SWITCH CARTS', true); return; }
-    if (romBlobUrl) URL.revokeObjectURL(romBlobUrl);
-    romBlobUrl = new URL(url, window.location.href).href;
-    romNameEl.textContent = '✔ ' + name;
-    if (!biosUrl) { setStatus('ROM READY: ' + name + ' · BOOTING…'); boot(); return; }
-    setStatus('LOADING ' + name + ' · PREPARING BIOS…');
-    fetch(biosUrl).then(function (r) {
-      if (!r.ok) throw new Error('BIOS HTTP ' + r.status);
+    setStatus('DOWNLOADING ' + name + '…');
+    fetch(new URL(url, window.location.href).href).then(function (r) {
+      if (!r.ok) throw new Error('GAME HTTP ' + r.status);
       return r.blob();
     }).then(function (blob) {
-      if (biosBlobUrl) URL.revokeObjectURL(biosBlobUrl);
-      biosBlobUrl = URL.createObjectURL(blob);
-      biosNameEl.textContent = '✔ bundled OpenBIOS';
-      setStatus('ROM + BIOS READY · BOOTING ' + name + '…');
-      boot();
+      if (romBlobUrl) URL.revokeObjectURL(romBlobUrl);
+      romBlobUrl = URL.createObjectURL(blob);
+      romNameEl.textContent = '✔ ' + name;
+      if (!biosUrl) { setStatus('ROM READY: ' + name + ' · BOOTING…'); boot(); return; }
+      setStatus('LOADING ' + name + ' · PREPARING BIOS…');
+      return fetch(new URL(biosUrl, window.location.href)).then(function (r) {
+        if (!r.ok) throw new Error('BIOS HTTP ' + r.status);
+        return r.blob();
+      }).then(function (biosBlob) {
+        if (biosBlobUrl) URL.revokeObjectURL(biosBlobUrl);
+        biosBlobUrl = URL.createObjectURL(biosBlob);
+        biosNameEl.textContent = '✔ bundled OpenBIOS';
+        setStatus('ROM + BIOS READY · BOOTING ' + name + '…');
+        boot();
+      });
     }).catch(function (e) {
-      setStatus('COULD NOT LOAD BUNDLED BIOS: ' + (e && e.message ? e.message : e), true);
+      setStatus('COULD NOT PREPARE GAME: ' + (e && e.message ? e.message : e), true);
     });
   }
   if (catalogEl && CFG.manifest) {
