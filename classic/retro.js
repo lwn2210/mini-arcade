@@ -84,6 +84,7 @@
     window.EJS_core = core;
     window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
     window.EJS_gameUrl = romBlobUrl;
+    window.EJS_gameName = platform + '-' + (romNameEl.textContent || 'game').replace(/^✔\s*/, '');
     if (biosBlobUrl) window.EJS_biosUrl = biosBlobUrl;
     window.EJS_startOnLoaded = true;
     window.EJS_Buttons = {
