@@ -6,6 +6,13 @@
 <title>CLASSIC ZONE — PlayStation 1</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../retro.css">
+<style>
+  .catalog-section { width: 100%; max-width: 1100px; margin: 8px 0 22px; }
+  .section-kicker { color: #00f0ff; font-size: 10px; letter-spacing: .08em; margin: 0 0 10px; }
+  .catalog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .catalog-grid .card { min-height: 150px; cursor: pointer; }
+  .catalog-grid .card:hover { transform: translateY(-2px); }
+</style>
 </head>
 <body>
   <a class="back-link" href="../index.html">◄ RETRO VAULT</a>
@@ -18,7 +25,10 @@
     <p>LOAD YOUR OWN LEGALLY-DUMPED DISC IMAGE BELOW.</p>
   </div>
 
-  <div id="catalog" class="catalog-grid"></div>
+  <section class="catalog-section" aria-label="PS1 game catalog">
+    <div class="section-kicker">PS1 GAME CATALOG</div>
+    <div id="catalog" class="catalog-grid"></div>
+  </section>
 
   <div id="player">
     <div class="player-head">

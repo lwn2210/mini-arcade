@@ -107,7 +107,7 @@
   function bootUrl(url, name, biosUrl) {
     if (booted) { setStatus('A GAME IS ALREADY RUNNING — RELOAD THE PAGE TO SWITCH CARTS', true); return; }
     if (romBlobUrl) URL.revokeObjectURL(romBlobUrl);
-    romBlobUrl = url;
+    romBlobUrl = new URL(url, window.location.href).href;
     romNameEl.textContent = '✔ ' + name;
     if (!biosUrl) { setStatus('ROM READY: ' + name + ' · BOOTING…'); boot(); return; }
     setStatus('LOADING ' + name + ' · PREPARING BIOS…');
