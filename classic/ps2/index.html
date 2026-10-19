@@ -13,7 +13,8 @@
   .catalog-card { border: 1px solid rgba(0,240,255,.4); padding: 16px; background: rgba(0,0,0,.25); }
   .catalog-card h4 { color: #00f0ff; font-size: 9px; margin: 0 0 10px; }
   .catalog-card p { font-size: 7px; line-height: 1.9; color: #94a3b8; }
-  .catalog-card a { display: inline-block; margin-top: 8px; color: #050508; background: #00f0ff; padding: 10px 12px; font-size: 7px; text-decoration: none; }
+  .catalog-help { font-size: 7px; color: #ffe600; line-height: 1.9; margin-top: 12px; }
+  .player-state { border: 1px solid rgba(255,230,0,.45); color: #ffe600; padding: 12px; font-size: 8px; line-height: 1.8; margin-bottom: 14px; }
   .lab-note { max-width: 860px; width: 100%; z-index: 1; border: 2px dashed rgba(255,136,0,0.55); border-radius: 12px; padding: 24px; background: rgba(255,136,0,0.05); line-height: 2.4; }
   .lab-note h3 { font-size: 10px; color: #ff8800; margin-bottom: 14px; text-shadow: 0 0 10px rgba(255,136,0,0.5); }
   .lab-note p { font-size: 8px; color: #94a3b8; margin-bottom: 12px; }
@@ -52,7 +53,8 @@
     <span class="badge" style="color:#00f0ff;border-color:rgba(0,240,255,.55);">REAL PS2 EMULATOR / EXPERIMENTAL</span>
     <p>PS2 emulator WebAssembly yang berjalan langsung di browser. Tidak perlu BIOS. Pilih game PS2 dari perangkat lu untuk mulai.</p>
     <p><b>SUPPORTED:</b> ISO · CSO · CHD · ISZ · BIN · ELF · Chrome/Edge desktop terbaru direkomendasikan.</p>
-    <a class="lab-button" href="https://playjs.purei.org/" target="_blank" rel="noopener">▶ OPEN PS2 PLAYER</a>
+    <div class="player-state"><b>PLAYER READY:</b> Download a catalog ELF above, open the player, then click <b>Choose File</b> inside Play!.js. `0 f/s` is normal until a game file is selected.</div>
+    <a class="lab-button" href="https://playjs.purei.org/" target="_blank" rel="noopener">▶ OPEN PS2 PLAYER / CHOOSE FILE</a>
     <p class="sim-status">Game commercial tidak dibundel di vault. Player resmi akan meminta file game milik lu secara lokal; file tidak di-upload ke sini.</p>
     <iframe class="player-frame" src="https://playjs.purei.org/" title="Play!.js PS2 emulator" allow="autoplay; fullscreen; gamepad" loading="lazy"></iframe>
   </section>
