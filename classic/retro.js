@@ -157,6 +157,10 @@
           a.appendChild(icon); a.appendChild(h2); a.appendChild(p); a.appendChild(hs);
           a.addEventListener('click', function (ev) {
             ev.preventDefault();
+            if (g.title === 'Wipefaux') {
+              document.getElementById('officialPlayer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+              return;
+            }
             bootUrl(g.romUrl, g.fileName || g.title, g.biosUrl);
           });
           catalogEl.appendChild(a);

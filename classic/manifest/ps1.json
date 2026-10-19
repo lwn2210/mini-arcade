@@ -8,11 +8,10 @@
       "fileName": "WIPEFAUX.CHD",
       "icon": "🏎️",
       "color": "cyan",
-      "desc": "A playable PS1 homebrew anti-gravity racing game inspired by WipEout. Steer, accelerate, and race through the demo track.",
-      "meta": "▶ PLAY · MPL-2.0 ENGINE · 18MB CHD",
+      "desc": "PS1 homebrew racing game. Play it in the creator-hosted web player embedded below.",
+      "meta": "▶ PLAY · CREATOR-HOSTED PLAYER · MPL-2.0 ENGINE",
       "license": "MPL-2.0",
-      "romUrl": "../ps1/roms/WIPEFAUX.CHD",
-      "biosUrl": "../ps1/roms/openbios.bin"
+      "playerUrl": "https://luksamuk.codes/static/psx/?game=wipefaux"
     }
   ]
 }
