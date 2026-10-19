@@ -13,7 +13,13 @@
   .catalog-grid .card { min-height: 150px; cursor: pointer; width: 100%; text-align: left; font: inherit; }
   .catalog-grid .card:hover { transform: translateY(-2px); }
   .official-player { width: 100%; max-width: 1100px; margin: 0 0 22px; }
+  .player-modes { display: flex; gap: 6px; margin: 0 0 10px; }
+  .player-modes button { min-height: 38px; padding: 8px 12px; border: 1px solid #334155; color: #cbd5e1; background: #090b12; font: inherit; font-size: 8px; cursor: pointer; }
+  .player-modes button[aria-pressed="true"] { color: #050508; background: #00f0ff; border-color: #00f0ff; }
   .official-player iframe { display: block; width: 100%; height: min(78vh, 760px); min-height: 560px; border: 1px solid rgba(0,240,255,.35); background: #080910; }
+  .local-player[hidden], .official-view[hidden] { display: none !important; }
+  .local-player { border: 1px solid rgba(255,0,255,.4); padding: 12px; background: rgba(9,11,18,.94); }
+  .local-player .stage { margin-bottom: 12px; }
   .official-player .status { margin-top: 10px; }
 </style>
 </head>
@@ -29,17 +35,35 @@
   </section>
 
   <section class="official-player" id="officialPlayer" aria-label="Official Wipefaux player">
-    <div class="player-head">
-      <div class="player-title">🏎 WIPEFAUX · OFFICIAL WEB PLAYER <small style="color:#64748b;font-size:7px;">BY LUKSAMUK</small></div>
+    <div class="player-modes" role="group" aria-label="PS1 player mode">
+      <button type="button" id="modeHomebrew" aria-pressed="true">WIPEFAUX HOMEBREW</button>
+      <button type="button" id="modeOwnDisc" aria-pressed="false">YOUR OWN DISC</button>
     </div>
-    <iframe id="wipefauxFrame" title="Official Wipefaux PS1 homebrew player" src="https://luksamuk.codes/static/psx/?game=wipefaux" loading="lazy" allow="fullscreen; gamepad" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-    <div class="status">Player/game by Lucas S. Vieira (luksamuk). Click <b>START GAME</b> to enter the track. In-game <b>START: RESET</b> resets the run. Controls are shown in-game.</div>
+    <div class="official-view" id="officialView">
+      <div class="player-head">
+        <div class="player-title">🏎 WIPEFAUX · OFFICIAL WEB PLAYER <small style="color:#64748b;font-size:7px;">BY LUKSAMUK</small></div>
+      </div>
+      <iframe id="wipefauxFrame" title="Official Wipefaux PS1 homebrew player" src="https://luksamuk.codes/static/psx/?game=wipefaux" loading="lazy" allow="fullscreen; gamepad" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      <div class="status">Creator-hosted homebrew sample. Click <b>START GAME</b> to enter the track. In-game <b>START: RESET</b> resets the run.</div>
+    </div>
+    <div class="local-player" id="localPlayer" hidden>
+      <div class="player-head">
+        <div class="player-title">🎮 YOUR PS1 DISC · EMULATORJS <small style="color:#64748b;font-size:7px;">LOCAL FILES ONLY</small></div>
+      </div>
+      <div class="stage" id="stage"><div id="game">CHOOSE YOUR LEGALLY-DUMPED DISC IMAGE AND BIOS, THEN PRESS START</div></div>
+      <div class="files-row">
+        <div class="file-slot"><label>YOUR GAME IMAGE</label><label class="pick" for="romInput">PICK DISC FILE</label><input type="file" id="romInput" accept=".bin,.cue,.iso,.chd,.pbp,.img,.zip" hidden><div class="fname" id="romName">no file</div></div>
+        <div class="file-slot"><label>YOUR BIOS FILE</label><label class="pick" for="biosInput">PICK BIOS FILE</label><input type="file" id="biosInput" accept=".bin,.rom" hidden><div class="fname" id="biosName">no file</div></div>
+      </div>
+      <div class="ctrl-bar"><button class="btn" id="btnStart">START</button><button class="btn fs" id="btnFull">FULLSCREEN</button></div>
+      <div class="status" id="status">CHOOSE A GAME AND A BIOS YOU ARE ENTITLED TO USE. FILES STAY IN YOUR BROWSER.</div>
+    </div>
   </section>
 
   <div class="note">
-    <b>LICENSES:</b> <a href="https://luksamuk.codes/pages/psx-homebrew.html" target="_blank" rel="noopener">Wipefaux homebrew source</a> · <a href="https://github.com/EmulatorJS/EmulatorJS/blob/main/LICENSE" target="_blank" rel="noopener">EmulatorJS GPL-3.0</a>.
-    <b>CONTROLS:</b> D-pad tilts, X thrusts, Start resets; L1/R1 changes ship. Click inside the player to focus controls.
-    <b>OFFLINE:</b> THE CREATOR-HOSTED PLAYER AND EMULATOR CORE REQUIRE INTERNET.
+    <b>WIPEFAUX:</b> original PS1 homebrew, not the commercial WipEout game or its ROM.
+    <b>YOUR DISC:</b> use a legally dumped BIN/CUE/ISO/CHD and a BIOS you are entitled to use. Nothing is uploaded.
+    <b>ATTRIBUTION:</b> <a href="https://luksamuk.codes/pages/psx-homebrew.html" target="_blank" rel="noopener">Wipefaux homebrew source</a> · <a href="https://github.com/EmulatorJS/EmulatorJS/blob/main/LICENSE" target="_blank" rel="noopener">EmulatorJS license</a>.
   </div>
 
   <script>
@@ -70,6 +94,27 @@
         if (status) status.textContent = 'CATALOG FAILED TO LOAD: ' + error.message;
       }
     })();
+
+    const homebrew = document.getElementById('modeHomebrew');
+    const ownDisc = document.getElementById('modeOwnDisc');
+    const officialView = document.getElementById('officialView');
+    const localPlayer = document.getElementById('localPlayer');
+    function selectMode(useOwnDisc) {
+      officialView.hidden = useOwnDisc;
+      localPlayer.hidden = !useOwnDisc;
+      homebrew.setAttribute('aria-pressed', String(!useOwnDisc));
+      ownDisc.setAttribute('aria-pressed', String(useOwnDisc));
+    }
+    homebrew.addEventListener('click', function () { selectMode(false); });
+    ownDisc.addEventListener('click', function () { selectMode(true); });
+
+    window.RETRO_CONFIG = {
+      core: 'psx',
+      exts: ['.bin', '.cue', '.iso', '.chd', '.pbp', '.img', '.zip'],
+      needsBios: true,
+      platform: 'PS1',
+    };
   </script>
+  <script src="../retro.js"></script>
 </body>
 </html>
