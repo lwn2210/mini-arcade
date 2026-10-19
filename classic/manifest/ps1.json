@@ -5,6 +5,7 @@
   "games": [
     {
       "title": "Wipefaux",
+      "fileName": "WIPEFAUX.CHD",
       "icon": "🏎️",
       "color": "cyan",
       "desc": "A playable PS1 homebrew anti-gravity racing game inspired by WipEout. Steer, accelerate, and race through the demo track.",

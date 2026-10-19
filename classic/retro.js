@@ -86,7 +86,7 @@
     window.EJS_gameUrl = romBlobUrl;
     if (biosBlobUrl) window.EJS_biosUrl = biosBlobUrl;
     window.EJS_startOnLoaded = true;
-    window.EJS_gameName = platform + '-' + (romNameEl.textContent || 'game').replace(/^✔\s*/, '');
+    window.EJS_gameName = (romNameEl.textContent || 'game').replace(/^✔\s*/, '');
     window.EJS_Buttons = {
       playPause: null, restart: null, mute: null,
       settingsMenu: null, fullscreen: null, saveState: null, loadState: null,
@@ -157,7 +157,7 @@
           a.appendChild(icon); a.appendChild(h2); a.appendChild(p); a.appendChild(hs);
           a.addEventListener('click', function (ev) {
             ev.preventDefault();
-            bootUrl(g.romUrl, g.title, g.biosUrl);
+            bootUrl(g.romUrl, g.fileName || g.title, g.biosUrl);
           });
           catalogEl.appendChild(a);
         });
