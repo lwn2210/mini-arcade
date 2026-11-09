@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MINI ARCADE — Neon Collection</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#00f0ff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mini Arcade">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='4' y='4' width='24' height='24' rx='6' fill='%23050508' stroke='%2300f0ff' stroke-width='2'/%3E%3Ccircle cx='12' cy='13' r='3.5' fill='%23ff00aa'/%3E%3Crect x='17' y='11' width='8' height='4' rx='2' fill='%2300f0ff'/%3E%3Crect x='10' y='20' width='12' height='3' rx='1.5' fill='%23ffe600'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
@@ -183,12 +189,36 @@
     position: fixed; inset: 0; pointer-events: none; z-index: 4;
     background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.5) 100%);
   }
+  .pwa-install-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #00f0ff, #ff00aa);
+    color: #050508;
+    font-family: inherit;
+    font-size: 8px;
+    font-weight: 800;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 99px;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(0,240,255,0.6);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    margin: 4px 0 24px;
+    z-index: 10;
+  }
+  .pwa-install-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 22px rgba(255,0,170,0.8);
+  }
+  .pwa-install-btn.hidden { display: none !important; }
 </style>
 </head>
 <body>
   <div class="logo">MINI<span> ARCADE</span></div>
   <div class="tagline">NEON COLLECTION · SINGLE-FILE GAMES · ZERO DEPENDENCY<br>PILIH GAME ▼</div>
   <div class="status-strip"><span class="status-dot"></span> OPEN 24/7 · 16 GAMES · NUSANTARA ARCADE COLLECTION</div>
+  <button id="btnPwaInstall" class="pwa-install-btn hidden">📲 INSTALL KE HP (MAIN OFFLINE)</button>
 
   <div class="grid">
     <!-- Nusantara Arcade Collection -->
@@ -381,6 +411,38 @@
         .catch(function(){ tStat.textContent='offline'; tList.innerHTML='<div class="ticket-none">Board tidak bisa dimuat — cek koneksi atau buka langsung github.com/'+REPO+'/issues</div>'; });
     }
     loadTickets();
+
+    // PWA & Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./sw.js').then(function(reg) {
+          console.log('PWA ServiceWorker active:', reg.scope);
+        }).catch(function(err) {
+          console.log('PWA registration skipped:', err);
+        });
+      });
+    }
+
+    var deferredPrompt = null;
+    var pwaBtn = document.getElementById('btnPwaInstall');
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (pwaBtn) pwaBtn.classList.remove('hidden');
+    });
+    if (pwaBtn) {
+      pwaBtn.addEventListener('click', function() {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then(function(choice) {
+            if (choice.outcome === 'accepted') {
+              pwaBtn.classList.add('hidden');
+            }
+            deferredPrompt = null;
+          });
+        }
+      });
+    }
   </script>
 </body>
 </html>

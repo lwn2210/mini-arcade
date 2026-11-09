@@ -1,0 +1,26 @@
+{
+  "name": "Mini Arcade — Nusantara & Neon Collection",
+  "short_name": "Mini Arcade",
+  "description": "Koleksi game arcade ringan zero-dependency khas Nusantara dan Neon Cyberpunk.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#050508",
+  "theme_color": "#00f0ff",
+  "orientation": "any",
+  "categories": ["games", "arcade", "entertainment"],
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
