@@ -69,10 +69,24 @@
     97%      { opacity: 0.92; }
     98%      { opacity: 1; }
   }
+  .back {
+    position: absolute;
+    top: -26px;
+    left: 4px;
+    font-size: 8px;
+    font-family: 'Press Start 2P', monospace;
+    letter-spacing: 1px;
+    color: #00f0ff;
+    text-decoration: none;
+    text-shadow: 0 0 6px rgba(0, 240, 255, 0.5);
+    z-index: 10;
+  }
+  .back:hover { color: #ff00aa; text-shadow: 0 0 10px rgba(255, 0, 170, 0.7); }
 </style>
 </head>
 <body>
 <div id="wrap">
+  <a class="back" href="../">&larr; BACK TO HUB</a>
   <canvas id="game" width="600" height="700"></canvas>
   <div id="crt"></div>
 </div>
