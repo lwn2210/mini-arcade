@@ -385,6 +385,12 @@
       <p>Rhythm game ala Guitar Hero: tepatkan note di garis, timing Perfect ±45ms. Track disintesis live — tanpa file audio.</p>
       <div class="hs" id="hsHero">★ BEST: 0</div>
     </a>
+    <a class="card cyan" href="citadel/index.html">
+      <span class="icon">🏰</span>
+      <h2>CYBER CITADEL</h2>
+      <p>Tactical tower defense: tempatkan turret laser, plasma, cryo &amp; tesla di grid jalur untuk lindungi inti benteng dari 20 wave mecha.</p>
+      <div class="hs" id="hsCitadel">★ BEST: 0</div>
+    </a>
   </div>
 
   <div class="footer">BUILT WITH VANILLA JS · NO ENGINE · NO ASSETS<br>Part of the lwn2210 arcade universe<br><a href="https://lwn2210.github.io/cyber-raid-2088/" style="color:#ff8800; text-decoration:none;">⚡ FEATURED: cyber-raid-2088 — full arcade shooter</a></div>
@@ -438,6 +444,7 @@
     fmt('hsFlappy', 'flappycyber_hs');
     fmt('hsTetris', 'neontetris_hs');
     fmt('hsHero', 'neonhero_hs');
+    fmt('hsCitadel', 'cybercitadel_hs');
     // Polarity tracks its best score in its own game screen.
 
     // ===== Arcade Hall of Fame =====
@@ -506,6 +513,15 @@
           read: function(v) {
             var n = parseInt(v, 10);
             return !isNaN(n) && n > 0 ? { score: n + ' Kardus & Barang', meta: 'Muatan mudik selamat' } : null;
+          }
+        },
+        {
+          name: 'Cyber Citadel',
+          icon: '🏰',
+          key: 'cybercitadel_hs',
+          read: function(v) {
+            var n = parseInt(v, 10);
+            return !isNaN(n) && n > 0 ? { score: n.toLocaleString('id-ID') + ' Pts', meta: 'Skor pertahanan benteng' } : null;
           }
         }
       ];
