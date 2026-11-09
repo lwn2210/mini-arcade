@@ -1,0 +1,9 @@
+{
+  "appId": "id.lwn.miniarcade",
+  "appName": "Mini Arcade",
+  "webDir": ".",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  }
+}

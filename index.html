@@ -212,6 +212,72 @@
     box-shadow: 0 0 22px rgba(255,0,170,0.8);
   }
   .pwa-install-btn.hidden { display: none !important; }
+
+  /* Hall of Fame / Leaderboard */
+  .hof-section {
+    max-width: 860px;
+    width: 100%;
+    margin: 24px auto 30px;
+    z-index: 1;
+    background: rgba(10, 14, 24, 0.9);
+    border: 2px solid #ffe600;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 0 25px rgba(255, 230, 0, 0.25);
+  }
+  .hof-head {
+    font-size: 11px;
+    color: #ffe600;
+    text-shadow: 0 0 10px rgba(255, 230, 0, 0.7);
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .hof-head span {
+    color: #94a3b8;
+    font-size: 7px;
+    letter-spacing: 1px;
+  }
+  .hof-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+  }
+  .hof-card {
+    background: rgba(5, 5, 8, 0.85);
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .hof-card:hover {
+    border-color: #00f0ff;
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.25);
+  }
+  .hof-card h3 {
+    font-size: 9px;
+    color: #00f0ff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .hof-score {
+    font-size: 12px;
+    color: #00ff88;
+    font-family: monospace;
+    font-weight: bold;
+  }
+  .hof-meta {
+    font-size: 7px;
+    color: #64748b;
+    font-family: monospace;
+  }
 </style>
 </head>
 <body>
@@ -344,6 +410,14 @@
       <p class="bug-note">Ticket dikirim ke GitHub Issues — status fix bisa dipantau di panel TICKETS di bawah.</p>
     </div>
   </div>
+  <section id="hall-of-fame" class="hof-section">
+    <div class="hof-head">
+      🏆 ARCADE HALL OF FAME
+      <span>REKOR TERTINGGI KAMU</span>
+    </div>
+    <div class="hof-grid" id="hof-grid"></div>
+  </section>
+
   <section id="tickets">
     <div class="tickets-head">🎫 TICKET BOARD <span id="tStat">loading…</span></div>
     <div id="ticketList" class="ticket-list"></div>
@@ -365,6 +439,97 @@
     fmt('hsTetris', 'neontetris_hs');
     fmt('hsHero', 'neonhero_hs');
     // Polarity tracks its best score in its own game screen.
+
+    // ===== Arcade Hall of Fame =====
+    function renderHallOfFame() {
+      var grid = document.getElementById('hof-grid');
+      if (!grid) return;
+      var records = [
+        {
+          name: 'Abang Gorengan',
+          icon: '🥢',
+          key: 'abang-gorengan.records',
+          read: function(v) {
+            try {
+              var r = JSON.parse(v || '{}');
+              return r.bestEarnings ? { score: 'Rp ' + r.bestEarnings.toLocaleString('id-ID'), meta: 'Hari ' + r.bestDay + ' · ' + (r.totalServed || 0) + ' pembeli' } : null;
+            } catch(e) { return null; }
+          }
+        },
+        {
+          name: 'Ojol Rush',
+          icon: '🛵',
+          key: 'ojol-rush.best',
+          read: function(v) {
+            try {
+              var r = JSON.parse(v || '{}');
+              return r.earnings ? { score: 'Rp ' + r.earnings.toLocaleString('id-ID'), meta: (r.delivered || 0) + ' antaran · Rating ' + (r.rating ? r.rating.toFixed(1) : '5.0') + '★' } : null;
+            } catch(e) { return null; }
+          }
+        },
+        {
+          name: 'Kucing Pasar',
+          icon: '🐟',
+          key: 'kucing-pasar.stars',
+          read: function(v) {
+            try {
+              var r = JSON.parse(v || '{}');
+              var total = Object.values(r).reduce(function(a, b){ return a + (typeof b === 'number' ? b : 0); }, 0);
+              return total > 0 ? { score: total + ' / 21 Bintang ★', meta: Object.keys(r).length + ' level terselesaikan' } : null;
+            } catch(e) { return null; }
+          }
+        },
+        {
+          name: 'Silat Duel',
+          icon: '🥋',
+          key: 'silat-duel.records',
+          read: function(v) {
+            try {
+              var r = JSON.parse(v || '{}');
+              return r.wins ? { score: r.wins + ' Kemenangan', meta: 'Jawara Padepokan' } : null;
+            } catch(e) { return null; }
+          }
+        },
+        {
+          name: 'Ojek Rush',
+          icon: '🛵',
+          key: 'ojek-rush.best',
+          read: function(v) {
+            var n = parseInt(v, 10);
+            return !isNaN(n) && n > 0 ? { score: n.toLocaleString('id-ID') + ' Pts', meta: 'Skor ngebut jalanan' } : null;
+          }
+        },
+        {
+          name: 'Mudik Stack',
+          icon: '🚗',
+          key: 'mudik-stack.best',
+          read: function(v) {
+            var n = parseInt(v, 10);
+            return !isNaN(n) && n > 0 ? { score: n + ' Kardus & Barang', meta: 'Muatan mudik selamat' } : null;
+          }
+        }
+      ];
+
+      grid.innerHTML = '';
+      records.forEach(function(item) {
+        var val = null;
+        try { val = localStorage.getItem(item.key); } catch(e){}
+        var res = item.read(val);
+        var card = document.createElement('div');
+        card.className = 'hof-card';
+        if (res) {
+          card.innerHTML = '<h3>' + item.icon + ' ' + item.name + '</h3>' +
+            '<div class="hof-score">' + res.score + '</div>' +
+            '<div class="hof-meta">' + res.meta + '</div>';
+        } else {
+          card.innerHTML = '<h3>' + item.icon + ' ' + item.name + '</h3>' +
+            '<div class="hof-score" style="color:#64748b">Belum ada rekor</div>' +
+            '<div class="hof-meta">Mainkan sekarang & ukir rekor!</div>';
+        }
+        grid.appendChild(card);
+      });
+    }
+    renderHallOfFame();
 
     // ===== ticket system (GitHub Issues) =====
     var REPO = 'lwn2210/mini-arcade';

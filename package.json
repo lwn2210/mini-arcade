@@ -1,0 +1,16 @@
+{
+  "name": "mini-arcade",
+  "version": "1.0.0",
+  "description": "Nusantara Retro Arcade Collection - 16 Games in One Portal",
+  "scripts": {
+    "build:apk": "npx @bubblewrap/cli build",
+    "cap:add": "npx @capacitor/cli add android",
+    "cap:build": "npx @capacitor/cli build android"
+  },
+  "devDependencies": {
+    "@bubblewrap/cli": "^1.21.1",
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/cli": "^6.1.2",
+    "@capacitor/core": "^6.1.2"
+  }
+}

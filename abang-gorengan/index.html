@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;800&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="./assets/index-D54xh3B5.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CLMdwsj4.css">
+    <script type="module" crossorigin src="./assets/index-DPXEzmBr.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CV1UQZHn.css">
   </head>
   <body>
     <div id="app">
@@ -66,6 +66,7 @@
           <p class="small" id="intro-menu"></p>
           <p class="target" id="intro-target"></p>
           <button id="start-day" class="btn">Buka lapak!</button>
+          <button id="open-shop-intro" class="btn ghost">🏪 Toko Gerobak</button>
         </div>
       </div>
 
@@ -87,9 +88,21 @@
           <div class="stats" id="result-stats"></div>
           <p class="records" id="result-best"></p>
           <button id="share-score" class="btn share">📤 Pamer Rekor (WhatsApp/Medsos)</button>
+          <button id="open-shop-result" class="btn ghost">🏪 Belanja Toko Gerobak</button>
           <button id="next" class="btn">Lanjut</button>
           <button id="to-menu" class="btn ghost">Menu</button>
         </div>
+      </div>
+
+      <div id="shop" class="overlay" hidden>
+        <div class="panel wide">
+          <h2>🏪 Toko Perlengkapan Gerobak</h2>
+          <p class="tagline">Tingkatkan peralatan dagang dari tabungan hasil jualanmu.</p>
+          <p class="money" id="shop-savings">Tabungan: Rp0</p>
+          <div class="shop-list" id="shop-list"></div>
+          <button id="close-shop" class="btn">Selesai Belanja</button>
+        </div>
+      </div>
       </div>
     </div>
   </body>
