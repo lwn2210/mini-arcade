@@ -37,6 +37,7 @@
 | 💀 **Neon Survivors** | [Play](https://lwn2210.github.io/mini-arcade/survivors/index.html) | Arena roguelite: auto-attack swarms of enemies, collect XP gems, and build builds. |
 | 🎸 **Neon Hero** | [Play](https://lwn2210.github.io/mini-arcade/hero/index.html) | Rhythm game with synthesized tracks and tight timing windows. |
 | 🏰 **Cyber Citadel** | [Play](https://lwn2210.github.io/mini-arcade/citadel/index.html) | Cyberpunk tower defense: 4 turret types, upgrades, 20 waves of mecha & titan bosses. |
+| 🃏 **Neon Deck** | [Play](https://lwn2210.github.io/mini-arcade/deck/index.html) | Pocket Balatro roguelike: chips × mult scoring, 15+ game-breaking jokers, casino shop. |
 | 🛸 **Cyber-Raid 2088** | [Play](https://lwn2210.github.io/cyber-raid-2088/) | Full arcade space shooter: 360° flight, boss phases, and procedural DSP audio. |
 
 ---

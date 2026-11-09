@@ -391,6 +391,12 @@
       <p>Tactical tower defense: tempatkan turret laser, plasma, cryo &amp; tesla di grid jalur untuk lindungi inti benteng dari 20 wave mecha.</p>
       <div class="hs" id="hsCitadel">★ BEST: 0</div>
     </a>
+    <a class="card purple" href="deck/index.html">
+      <span class="icon">🃏</span>
+      <h2>NEON DECK</h2>
+      <p>Pocket Balatro roguelike: racik combo Chips × Mult, borong kartu Joker sakti di toko kasino, dan libas Boss Blind hingga Ante 8!</p>
+      <div class="hs" id="hsDeck">★ BEST: 0</div>
+    </a>
   </div>
 
   <div class="footer">BUILT WITH VANILLA JS · NO ENGINE · NO ASSETS<br>Part of the lwn2210 arcade universe<br><a href="https://lwn2210.github.io/cyber-raid-2088/" style="color:#ff8800; text-decoration:none;">⚡ FEATURED: cyber-raid-2088 — full arcade shooter</a></div>
@@ -445,6 +451,7 @@
     fmt('hsTetris', 'neontetris_hs');
     fmt('hsHero', 'neonhero_hs');
     fmt('hsCitadel', 'cybercitadel_hs');
+    fmt('hsDeck', 'neondeck_hs');
     // Polarity tracks its best score in its own game screen.
 
     // ===== Arcade Hall of Fame =====
@@ -522,6 +529,15 @@
           read: function(v) {
             var n = parseInt(v, 10);
             return !isNaN(n) && n > 0 ? { score: n.toLocaleString('id-ID') + ' Pts', meta: 'Skor pertahanan benteng' } : null;
+          }
+        },
+        {
+          name: 'Neon Deck',
+          icon: '🃏',
+          key: 'neondeck_hs',
+          read: function(v) {
+            var n = parseInt(v, 10);
+            return !isNaN(n) && n > 0 ? { score: n.toLocaleString('id-ID') + ' Pts', meta: 'Skor tertinggi poker roguelike' } : null;
           }
         }
       ];
