@@ -14,10 +14,10 @@
 
 | Game | Direct Link | Description | Tech |
 |---|---|---|---|
-| 🥋 **Silat Duel 3D** | [Play](https://lwn2210.github.io/mini-arcade/silat-duel/) | 2.5D fighting duel between silat warriors (Jaka & Sari). Combos, air juggles, parry (*tepis*), and synthetic audio. | Three.js + TypeScript |
-| 🥢 **Abang Gorengan** | [Play](https://lwn2210.github.io/mini-arcade/abang-gorengan/) | Time-management street food cart: dip, fry, drain, and wrap authentic Indonesian snacks (bakwan, mendoan, tahu isi, cireng, combro). | Canvas 2D + Web Audio |
-| 🐱 **Kucing Pasar** | [Play](https://lwn2210.github.io/mini-arcade/kucing-pasar/) | Stealth 2D platformer: play as a cheeky orange cat stealing fish in a wet market while dodging stall aunties with broomsticks. | Canvas 2D (13 KB gzip) |
-| 🛵 **Ojol Rush** | [Play](https://lwn2210.github.io/mini-arcade/ojol-rush/) | Open-world motorcycle courier simulation with procedural city streets, police raids, speed bumps, and dynamic headlights. | Canvas 2D + Touch Joystick |
+| 🥋 **Silat Duel 3D** | [Play](https://lwn2210.github.io/mini-arcade/silat-duel/) | 2.5D fighting duel between 3 silat warriors (Jaka, Sari & Gatot). Combos, air juggles, parry (*tepis*), Batik Megamendung motif, and synthetic gamelan audio. | Three.js + TypeScript |
+| 🥢 **Abang Gorengan** | [Play](https://lwn2210.github.io/mini-arcade/abang-gorengan/) | Time-management street food cart with real 2D sprites: dip, fry, drain, and wrap authentic Indonesian snacks (bakwan, mendoan, tahu isi, cireng, combro). | Canvas 2D + Web Audio |
+| 🐱 **Kucing Pasar** | [Play](https://lwn2210.github.io/mini-arcade/kucing-pasar/) | Stealth 2D platformer with cartoon cat & vendor sprites: 7 full levels escaping wet markets through the gutters! | Canvas 2D + Web Audio |
+| 🛵 **Ojol Rush** | [Play](https://lwn2210.github.io/mini-arcade/ojol-rush/) | Open-world motorcycle courier simulation with top-down rider & Metromini sprites, interactive traffic honking, police raids, and dynamic headlights. | Canvas 2D + Touch Joystick |
 | 🪁 **Layangan Duel 3D** | [Play](https://lwn2210.github.io/mini-arcade/layangan-duel/) | 3D kite fighting game over Jakarta rooftops: pull vs release techniques with realistic glass-string friction physics. | Three.js + Solo AI |
 | 📦 **Mudik Stack 3D** | [Play](https://lwn2210.github.io/mini-arcade/mudik-stack/) | Stack Indonesian homecoming luggage on a moving Toyota Avanza roof along Pantura highway with suspension physics. | Three.js + Rapier 3D WASM |
 | ⚡ **Ojek Rush** | [Play](https://lwn2210.github.io/mini-arcade/ojek-rush/) | 4-lane traffic runner: weave through Jakarta traffic, dodge MetroMini buses, and grab speed boosts to deliver packages. | Canvas 2D + Web Audio |
