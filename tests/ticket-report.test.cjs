@@ -6,7 +6,13 @@ const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
 const { once } = require('node:events');
-const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+let playwrightMod = process.env.PLAYWRIGHT_MODULE || 'playwright';
+try { require.resolve(playwrightMod); } catch {
+  for (const fb of ['/Users/hellmeet/.openclaw/workspace/micro-sfx/node_modules/playwright', '/Users/hellmeet/.hermes/cache/scratch/alatkilat-qa/node_modules/playwright']) {
+    if (fs.existsSync(fb)) { playwrightMod = fb; break; }
+  }
+}
+const { chromium } = require(playwrightMod);
 
 async function withPage(blocked, exercise) {
   const html = fs.readFileSync(path.join(__dirname, '../index.html'));

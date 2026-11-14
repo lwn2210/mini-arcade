@@ -7,7 +7,13 @@ const path = require('node:path');
 const http = require('node:http');
 const cp = require('node:child_process');
 const { once } = require('node:events');
-const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+let playwrightMod = process.env.PLAYWRIGHT_MODULE || 'playwright';
+try { require.resolve(playwrightMod); } catch {
+  for (const fb of ['/Users/hellmeet/.openclaw/workspace/micro-sfx/node_modules/playwright', '/Users/hellmeet/.hermes/cache/scratch/alatkilat-qa/node_modules/playwright']) {
+    if (fs.existsSync(fb)) { playwrightMod = fb; break; }
+  }
+}
+const { chromium } = require(playwrightMod);
 const root = path.join(__dirname, '..');
 // Pin the actual pre-fix release, not HEAD^ (which moves when the fix is committed).
 const oldHtml = cp.execFileSync('git', ['show', '2c1608a78bde27a828466717ba0318886ea84c8b:index.html'], { cwd: root });
